@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Fira_Sans, Hedvig_Letters_Serif } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 
 const firaSans = Fira_Sans({
   subsets: ["latin"],
@@ -29,7 +31,9 @@ export default function RootLayout({
       className={`${firaSans.variable} ${hedvig.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-linear-to-tr from-black to-[#171717]">
+        <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );
