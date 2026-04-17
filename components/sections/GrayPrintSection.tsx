@@ -1,5 +1,4 @@
 "use client";
-
 import Image from "next/image";
 import bgVector from "@/assets/bg-vector-1.svg";
 
@@ -31,48 +30,41 @@ const steps = [
 
 export function GrayPrintSection() {
   return (
-    <section className="relative overflow-hidden flex flex-col items-center justify-center">
-      <Image src={bgVector} alt="Background" className="w-full h-auto" />
-      <div className="absolute inset-0 z-10 w-full flex flex-col items-center justify-center space-y-12">
-        <h2 className="font-serif text-5xl text-white">W</h2>
+    <section className="relative overflow-hidden min-h-[550px] md:min-h-[650px] lg:min-h-[750px] flex items-center justify-center px-6 md:px-12 lg:px-39">
+      {/* ✅ Background Image: Selalu cover area section di semua breakpoint */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src={bgVector}
+          alt="Background"
+          fill
+          className="object-cover"
+          priority
+        />
+      </div>
 
-        <p className="text-2xl text-[#E5E5E5] text-center font-light">
+      {/* ✅ Content Wrapper */}
+      <div className="relative z-10 w-full max-w-7xl flex flex-col items-center justify-center py-16 md:py-20 lg:py-25 space-y-6 md:space-y-8 lg:space-y-12">
+        <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-white">
+          W
+        </h2>
+        <p className="text-lg md:text-xl lg:text-2xl text-[#E5E5E5] text-center font-light max-w-2xl lg:max-w-3xl px-2">
           Your GrayPrint™ is a personalized report about your mind with
           practical insights.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-10 w-full">
           {steps.map((step) => (
             <div
               key={step.number}
-              className="
-                group w-75 relative p-8 rounded-2xl 
-                bg-[#171717]/50 backdrop-blur-md 
-                flex flex-col items-center text-center 
-                transition-all duration-500 ease-out
-                hover:-translate-y-1
-              "
+              className="group relative p-6 md:p-8 rounded-2xl bg-[#171717]/50 backdrop-blur-md flex flex-col items-center text-center transition-all duration-500 ease-out hover:-translate-y-1"
             >
-              {/* Badge */}
-              <div
-                className="
-                mb-4 w-16 h-16 rounded-2xl 
-                bg-linear-to-br from-[#404040] to-[#262626] 
-                flex items-center justify-center 
-                text-2xl font-serif text-white/80
-                transition-transform duration-500 group-hover:scale-110
-              "
-              >
+              <div className="mb-4 w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-linear-to-br from-[#404040] to-[#262626] flex items-center justify-center text-xl md:text-2xl font-serif text-white/80 transition-transform duration-500 group-hover:scale-110">
                 {step.number}
               </div>
-
-              {/* Title */}
-              <h3 className="font-serif text-xl text-[#D4D4D4] mb-4.5 group-hover:text-white transition-colors">
+              <h3 className="font-serif text-lg md:text-xl text-[#D4D4D4] mb-3 md:mb-4.5 group-hover:text-white transition-colors">
                 {step.title}
               </h3>
-
-              {/* Description */}
-              <p className="text-sm text-[#A1A1A1] group-hover:text-[#D4D4D4] transition-colors">
+              <p className="text-xs md:text-sm text-[#A1A1A1] group-hover:text-[#D4D4D4] transition-colors">
                 {step.description}
               </p>
             </div>

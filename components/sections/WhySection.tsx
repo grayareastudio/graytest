@@ -33,24 +33,25 @@ const features = [
 
 export function WhySection() {
   return (
-    <section className="py-25">
-      <div className="mx-auto px-39">
-        <h2 className="font-serif text-5xl text-center font-light text-white mb-21">
+    <section className="py-16 md:py-20 lg:py-25 px-6 md:px-12 lg:px-39">
+      <div className="mx-auto">
+        <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-center font-light text-white mb-10 md:mb-16 lg:mb-21">
           Why Graytest?
         </h2>
 
-        <div className="grid grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           {features.map((feature) => (
             <div key={feature.title} className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 border border-white/10 rounded-full flex items-center justify-center">
+              <div className="w-14 h-14 md:w-16 md:h-16 mx-auto mb-4 border border-white/10 rounded-full flex items-center justify-center">
                 <Image
                   src={feature.icon}
                   alt={feature.title}
-                  width={30}
-                  height={30}
+                  width={24}
+                  height={24}
+                  className="md:w-[30] md:h-[30]"
                 />
               </div>
-              <h3 className="font-serif text-xl text-[#D4D4D4] mb-4.5">
+              <h3 className="font-serif text-lg md:text-xl text-[#D4D4D4] mb-3 md:mb-4.5">
                 {feature.title}
               </h3>
               <p className="text-sm text-[#A1A1A1]">{feature.description}</p>
@@ -58,7 +59,7 @@ export function WhySection() {
           ))}
         </div>
 
-        <div className="text-center mt-35">
+        <div className="text-center mt-12 md:mt-24 lg:mt-35">
           <Button
             onClick={() =>
               document

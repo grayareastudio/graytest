@@ -42,15 +42,20 @@ export function TestCards() {
   const handleAssessment = (testType: string) => {};
 
   return (
-    <section className="py-25 ">
-      <div className="mx-auto px-39 space-y-11 flex flex-col items-center">
-        <h2 className="font-serif text-5xl text-white">Choose Your Test</h2>
-        <p className="text-xl text-[#D1D5DC]">
+    <section
+      className="py-16 md:py-20 lg:py-25 px-6 md:px-12 lg:px-39"
+      id="tests"
+    >
+      <div className="mx-auto space-y-6 md:space-y-8 lg:space-y-11 flex flex-col items-center">
+        <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-white text-center">
+          Choose Your Test
+        </h2>
+        <p className="text-base md:text-lg lg:text-xl text-[#D1D5DC] text-center max-w-2xl">
           Explore in minutes. Each test reveals a new layer of how your mind
           works.
         </p>
 
-        <div className="grid grid-cols-4 gap-7 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-7 w-full max-w-7xl">
           {tests.map((test) => (
             <TestCard
               key={test.title}

@@ -9,6 +9,7 @@ type HeroProps = {
   image: StaticImageData;
   bgImage?: StaticImageData;
 };
+
 export function Hero({
   title,
   description,
@@ -17,24 +18,32 @@ export function Hero({
   bgImage,
 }: HeroProps) {
   return (
-    <section className="relative h-screen flex items-center px-39 overflow-hidden bg-black">
+    <section className="relative min-h-screen flex items-center px-6 md:px-12 lg:px-39 overflow-hidden bg-black">
+      {/* Image: Disembunyikan di mobile, muncul di tablet+ */}
       <Image
         src={image}
         alt={title}
-        className="absolute right-39 top-1/2 -translate-y-1/2 w-1/2 object-cover h-auto z-1"
+        className="hidden md:block md:absolute md:right-39 md:top-1/2 md:-translate-y-1/2 md:w-1/2 md:object-cover md:h-auto md:z-1"
         priority
+        quality={90}
       />
       {bgImage && (
-        <Image src={bgImage} alt={title} fill className="z-0" priority />
+        <Image
+          src={bgImage}
+          alt="bg"
+          fill
+          className="z-0 object-cover"
+          priority
+        />
       )}
 
-      <div className="relative z-10 max-w-201 space-y-13">
-        <h1 className="font-serif text-7xl text-[#D4D4D4]">{title}</h1>
-
-        <p className="text-2xl text-[#D4D4D4] font-light max-w-137">
+      <div className="relative z-10 max-w-201 w-full space-y-8 md:space-y-10 lg:space-y-13">
+        <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl text-[#D4D4D4]">
+          {title}
+        </h1>
+        <p className="text-lg md:text-xl lg:text-2xl text-[#D4D4D4] font-light max-w-137">
           {description}
         </p>
-
         <Button
           onClick={() =>
             document

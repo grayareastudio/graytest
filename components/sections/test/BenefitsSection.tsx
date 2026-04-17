@@ -26,24 +26,26 @@ export function BenefitsSection({
   };
 
   return (
-    <section className="relative py-20 px-6 overflow-hidden">
+    <section className="relative py-16 md:py-20 lg:py-25 px-6 md:px-12 lg:px-39 overflow-hidden">
       {bgImage && (
         <Image
           src={bgImage}
           alt="Background"
           fill
-          className="z-0"
-          objectFit="cover"
+          className="z-0 object-cover"
+          priority
         />
       )}
-      <div className="relative z-10 px-39">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-60 items-center">
-          <div className="space-y-5">
+
+      <div className="relative z-10 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-60 items-center">
+          {/* Left Content */}
+          <div className="space-y-6 md:space-y-8 text-center lg:text-left">
             <div>
-              <h2 className="font-serif text-5xl md:text-6xl text-white mb-6 font-light tracking-tight">
+              <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-white mb-4 md:mb-6 font-light tracking-tight">
                 How it benefits you
               </h2>
-              <p className=" text-[#D1D5DC]">
+              <p className="text-base md:text-lg text-[#D1D5DC] max-w-xl mx-auto lg:mx-0 leading-relaxed">
                 Your cognitive profile is like a mental toolkit. Knowing what's
                 inside helps you use it wisely.
               </p>
@@ -52,12 +54,12 @@ export function BenefitsSection({
             <button
               onClick={onCtaClick}
               className="
-                px-8 py-4 rounded-full 
+                px-6 py-3 md:px-8 md:py-4 rounded-full 
                 bg-white/10 border border-white/20 
                 text-white font-medium text-sm
                 hover:bg-white/20 hover:border-white/30 
                 transition-all duration-300
-                backdrop-blur-sm
+                backdrop-blur-sm mx-auto lg:mx-0
               "
             >
               Start your assessment
@@ -65,7 +67,7 @@ export function BenefitsSection({
           </div>
 
           {/* Right Accordion Panel */}
-          <div className="bg-[#1D1D1D]/50 backdrop-blur-xl rounded-2xl border border-white/10 p-8 shadow-2xl">
+          <div className="bg-[#1D1D1D]/50 backdrop-blur-xl rounded-2xl border border-white/10 p-4 md:p-6 lg:p-8 shadow-2xl">
             <div className="space-y-2">
               {items.map((item, index) => {
                 const isExpanded = expandedIndex === index;
@@ -81,11 +83,11 @@ export function BenefitsSection({
                   >
                     <button
                       onClick={() => toggleAccordion(index)}
-                      className="w-full flex items-center justify-between py-4 text-left group"
+                      className="w-full flex items-center justify-between py-3 md:py-4 text-left group"
                     >
                       <span
                         className={`
-                          font-serif text-2xl
+                          font-serif text-xl md:text-2xl
                           transition-colors duration-300
                           ${isExpanded ? "text-white" : "text-[#ADADAD] group-hover:text-white"}
                         `}
@@ -94,7 +96,7 @@ export function BenefitsSection({
                       </span>
                       <span
                         className={`
-                          w-6 h-6 flex items-center justify-center 
+                          w-5 h-5 md:w-6 md:h-6 flex items-center justify-center 
                           text-[#ADADAD] transition-all duration-300
                           ${isExpanded ? "rotate-45" : "rotate-0"}
                         `}
@@ -106,10 +108,10 @@ export function BenefitsSection({
                     <div
                       className={`
                         overflow-hidden transition-all duration-500 ease-out
-                        ${isExpanded ? "max-h-40 opacity-100" : "max-h-0 opacity-0"}
+                        ${isExpanded ? "max-h-60 md:max-h-40 opacity-100" : "max-h-0 opacity-0"}
                       `}
                     >
-                      <p className="pb-7.5 text-white leading-relaxed">
+                      <p className="pb-4 md:pb-7.5 text-sm md:text-base text-white leading-relaxed">
                         {item.description}
                       </p>
                     </div>

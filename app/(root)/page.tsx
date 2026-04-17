@@ -18,7 +18,12 @@ export default function HomePage() {
       <GrayPrintSection />
       <div className="relative">
         <div className="absolute inset-0 h-225 top-130 -z-10">
-          <Image src={bgVector2} alt="divider" fill className="object-cover" />
+          <Image
+            src={bgVector2}
+            alt="background"
+            fill
+            className="object-cover"
+          />
         </div>
         <TestCards />
         <WhySection />
