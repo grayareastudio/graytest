@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/Button";
 import Image, { StaticImageData } from "next/image";
 
@@ -6,7 +7,8 @@ type HeroProps = {
   title: string;
   description: string;
   buttonText: string;
-  image: StaticImageData;
+  videoSrc: string;
+  videoClassName?: string;
   bgImage?: StaticImageData;
 };
 
@@ -14,25 +16,30 @@ export function Hero({
   title,
   description,
   buttonText,
-  image,
+  videoSrc,
+  videoClassName,
   bgImage,
 }: HeroProps) {
   return (
-    <section className="relative min-h-screen flex items-center px-6 md:px-12 lg:px-39 overflow-hidden bg-black">
-      {/* Image: Disembunyikan di mobile, muncul di tablet+ */}
-      <Image
-        src={image}
-        alt={title}
-        className="hidden md:block md:absolute md:right-39 md:top-1/2 md:-translate-y-1/2 md:w-1/2 md:object-cover md:h-auto md:z-1"
-        priority
-        quality={90}
+    <section className="relative min-h-screen flex items-center px-6 md:px-12 lg:px-39 overflow-hidden">
+      <video
+        src={videoSrc}
+        autoPlay
+        muted
+        loop
+        playsInline
+        className={`
+          hidden md:block md:absolute 
+          ${videoClassName || ""}
+        `}
       />
+
       {bgImage && (
         <Image
           src={bgImage}
           alt="bg"
           fill
-          className="z-0 object-cover"
+          className="-z-1 object-cover"
           priority
         />
       )}

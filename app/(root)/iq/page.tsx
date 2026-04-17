@@ -3,7 +3,6 @@ import { MeasuresSection } from "@/components/sections/test/MeasuresSection";
 import { BenefitsSection } from "@/components/sections/test/BenefitsSection";
 import { WhySection } from "@/components/sections/WhySection";
 import { InfoSection } from "@/components/sections/test/InfoSection";
-import heroImage from "@/assets/iq-hero.jpg";
 import bgImage from "@/assets/iq-bg.svg";
 import benefitsBg from "@/assets/iq-benefit.png";
 
@@ -14,8 +13,9 @@ export default function Page() {
         title="E"
         description="Emotional intelligence gives you tools to navigate daily life with more balance and clarity."
         buttonText="Start your assessment"
-        image={heroImage}
+        videoSrc="/videos/iq.mp4"
         bgImage={bgImage}
+        videoClassName="right-8 lg:right-39 aspect-9/7 object-cover w-2/5"
       />
 
       <MeasuresSection
