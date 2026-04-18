@@ -10,8 +10,8 @@ export default function Page() {
   return (
     <main>
       <Hero
-        title="E"
-        description="Emotional intelligence gives you tools to navigate daily life with more balance and clarity."
+        title="I"
+        description="Measure your cognitive abilities across multiple domains including pattern recognition, logical reasoning, and problem-solving capabilities."
         buttonText="Start your assessment"
         videoSrc="/videos/iq.mp4"
         bgImage={bgImage}
@@ -21,24 +21,24 @@ export default function Page() {
       <MeasuresSection
         items={[
           {
-            title: "Self-Awareness",
+            title: "Logical Reasoning",
             description:
-              "Your ability to identify and understand your own emotions and their impact.",
+              "Your ability to solve problems, identify patterns, and think abstractly.",
           },
           {
-            title: "Self-Regulation",
+            title: "Quantitative Skills",
             description:
-              "How well you manage or adjust your emotions and impulses.",
+              "How you handle numerical problems and mathematical logic.",
           },
           {
-            title: "Empathy",
+            title: "Verbal Comprehension",
             description:
-              "Your capacity to perceive and understand others’ feelings.",
+              "Your understanding of language, including vocabulary and verbal analogies.",
           },
           {
-            title: "Social Skills",
+            title: "Memory and Processing Speed",
             description:
-              "How you use emotional insight to build relationships and navigate social situations.",
+              "Short-term memory capacity and how quickly you can manipulate information.",
           },
         ]}
       />
@@ -48,22 +48,19 @@ export default function Page() {
           {
             title: "Improve communication",
             description:
-              "Learn to express yourself clearly and listen with empathy, making tough conversations with friends, family, or coworkers smoother and more meaningful.",
+              "Find out if logic, math, language, or memory are your standout strengths—and put them to work in study, career, or problem-solving.",
           },
           {
-            title: "Handle stress and conflict",
-            description:
-              "Develop strategies to manage stress and resolve conflicts in a healthy and constructive manner.",
+            title: "Guide career or study choices",
+            description: "To guide your career",
           },
           {
-            title: "Strengthen relationships",
-            description:
-              "Build deeper connections by understanding and responding to the emotions of others, fostering trust and intimacy.",
+            title: "Support weaker areas",
+            description: "Know and support your weak areas",
           },
           {
-            title: "Use insights in therapy or coaching",
-            description:
-              "Gain valuable insights into your emotional patterns and triggers, which can be used in therapy or coaching to support personal growth and healing.",
+            title: "Build confidence",
+            description: "Build your confidence",
           },
         ]}
         bgImage={benefitsBg}
@@ -74,7 +71,7 @@ export default function Page() {
       <InfoSection
         info={{
           duration: "6–10 min",
-          questions: "50 questions",
+          questions: "5 (open ended)",
           result: "Instant",
         }}
       />

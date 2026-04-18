@@ -10,8 +10,8 @@ export default function Page() {
   return (
     <main>
       <Hero
-        title="E"
-        description="Emotional intelligence gives you tools to navigate daily life with more balance and clarity."
+        title="S"
+        description="This assessment explores how your brain processes the world—socially, behaviorally, and sensorially."
         buttonText="Start your assessment"
         videoSrc="/videos/spectrum.mp4"
         bgImage={bgImage}
@@ -21,24 +21,23 @@ export default function Page() {
       <MeasuresSection
         items={[
           {
-            title: "Self-Awareness",
+            title: "Social Communication",
             description:
-              "Your ability to identify and understand your own emotions and their impact.",
+              "Questions will gauge how comfortable you are in social situations.",
           },
           {
-            title: "Self-Regulation",
+            title: "Repetitive Behaviors",
             description:
-              "How well you manage or adjust your emotions and impulses.",
+              "The test looks at your need for sameness and routines.",
           },
           {
-            title: "Empathy",
-            description:
-              "Your capacity to perceive and understand others’ feelings.",
+            title: "Special Interests and Focus",
+            description: "It will ask about the intensity of your interests.",
           },
           {
-            title: "Social Skills",
+            title: "Sensory Sensitivities",
             description:
-              "How you use emotional insight to build relationships and navigate social situations.",
+              "The test may probe sensitivities or atypical responses you have to STIMULI.",
           },
         ]}
       />
@@ -46,24 +45,24 @@ export default function Page() {
       <BenefitsSection
         items={[
           {
-            title: "Improve communication",
+            title: "Gain validation",
             description:
-              "Learn to express yourself clearly and listen with empathy, making tough conversations with friends, family, or coworkers smoother and more meaningful.",
+              "See your habits and tendencies clearly, so you can lean into your strengths and work on challenges without self-blame.",
           },
           {
-            title: "Handle stress and conflict",
+            title: "Improve self-care",
             description:
-              "Develop strategies to manage stress and resolve conflicts in a healthy and constructive manner.",
+              "Match your talents to fields where they’ll shine, whether that’s analytical work, creative problem-solving, or communication-heavy roles.",
           },
           {
-            title: "Strengthen relationships",
+            title: "Seek professional support",
             description:
-              "Build deeper connections by understanding and responding to the emotions of others, fostering trust and intimacy.",
+              "Match your talents to fields where they’ll shine, whether that’s analytical work, creative problem-solving, or communication-heavy roles.",
           },
           {
-            title: "Use insights in therapy or coaching",
+            title: "Connect with community",
             description:
-              "Gain valuable insights into your emotional patterns and triggers, which can be used in therapy or coaching to support personal growth and healing.",
+              "Match your talents to fields where they’ll shine, whether that’s analytical work, creative problem-solving, or communication-heavy roles.",
           },
         ]}
         bgImage={benefitsBg}
@@ -74,7 +73,7 @@ export default function Page() {
       <InfoSection
         info={{
           duration: "6–10 min",
-          questions: "50 questions",
+          questions: "5 (open ended)",
           result: "Instant",
         }}
       />

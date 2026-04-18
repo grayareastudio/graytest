@@ -18,7 +18,6 @@ interface InfoSectionProps {
 export function InfoSection({ info, onStart }: InfoSectionProps) {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-12 md:py-16 lg:py-0 px-6 md:px-12 lg:px-39">
-      {/* ✅ Fix: objectFit deprecated, gunakan className + priority */}
       <Image
         src={bgVector2}
         alt="Wavy Background"
@@ -27,7 +26,7 @@ export function InfoSection({ info, onStart }: InfoSectionProps) {
         priority
       />
 
-      <div className="relative z-10 w-full max-w-md md:max-w-lg lg:max-w-xl flex flex-col items-center bg-white/5 border border-white/10 rounded-2xl p-6 pb-8 md:p-8 md:pb-12 lg:p-10 lg:pb-15 backdrop-blur-sm">
+      <div className="relative z-10 w-full max-w-md md:max-w-lg lg:max-w-xl flex flex-col items-center bg-white/2 border border-white/10 rounded-2xl p-6 pb-8 md:p-8 md:pb-12 lg:p-10 lg:pb-15 backdrop-blur-sm">
         <h2 className="font-serif text-xl md:text-2xl text-white text-center mb-6 md:mb-8 font-light tracking-wide">
           Test Information
         </h2>
