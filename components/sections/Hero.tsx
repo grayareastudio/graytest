@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/Button";
 import Image, { StaticImageData } from "next/image";
+import { TypingText } from "../ui/TypingText";
 
 type HeroProps = {
   title: string;
@@ -46,7 +47,7 @@ export function Hero({
 
       <div className="relative z-10 max-w-201 w-full space-y-8 md:space-y-10 lg:space-y-13">
         <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl text-[#D4D4D4]">
-          {title}
+          <TypingText text={title || ""} />
         </h1>
         <p className="text-lg md:text-xl lg:text-2xl text-[#D4D4D4] font-light max-w-137">
           {description}

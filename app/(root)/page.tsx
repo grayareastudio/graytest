@@ -10,7 +10,7 @@ export default function HomePage() {
     <main>
       <div className="bg-black">
         <Hero
-          title="F"
+          title="Find out how your brain actually works"
           description="Achieve clarity though the world's first AI-powered cognitive testing platform."
           buttonText="Take a Test"
           videoSrc="/videos/hero.mp4"

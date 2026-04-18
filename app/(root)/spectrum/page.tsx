@@ -10,7 +10,7 @@ export default function Page() {
   return (
     <main>
       <Hero
-        title="S"
+        title="Spectrum Test"
         description="This assessment explores how your brain processes the world—socially, behaviorally, and sensorially."
         buttonText="Start your assessment"
         videoSrc="/videos/spectrum.mp4"

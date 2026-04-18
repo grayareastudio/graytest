@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import bgVector from "@/assets/bg-vector-1.svg";
+import { TypingText } from "../ui/TypingText";
 
 const steps = [
   {
@@ -43,7 +44,7 @@ export function GrayPrintSection() {
 
       <div className="relative z-10 w-full max-w-7xl flex flex-col items-center justify-center py-16 md:py-20 lg:py-25 space-y-6 md:space-y-8 lg:space-y-12">
         <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-white">
-          W
+          <TypingText text="What is a GrayPrint" />
         </h2>
         <p className="text-lg md:text-xl lg:text-2xl text-[#E5E5E5] text-center font-light max-w-2xl lg:max-w-3xl px-2">
           Your GrayPrint™ is a personalized report about your mind with

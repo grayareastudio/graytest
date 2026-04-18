@@ -10,7 +10,7 @@ export default function Page() {
   return (
     <main>
       <Hero
-        title="I"
+        title="Intelligence Quotient (IQ)"
         description="Measure your cognitive abilities across multiple domains including pattern recognition, logical reasoning, and problem-solving capabilities."
         buttonText="Start your assessment"
         videoSrc="/videos/iq.mp4"

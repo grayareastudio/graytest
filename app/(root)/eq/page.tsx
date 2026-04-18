@@ -10,7 +10,7 @@ export default function Page() {
   return (
     <main>
       <Hero
-        title="E"
+        title="Emotional Quotient (EQ)"
         description="Emotional intelligence gives you tools to navigate daily life with more balance and clarity."
         buttonText="Start your assessment"
         videoSrc="/videos/eq.mp4"

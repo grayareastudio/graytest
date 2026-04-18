@@ -10,7 +10,7 @@ export default function Page() {
   return (
     <main>
       <Hero
-        title="P"
+        title="Personality Test"
         description="This test highlights your natural tendencies on how you act, think, and connect."
         buttonText="Start your assessment"
         videoSrc="/videos/personality.mp4"
