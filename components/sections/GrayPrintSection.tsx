@@ -54,17 +54,31 @@ export function GrayPrintSection() {
           {steps.map((step) => (
             <div
               key={step.number}
-              className="group relative p-6 md:p-8 rounded-2xl bg-[#171717]/50 backdrop-blur-md flex flex-col items-center text-center transition-all duration-500 ease-out hover:-translate-y-1"
+              className="group relative p-6 md:p-8 rounded-2xl bg-[#171717]/40 flex flex-col items-center text-center transition-all duration-500 ease-out hover:-translate-y-1 overflow-hidden"
             >
-              <div className="mb-4 w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-linear-to-br from-[#404040] to-[#262626] flex items-center justify-center text-xl md:text-2xl font-serif text-white/80 transition-transform duration-500 group-hover:scale-110">
-                {step.number}
+              <div className="relative z-10 flex flex-col items-center">
+                <div className="mb-4 w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-[#404040] to-[#262626] flex items-center justify-center text-xl md:text-2xl font-serif text-white/80 transition-transform duration-500 group-hover:scale-110">
+                  {step.number}
+                </div>
+
+                <h3 className="font-serif text-lg md:text-xl text-[#D4D4D4] mb-3 md:mb-4.5 group-hover:text-white transition-colors">
+                  {step.title}
+                </h3>
+
+                <p className="text-xs md:text-sm text-[#A1A1A1] group-hover:text-[#D4D4D4] transition-colors">
+                  {step.description}
+                </p>
               </div>
-              <h3 className="font-serif text-lg md:text-xl text-[#D4D4D4] mb-3 md:mb-4.5 group-hover:text-white transition-colors">
-                {step.title}
-              </h3>
-              <p className="text-xs md:text-sm text-[#A1A1A1] group-hover:text-[#D4D4D4] transition-colors">
-                {step.description}
-              </p>
+
+              <div
+                className="
+                pointer-events-none
+                absolute inset-0 z-20
+                backdrop-blur-sm bg-[#171717]/50
+                transition-all duration-500
+                group-hover:opacity-0
+              "
+              />
             </div>
           ))}
         </div>
