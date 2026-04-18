@@ -1,15 +1,14 @@
+// app/test/layout.tsx
 import { getTestConfig } from "@/lib/test/questions";
 import { TestLayoutClient } from "./TestLayoutClient";
-
-interface TestLayoutProps {
-  children: React.ReactNode;
-  params: Promise<{ type: string }>;
-}
 
 export default async function TestLayout({
   children,
   params,
-}: TestLayoutProps) {
+}: {
+  children: React.ReactNode;
+  params: Promise<{ type: string }>;
+}) {
   const { type } = await params;
   const config = getTestConfig(type);
 

@@ -239,7 +239,6 @@ export default function DashboardPage() {
                           variant="outline"
                           size="sm"
                           className="px-3 md:px-4 py-1.5 md:py-2 text-[10px] md:text-xs shrink-0"
-                          onClick={(e) => e.preventDefault()} // Prevent double navigation
                         >
                           View Results
                         </Button>
@@ -253,7 +252,7 @@ export default function DashboardPage() {
                 <p className="text-sm md:text-base mb-4">
                   No tests found for this filter.
                 </p>
-                <Button variant="outline" size="sm" asChild>
+                <Button variant="outline" size="sm">
                   <Link href="/iq">Take a Test</Link>
                 </Button>
               </div>

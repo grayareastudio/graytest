@@ -1,13 +1,11 @@
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { Button } from "../ui/Button";
-import { Card } from "../ui/Card";
-
 interface TestCardProps {
   title: string;
   description: string;
   duration: string;
   price: string;
-  imageBg: string;
+  imageBg: StaticImageData;
   badge?: string;
   onAssessment: () => void;
   onAbout: () => void;
