@@ -80,7 +80,7 @@ function LayoutContent({ children }: { children: ReactNode }) {
         </div>
       </div>
 
-      <main className="flex flex-col items-center justify-center min-h-screen pt-32 md:pt-36 lg:pt-40 pb-32 md:pb-44 lg:pb-58 px-4 md:px-8 lg:px-90">
+      <main className="flex flex-col items-center justify-center min-h-screen pt-32 md:pt-40 lg:pt-40 pb-32 md:pb-44 lg:pb-58 px-4 md:px-8 lg:px-90">
         {children}
       </main>
 
