@@ -27,20 +27,22 @@ export function CheckboxQuestion({
   };
 
   return (
-    <div className="space-y-15 text-white">
-      <p className="text-2xl font-bold">{questionText}</p>
+    <div className="space-y-6 md:space-y-8 lg:space-y-12 text-white">
+      <p className="text-xl md:text-2xl lg:text-3xl font-bold leading-snug">
+        {questionText}
+      </p>
 
-      <div className="space-y-10">
+      <div className="space-y-4 md:space-y-6 lg:space-y-8">
         {options.map((option) => {
           const isSelected = selectedOptions.includes(option.id);
           return (
             <label
               key={option.id}
-              className="flex items-center gap-8 cursor-pointer transition-colors group"
+              className="flex items-center gap-4 md:gap-6 lg:gap-8 cursor-pointer transition-colors group"
             >
               <div
                 className={`
-                  w-7.5 h-7.5 rounded border-2 flex items-center justify-center
+                  w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 rounded border-2 shrink-0 flex items-center justify-center
                   transition-all duration-200
                   ${
                     isSelected
@@ -51,7 +53,7 @@ export function CheckboxQuestion({
               >
                 {isSelected && (
                   <svg
-                    className="w-5 h-5 text-black"
+                    className="w-4 h-4 md:w-5 md:h-5 text-black"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -71,7 +73,9 @@ export function CheckboxQuestion({
                 onChange={() => handleToggle(option.id)}
                 className="sr-only"
               />
-              <span className="text-2xl">{option.label}</span>
+              <span className="text-base md:text-lg lg:text-xl leading-snug">
+                {option.label}
+              </span>
             </label>
           );
         })}

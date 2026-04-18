@@ -63,65 +63,73 @@ function LayoutContent({ children }: { children: ReactNode }) {
     <>
       <Header />
 
-      <div className="fixed top-41 left-39 z-40">
-        <div className="flex items-center gap-5 px-5 py-2.5 backdrop-blur-[20px] border border-white/10 rounded-full">
-          <Image src={clockIcon} alt="clock" width={40} height={40} />
+      <div className="fixed top-20 md:top-24 lg:top-41 left-4 md:left-6 lg:left-39 z-40">
+        <div className="flex items-center gap-3 md:gap-5 px-4 py-2 md:px-5 md:py-2.5 backdrop-blur-[20px] border border-white/10 rounded-full">
+          <Image
+            src={clockIcon}
+            alt="clock"
+            width={32}
+            height={32}
+            className="md:w-10 md:h-10"
+          />
           <span
-            className={`text-2xl ${currentTime <= 60 ? "text-red-400" : ""}`}
+            className={`text-lg md:text-2xl ${currentTime <= 60 ? "text-red-400" : ""}`}
           >
             {timeDisplay}
           </span>
         </div>
       </div>
 
-      <main className="flex flex-col items-center justify-center min-h-screen pt-40 pb-58 px-90">
+      <main className="flex flex-col items-center justify-center min-h-screen pt-32 md:pt-36 lg:pt-40 pb-32 md:pb-44 lg:pb-58 px-4 md:px-8 lg:px-90">
         {children}
       </main>
 
-      <div className="fixed bottom-25 left-0 right-0">
-        <div className="max-w-137 mx-auto px-6">
-          <div className="w-full h-2 bg-[#D9D9D9]/30 rounded-full mb-5 overflow-hidden">
+      <div className="fixed bottom-0 left-0 right-0 pb-4 md:pb-6 lg:pb-25">
+        <div className="max-w-full md:max-w-137 mx-auto px-4 md:px-6">
+          <div className="w-full h-1.5 md:h-2 bg-[#D9D9D9]/30 rounded-full mb-3 md:mb-5 overflow-hidden">
             <div
               className="h-full bg-[#D9D9D9] transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>
 
-          <div className="flex items-center justify-center gap-5 text-white">
+          <div className="flex items-center justify-center gap-3 md:gap-5 text-white">
             <button
               onClick={prevQuestion}
               disabled={currentQuestionIndex === 0}
-              className="disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
+              className="disabled:opacity-30 disabled:cursor-not-allowed transition-opacity p-1 md:p-2"
             >
               <Image
                 src={arrowLeftIcon}
                 alt="arrow left"
-                width={40}
-                height={40}
+                width={32}
+                height={32}
+                className="md:w-10 md:h-10"
               />
             </button>
 
-            <span className="text-2xl min-w-14 text-center">
+            <span className="text-lg md:text-2xl min-w-12 md:min-w-14 text-center">
               {currentQuestionIndex + 1}/{totalQuestions}
             </span>
 
             {isLastQuestion ? (
               <button
                 onClick={handleSubmit}
-                className="bg-[#D9D9D9] text-black px-6 py-2 rounded-full font-medium hover:bg-white transition-colors hover:cursor-pointer"
+                className="bg-[#D9D9D9] text-black px-4 py-1.5 md:px-6 md:py-2 rounded-full text-sm md:text-base font-medium hover:bg-white transition-colors"
               >
-                Submit Test
+                Submit
               </button>
             ) : (
               <button
                 onClick={nextQuestion}
-                className="hover:opacity-80 transition-opacity hover:cursor-pointer"
+                className="hover:opacity-80 transition-opacity p-1 md:p-2"
               >
                 <Image
                   src={arrowRightIcon}
                   alt="arrow right"
-                  width={40}
-                  height={40}
+                  width={32}
+                  height={32}
+                  className="md:w-10 md:h-10"
                 />
               </button>
             )}
