@@ -1,6 +1,6 @@
 // app/results/[id]/page.tsx
+import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import Link from "next/link";
 
 const TEST_CONTENT: Record<
   string,
@@ -187,95 +187,73 @@ export default async function ResultPage({
 
   return (
     <main className="min-h-full flex flex-col bg-linear-to-tr from-black to-[#171717] text-white">
-      {/* Sticky Nav */}
-      <nav className="fixed top-14 left-39 right-39 z-40 flex items-center justify-between px-10 h-16 transition-all duration-400 backdrop-blur-[20px] border border-white/10 rounded-full bg-[#0A0A0A]/20">
-        <Link href="/" className="font-serif text-xl uppercase text-[#D4D4D4]">
-          GrayPrint
-        </Link>
-        <div className="flex gap-4">
-          <button className="rounded-full font-semibold transition-all duration-200 hover:cursor-pointer bg-[#E5E5E5]/20 border border-white/10 text-white px-6 py-2 text-sm">
-            Email
-          </button>
-          <button className="rounded-full font-semibold transition-all duration-200 hover:cursor-pointer bg-[#E5E5E5]/20 border border-white/10 text-white px-6 py-2 text-sm">
-            Share
-          </button>
-        </div>
-      </nav>
+      <Header />
 
       {/* Hero / Score Section */}
-      <section className="py-25 px-39 pt-40">
-        <div className="mx-auto">
-          <div className="mb-12">
+      <section className="pt-28 md:pt-36 lg:pt-40 pb-12 md:pb-16 lg:pb-20 px-6 md:px-12 lg:px-39">
+        <div className="mx-auto max-w-7xl">
+          {/* Artistic Title & Description */}
+          <div className="mb-10 md:mb-12 lg:mb-16">
             <span className="text-[10px] tracking-[0.28em] uppercase text-[#c6bcaa] opacity-75 block mb-3">
               {fakeResult.testType}
             </span>
-            <h1 className="font-serif text-4xl md:text-5xl text-white mb-4">
+            <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-white mb-3 md:mb-4 leading-tight">
               {content.artisticTitle}
             </h1>
-            <p className="text-xl text-[#D4D4D4] font-light leading-relaxed max-w-2xl">
+            <p className="text-base md:text-lg lg:text-xl text-[#D4D4D4] font-light leading-relaxed max-w-2xl">
               {content.artisticDescription}
             </p>
           </div>
 
-          {/* Score Stats */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            <div className="bg-[#0A0A0A]/20 backdrop-blur-md border border-white/10 rounded-2xl p-6 text-center">
-              <div className="font-serif text-4xl text-white mb-1">
-                {fakeResult.score}
+          {/* Score Stats - Responsive Grid */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-10 md:mb-12 lg:mb-16">
+            {[
+              { label: "Total Score", value: fakeResult.score },
+              { label: "Correct", value: fakeResult.correct },
+              { label: "Wrong", value: fakeResult.wrong },
+              { label: "Accuracy", value: `${fakeResult.accuracy}%` },
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                className="bg-[#0A0A0A]/20 backdrop-blur-md border border-white/10 rounded-2xl p-5 md:p-6 text-center hover:-translate-y-1 transition-transform"
+              >
+                <div className="font-serif text-3xl md:text-4xl text-white mb-1 md:mb-2">
+                  {stat.value}
+                </div>
+                <div className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-[#A1A1A1]">
+                  {stat.label}
+                </div>
               </div>
-              <div className="text-[10px] uppercase tracking-[0.2em] text-[#A1A1A1]">
-                Total Score
-              </div>
-            </div>
-            <div className="bg-[#0A0A0A]/20 backdrop-blur-md border border-white/10 rounded-2xl p-6 text-center">
-              <div className="font-serif text-4xl text-white mb-1">
-                {fakeResult.correct}
-              </div>
-              <div className="text-[10px] uppercase tracking-[0.2em] text-[#A1A1A1]">
-                Correct
-              </div>
-            </div>
-            <div className="bg-[#0A0A0A]/20 backdrop-blur-md border border-white/10 rounded-2xl p-6 text-center">
-              <div className="font-serif text-4xl text-white mb-1">
-                {fakeResult.wrong}
-              </div>
-              <div className="text-[10px] uppercase tracking-[0.2em] text-[#A1A1A1]">
-                Wrong
-              </div>
-            </div>
-            <div className="bg-[#0A0A0A]/20 backdrop-blur-md border border-white/10 rounded-2xl p-6 text-center">
-              <div className="font-serif text-4xl text-white mb-1">
-                {fakeResult.accuracy}%
-              </div>
-              <div className="text-[10px] uppercase tracking-[0.2em] text-[#A1A1A1]">
-                Accuracy
-              </div>
-            </div>
+            ))}
           </div>
 
           {/* Percentile & Tag */}
-          <div className="flex items-end justify-between mb-12">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10 md:mb-12 lg:mb-16">
             <div>
-              <div className="text-xs uppercase tracking-wider text-[#A1A1A1] mb-1">
+              <div className="text-xs uppercase tracking-wider text-[#A1A1A1] mb-1 md:mb-2">
                 Percentile ranking
               </div>
-              <div className="font-serif text-3xl text-white">
+              <div className="font-serif text-2xl md:text-3xl text-white">
                 {fakeResult.percentile}
               </div>
             </div>
-            <span className="text-sm font-semibold text-white bg-[#0A0A0A]/20 border border-white px-4 py-1.5 rounded-full backdrop-blur-[10px]">
+            <span className="text-sm font-semibold text-white bg-[#0A0A0A]/20 border border-white px-4 py-1.5 rounded-full backdrop-blur-[10px] self-start md:self-auto">
               {fakeResult.tag}
             </span>
           </div>
 
-          <div className="bg-[#0A0A0A]/20 backdrop-blur-md border border-white/10 rounded-2xl p-8 space-y-6">
-            <h3 className="font-serif text-2xl text-white">
+          {/* Traits Bars */}
+          <div className="bg-[#0A0A0A]/20 backdrop-blur-md border border-white/10 rounded-2xl p-6 md:p-8 space-y-5 md:space-y-6">
+            <h3 className="font-serif text-xl md:text-2xl text-white mb-4 md:mb-6">
               Dimension breakdown
             </h3>
-            <div className="space-y-4">
+            <div className="space-y-4 md:space-y-5">
               {fakeResult.traits.map((trait) => (
-                <div key={trait.name} className="flex items-center gap-4">
-                  <div className="text-base text-[#D4D4D4] w-40 shrink-0">
+                <div
+                  key={trait.name}
+                  className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4"
+                >
+                  <div className="text-sm md:text-base text-[#D4D4D4] md:w-44 shrink-0">
                     {trait.name}
                   </div>
                   <div className="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
@@ -284,7 +262,7 @@ export default async function ResultPage({
                       style={{ width: `${trait.value}%` }}
                     />
                   </div>
-                  <div className="font-serif text-lg text-white w-10 text-right">
+                  <div className="font-serif text-base md:text-lg text-white md:w-10 text-right">
                     {trait.value}
                   </div>
                 </div>
@@ -295,25 +273,25 @@ export default async function ResultPage({
       </section>
 
       {/* Detailed Breakdown */}
-      <section className="py-25 px-39 bg-black">
-        <div className="mx-auto">
-          <h2 className="font-serif text-4xl md:text-5xl text-center font-light text-white mb-12">
+      <section className="py-16 md:py-20 lg:py-25 px-6 md:px-12 lg:px-39 bg-black">
+        <div className="mx-auto max-w-7xl">
+          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-center font-light text-white mb-10 md:mb-12 lg:mb-16">
             Detailed analysis
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {content.breakdown.map((item) => (
               <div
                 key={item.category}
-                className="bg-[#0A0A0A]/20 backdrop-blur-md border border-white/10 rounded-2xl p-8"
+                className="bg-[#0A0A0A]/20 backdrop-blur-md border border-white/10 rounded-2xl p-6 md:p-8 hover:-translate-y-1 transition-transform"
               >
-                <div className="font-serif text-4xl text-white leading-none mb-4">
+                <div className="font-serif text-3xl md:text-4xl text-white leading-none mb-3 md:mb-4">
                   {item.score}
                 </div>
-                <div className="text-[10px] tracking-[0.25em] uppercase text-[#A1A1A1] mb-4">
+                <div className="text-[9px] md:text-[10px] tracking-[0.25em] uppercase text-[#A1A1A1] mb-3 md:mb-4">
                   {item.category}
                 </div>
-                <h3 className="font-serif text-xl text-[#D4D4D4] mb-3">
+                <h3 className="font-serif text-lg md:text-xl text-[#D4D4D4] mb-2 md:mb-3">
                   {item.title}
                 </h3>
                 <p className="text-sm text-[#A1A1A1] leading-relaxed">
@@ -326,11 +304,11 @@ export default async function ResultPage({
       </section>
 
       {/* AI Insight */}
-      <section className="py-25 px-39">
-        <div className="mx-auto bg-[#0A0A0A]/20 backdrop-blur-md border border-white/10 rounded-2xl p-8 flex items-start gap-4">
-          <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center shrink-0">
+      <section className="py-16 md:py-20 lg:py-25 px-6 md:px-12 lg:px-39">
+        <div className="mx-auto max-w-7xl bg-[#0A0A0A]/20 backdrop-blur-md border border-white/10 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row md:items-start gap-4 md:gap-6">
+          <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 flex items-center justify-center shrink-0">
             <svg
-              className="w-5 h-5 text-[#D4D4D4]"
+              className="w-5 h-5 md:w-6 md:h-6 text-[#D4D4D4]"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -347,17 +325,18 @@ export default async function ResultPage({
             <span className="text-xs tracking-[0.22em] uppercase text-[#D4D4D4] opacity-70 block mb-3">
               AI Insight
             </span>
-            <p className="text-base text-[#D4D4D4] font-light leading-relaxed">
-              {content.artisticDescription}{" "}
+            <p className="text-base md:text-lg text-[#D4D4D4] font-light leading-relaxed">
+              {content.artisticDescription}
             </p>
           </div>
         </div>
       </section>
 
+      {/* Clinical Disclaimer (Spectrum only) */}
       {content.showDisclaimer && (
-        <section className="px-39 pb-12">
-          <div className="mx-auto bg-[#0A0A0A]/20 backdrop-blur-md border border-[#c6bcaa]/20 rounded-2xl p-6">
-            <p className="text-xs text-[#A1A1A1] leading-relaxed">
+        <section className="px-6 md:px-12 lg:px-39 pb-12 md:pb-16">
+          <div className="mx-auto max-w-7xl bg-[#0A0A0A]/20 backdrop-blur-md border border-[#c6bcaa]/20 rounded-2xl p-5 md:p-6">
+            <p className="text-xs md:text-sm text-[#A1A1A1] leading-relaxed">
               <strong className="text-[#c6bcaa]">Disclaimer:</strong> The
               Spectrum Assessment is an educational self-awareness tool based on
               the validated AQ-50. It is not a clinical diagnosis and does not

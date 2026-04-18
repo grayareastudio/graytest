@@ -31,6 +31,7 @@ export default function RootLayout({
       className={`${firaSans.variable} ${hedvig.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-linear-to-tr from-black to-[#171717]">
+        <Header />
         {children}
         <Footer />
       </body>

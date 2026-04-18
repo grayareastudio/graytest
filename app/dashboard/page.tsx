@@ -132,23 +132,6 @@ export default function DashboardPage() {
 
   return (
     <main className="min-h-full flex flex-col bg-linear-to-tr from-black to-[#171717] text-white">
-      <nav className="fixed top-10 left-4 right-4 z-40 flex items-center justify-between px-5 h-14 transition-all duration-400 backdrop-blur-[20px] border border-white/10 bg-[#0A0A0A]/20 md:top-14 md:left-39 md:right-39 md:h-16 md:px-10 rounded-full">
-        <Link
-          href="/"
-          className="font-serif text-lg uppercase text-[#D4D4D4] md:text-xl"
-        >
-          Graytest
-        </Link>
-        <div className="hidden md:flex gap-4">
-          <button className="rounded-full font-semibold transition-all duration-200 hover:cursor-pointer bg-[#E5E5E5]/20 border border-white/10 text-white px-6 py-2 text-sm">
-            Email
-          </button>
-          <button className="rounded-full font-semibold transition-all duration-200 hover:cursor-pointer bg-[#E5E5E5]/20 border border-white/10 text-white px-6 py-2 text-sm">
-            Share
-          </button>
-        </div>
-      </nav>
-
       <section className="pt-24 md:pt-28 lg:pt-32 pb-8 md:pb-10 lg:pb-8 px-6 md:px-12 lg:px-39">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10 md:mb-12">
           <div>
