@@ -2,8 +2,9 @@
 
 import { Header } from "@/components/layout/Header";
 import { TestProvider, useTest } from "@/lib/test/TestContext";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { submitTestResults } from "@/lib/actions/test-actions";
 import clockIcon from "@/assets/icons/clock.svg";
 import arrowRightIcon from "@/assets/icons/arrow-right.svg";
 import arrowLeftIcon from "@/assets/icons/arrow-left.svg";
@@ -13,24 +14,39 @@ interface TestLayoutClientProps {
   children: ReactNode;
   durationSeconds: number;
   totalQuestions: number;
+  testType: string;
 }
 
 export function TestLayoutClient({
   children,
   durationSeconds,
   totalQuestions,
+  testType,
 }: TestLayoutClientProps) {
+  const hasTimer = testType === "iq";
+
   return (
     <TestProvider
       durationSeconds={durationSeconds}
       totalQuestions={totalQuestions}
+      hasTimer={hasTimer}
     >
-      <LayoutContent>{children}</LayoutContent>
+      <LayoutContent testType={testType} durationSeconds={durationSeconds}>
+        {children}
+      </LayoutContent>
     </TestProvider>
   );
 }
 
-function LayoutContent({ children }: { children: ReactNode }) {
+function LayoutContent({
+  children,
+  testType,
+  durationSeconds,
+}: {
+  children: ReactNode;
+  testType: string;
+  durationSeconds: number;
+}) {
   const router = useRouter();
   const {
     currentTime,
@@ -41,46 +57,67 @@ function LayoutContent({ children }: { children: ReactNode }) {
     prevQuestion,
   } = useTest();
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const minutes = Math.floor(currentTime / 60);
   const seconds = currentTime % 60;
   const timeDisplay = `${String(minutes).padStart(3, "0")}:${String(seconds).padStart(2, "0")}`;
   const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
   const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
 
-  const handleSubmit = () => {
-    console.log("Submitting fake data:", answers);
+  const handleSubmit = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
-    router.push(`/results/fake-test-id-${Date.now()}`);
+    try {
+      const actualDuration =
+        testType === "iq" ? durationSeconds - currentTime : undefined;
+
+      const result = await submitTestResults(
+        testType,
+        answers,
+        totalQuestions,
+        actualDuration,
+      );
+      router.push(`/results/${result.id}`);
+    } catch (error) {
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   useEffect(() => {
-    if (currentTime === 0) {
+    if (testType === "iq" && currentTime === 0 && !isSubmitting) {
       handleSubmit();
     }
-  }, [currentTime]);
+  }, [currentTime, isSubmitting, testType]);
 
   return (
     <>
       <Header />
 
-      <div className="fixed top-20 md:top-24 lg:top-41 left-4 md:left-6 lg:left-39 z-40">
-        <div className="flex items-center gap-3 md:gap-5 px-4 py-2 md:px-5 md:py-2.5 backdrop-blur-[20px] border border-white/10 rounded-full">
-          <Image
-            src={clockIcon}
-            alt="clock"
-            width={32}
-            height={32}
-            className="md:w-10 md:h-10"
-          />
-          <span
-            className={`text-lg md:text-2xl ${currentTime <= 60 ? "text-red-400" : ""}`}
-          >
-            {timeDisplay}
-          </span>
+      {testType === "iq" && (
+        <div className="fixed top-20 md:top-24 lg:top-41 left-4 md:left-6 lg:left-39 z-40">
+          <div className="flex items-center gap-3 md:gap-5 px-4 py-2 md:px-5 md:py-2.5 backdrop-blur-[20px] border border-white/10 rounded-full">
+            <Image
+              src={clockIcon}
+              alt="clock"
+              width={32}
+              height={32}
+              className="md:w-10 md:h-10"
+            />
+            <span
+              className={`text-lg md:text-2xl ${currentTime <= 60 ? "text-red-400" : ""}`}
+            >
+              {timeDisplay}
+            </span>
+          </div>
         </div>
-      </div>
+      )}
 
-      <main className="flex flex-col items-center justify-center min-h-screen pt-32 md:pt-40 lg:pt-40 pb-32 md:pb-44 lg:pb-58 px-4 md:px-8 lg:px-90">
+      <main
+        className={`flex flex-col items-center justify-center min-h-screen ${testType === "iq" ? "pt-32 md:pt-40 lg:pt-40" : "pt-24 md:pt-28 lg:pt-32"} pb-32 md:pb-44 lg:pb-58 px-4 md:px-8 lg:px-90`}
+      >
         {children}
       </main>
 
@@ -96,8 +133,8 @@ function LayoutContent({ children }: { children: ReactNode }) {
           <div className="flex items-center justify-center gap-3 md:gap-5 text-white">
             <button
               onClick={prevQuestion}
-              disabled={currentQuestionIndex === 0}
-              className="disabled:opacity-30 disabled:cursor-not-allowed transition-opacity p-1 md:p-2"
+              disabled={currentQuestionIndex === 0 || isSubmitting}
+              className="hover:opacity-80 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity p-1 md:p-2 hover:cursor-pointer"
             >
               <Image
                 src={arrowLeftIcon}
@@ -115,14 +152,20 @@ function LayoutContent({ children }: { children: ReactNode }) {
             {isLastQuestion ? (
               <button
                 onClick={handleSubmit}
-                className="bg-[#D9D9D9] text-black px-4 py-1.5 md:px-6 md:py-2 rounded-full text-sm md:text-base font-medium hover:bg-white transition-colors"
+                disabled={isSubmitting}
+                className={`
+                  bg-[#D9D9D9] text-black px-4 py-1.5 md:px-6 md:py-2 rounded-full 
+                  text-sm md:text-base font-medium transition-colors
+                  ${isSubmitting ? "opacity-50 cursor-wait" : "hover:bg-white hover:cursor-pointer"}
+                `}
               >
-                Submit
+                {isSubmitting ? "Submitting..." : "Submit"}
               </button>
             ) : (
               <button
                 onClick={nextQuestion}
-                className="hover:opacity-80 transition-opacity p-1 md:p-2"
+                disabled={isSubmitting}
+                className="hover:opacity-80 transition-opacity p-1 md:p-2 disabled:opacity-30 hover:cursor-pointer"
               >
                 <Image
                   src={arrowRightIcon}

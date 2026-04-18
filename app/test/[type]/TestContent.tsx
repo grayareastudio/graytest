@@ -1,8 +1,10 @@
 // app/test/[type]/TestContent.tsx
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTest } from "@/lib/test/TestContext";
-import { getTestConfig, Question } from "@/lib/test/questions"; // ← Import dari file terpisah
+import { getTestQuestions } from "@/lib/actions/test-actions";
+import { type Question, type QuestionType } from "@/lib/test/questions";
 import { RadioQuestion } from "@/components/sections/test/RadioQuestion";
 import { CheckboxQuestion } from "@/components/sections/test/CheckboxQuestion";
 import { MatrixQuestion } from "@/components/sections/test/MatrixQuestion";
@@ -12,8 +14,35 @@ import { VisualQuestion } from "@/components/sections/test/VisualQuestion";
 export function TestContent({ type }: { type: string }) {
   const { currentQuestionIndex, answers, setAnswer } = useTest();
 
-  const config = getTestConfig(type);
-  const currentQuestion = config.questions[currentQuestionIndex];
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchQuestions() {
+      try {
+        const data = await getTestQuestions(type);
+        console.log("First question type:", data[0]?.type);
+
+        console.log(
+          "All types:",
+          data.map((q) => q.type),
+        );
+
+        setQuestions(data);
+      } catch (error) {
+        console.error("Failed:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchQuestions();
+  }, [type]);
+
+  if (loading) return <p className="text-white">Loading...</p>;
+  if (!questions.length)
+    return <p className="text-white">No questions available.</p>;
+
+  const currentQuestion = questions[currentQuestionIndex];
   const currentAnswer = answers[currentQuestion?.id];
 
   if (!currentQuestion) return null;

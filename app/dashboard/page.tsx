@@ -97,7 +97,7 @@ function formatPercentile(testType: TestType, value: string): string {
     if (num >= 26) return "Moderate AQ";
     return "Typical Range";
   }
-  return value; // IQ & EQ: "91st", "70th", dll
+  return value;
 }
 
 function getScoreDisplay(item: TestHistoryItem): {

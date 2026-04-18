@@ -16,6 +16,7 @@ export default async function TestLayout({
     <TestLayoutClient
       durationSeconds={config.duration}
       totalQuestions={config.questions.length}
+      testType={type}
     >
       {children}
     </TestLayoutClient>

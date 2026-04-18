@@ -6,6 +6,7 @@ import {
   useState,
   ReactNode,
   useEffect,
+  useRef,
 } from "react";
 
 interface TestContextType {
@@ -16,7 +17,6 @@ interface TestContextType {
   setAnswer: (questionId: number, answer: any) => void;
   nextQuestion: () => void;
   prevQuestion: () => void;
-  isFinished: boolean;
 }
 
 const TestContext = createContext<TestContextType | undefined>(undefined);
@@ -25,22 +25,37 @@ export function TestProvider({
   children,
   durationSeconds,
   totalQuestions,
+  hasTimer = false,
 }: {
   children: ReactNode;
   durationSeconds: number;
   totalQuestions: number;
+  hasTimer?: boolean;
 }) {
   const [currentTime, setCurrentTime] = useState(durationSeconds);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, any>>({});
 
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
-    if (currentTime <= 0) return;
-    const timer = setInterval(() => {
+    if (!hasTimer || currentTime <= 0) return;
+
+    timerRef.current = setInterval(() => {
       setCurrentTime((prev) => prev - 1);
     }, 1000);
-    return () => clearInterval(timer);
-  }, [currentTime]);
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [hasTimer, currentTime]);
+
+  const clearTimer = () => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  };
 
   const setAnswer = (questionId: number, answer: any) => {
     setAnswers((prev) => ({ ...prev, [questionId]: answer }));
@@ -58,9 +73,6 @@ export function TestProvider({
     }
   };
 
-  const isFinished =
-    currentTime <= 0 || currentQuestionIndex === totalQuestions - 1;
-
   return (
     <TestContext.Provider
       value={{
@@ -71,7 +83,6 @@ export function TestProvider({
         setAnswer,
         nextQuestion,
         prevQuestion,
-        isFinished,
       }}
     >
       {children}
@@ -82,5 +93,10 @@ export function TestProvider({
 export function useTest() {
   const context = useContext(TestContext);
   if (!context) throw new Error("useTest must be used within TestProvider");
+  return context;
+}
+
+export function useTestTimer() {
+  const context = useContext(TestContext);
   return context;
 }
