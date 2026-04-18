@@ -31,7 +31,6 @@ const steps = [
 export function GrayPrintSection() {
   return (
     <section className="relative overflow-hidden min-h-[550px] md:min-h-[650px] lg:min-h-[750px] flex items-center justify-center px-6 md:px-12 lg:px-39">
-      {/* ✅ Background Image: Selalu cover area section di semua breakpoint */}
       <div className="absolute inset-0 z-0">
         <Image
           src={bgVector}
@@ -42,7 +41,6 @@ export function GrayPrintSection() {
         />
       </div>
 
-      {/* ✅ Content Wrapper */}
       <div className="relative z-10 w-full max-w-7xl flex flex-col items-center justify-center py-16 md:py-20 lg:py-25 space-y-6 md:space-y-8 lg:space-y-12">
         <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-white">
           W

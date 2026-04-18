@@ -23,7 +23,7 @@ export function Button({
   };
 
   const sizes = {
-    sm: "w-53 py-4.5 text-sm",
+    sm: "px-4 py-2 text-xs",
     md: "w-53 py-4.5 text-sm",
     lg: "w-53 py-4.5 text-sm",
   };

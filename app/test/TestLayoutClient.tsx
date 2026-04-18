@@ -105,18 +105,17 @@ function LayoutContent({ children }: { children: ReactNode }) {
               {currentQuestionIndex + 1}/{totalQuestions}
             </span>
 
-            {/* ✅ Tombol Submit */}
             {isLastQuestion ? (
               <button
                 onClick={handleSubmit}
-                className="bg-[#D9D9D9] text-black px-6 py-2 rounded-full font-medium hover:bg-white transition-colors"
+                className="bg-[#D9D9D9] text-black px-6 py-2 rounded-full font-medium hover:bg-white transition-colors hover:cursor-pointer"
               >
                 Submit Test
               </button>
             ) : (
               <button
                 onClick={nextQuestion}
-                className="hover:opacity-80 transition-opacity"
+                className="hover:opacity-80 transition-opacity hover:cursor-pointer"
               >
                 <Image
                   src={arrowRightIcon}
