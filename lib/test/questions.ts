@@ -23,19 +23,3 @@ export interface ScoringQuestion extends Question {
   reverse_scored?: boolean;
   difficulty?: number;
 }
-
-export interface TestConfig {
-  duration: number;
-  questions: Question[];
-}
-
-export const TEST_CONFIG: Record<string, TestConfig> = {
-  iq: {
-    duration: 1200, // 20 minutes
-    questions: [],
-  },
-};
-
-export function getTestConfig(type: string): TestConfig {
-  return TEST_CONFIG[type] || TEST_CONFIG.iq;
-}
