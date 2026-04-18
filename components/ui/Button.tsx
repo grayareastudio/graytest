@@ -1,9 +1,14 @@
+"use client";
+
+import { Slot } from "@radix-ui/react-slot";
+
 interface ButtonProps {
   children: React.ReactNode;
   variant?: "primary" | "secondary" | "outline";
   size?: "sm" | "md" | "lg";
   className?: string;
   onClick?: () => void;
+  asChild?: boolean;
 }
 
 export function Button({
@@ -12,7 +17,10 @@ export function Button({
   size = "md",
   className = "",
   onClick,
+  asChild = false,
 }: ButtonProps) {
+  const Comp = asChild ? Slot : "button";
+
   const baseStyles =
     "rounded-full font-semibold transition-all duration-200 hover:cursor-pointer";
 
@@ -29,11 +37,11 @@ export function Button({
   };
 
   return (
-    <button
+    <Comp
       onClick={onClick}
       className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
     >
       {children}
-    </button>
+    </Comp>
   );
 }

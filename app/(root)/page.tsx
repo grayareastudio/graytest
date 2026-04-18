@@ -13,6 +13,7 @@ export default function HomePage() {
           title="Find out how your brain actually works"
           description="Achieve clarity though the world's first AI-powered cognitive testing platform."
           buttonText="Take a Test"
+          href="/test/iq"
           videoSrc="/videos/hero.mp4"
           videoClassName="right-8 lg:right-39 h-9/10"
         />

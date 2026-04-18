@@ -144,7 +144,7 @@ export default function DashboardPage() {
             </p>
           </div>
           <Button variant="primary" size="md">
-            Take New Test
+            <Link href="/test/iq">Take New Test</Link>
           </Button>
         </div>
 
@@ -252,8 +252,8 @@ export default function DashboardPage() {
                 <p className="text-sm md:text-base mb-4">
                   No tests found for this filter.
                 </p>
-                <Button variant="outline" size="sm">
-                  <Link href="/iq">Take a Test</Link>
+                <Button variant="outline" size="sm" asChild>
+                  <Link href="/test/iq">Take a Test</Link>
                 </Button>
               </div>
             )}

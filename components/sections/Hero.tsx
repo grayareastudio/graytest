@@ -3,10 +3,12 @@
 import { Button } from "@/components/ui/Button";
 import Image, { StaticImageData } from "next/image";
 import { TypingText } from "../ui/TypingText";
+import Link from "next/link";
 
 type HeroProps = {
   title: string;
   description: string;
+  href: string;
   buttonText: string;
   videoSrc: string;
   videoClassName?: string;
@@ -16,6 +18,7 @@ type HeroProps = {
 export function Hero({
   title,
   description,
+  href,
   buttonText,
   videoSrc,
   videoClassName,
@@ -52,14 +55,10 @@ export function Hero({
         <p className="text-lg md:text-xl lg:text-2xl text-[#D4D4D4] font-light max-w-137">
           {description}
         </p>
-        <Button
-          onClick={() =>
-            document
-              .getElementById("tests")
-              ?.scrollIntoView({ behavior: "smooth" })
-          }
-        >
-          {buttonText}
+        <Button asChild>
+          <Link href={href} className="block text-center">
+            {buttonText}
+          </Link>
         </Button>
       </div>
     </section>

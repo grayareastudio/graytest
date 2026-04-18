@@ -5,6 +5,7 @@ import openAi from "@/assets/icons/open-ai.png";
 import lamp from "@/assets/icons/lamp.svg";
 import { Button } from "@/components/ui/Button";
 import Image from "next/image";
+import Link from "next/link";
 
 const features = [
   {
@@ -60,14 +61,10 @@ export function WhySection() {
         </div>
 
         <div className="text-center mt-12 md:mt-24 lg:mt-35">
-          <Button
-            onClick={() =>
-              document
-                .getElementById("tests")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-          >
-            Take A Test
+          <Button asChild>
+            <Link href="/test/iq" className="block mx-auto">
+              Take A Test
+            </Link>
           </Button>
         </div>
       </div>

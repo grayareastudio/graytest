@@ -13,6 +13,7 @@ export default function Page() {
         title="Intelligence Quotient (IQ)"
         description="Measure your cognitive abilities across multiple domains including pattern recognition, logical reasoning, and problem-solving capabilities."
         buttonText="Start your assessment"
+        href="/test/iq"
         videoSrc="/videos/iq.mp4"
         bgImage={bgImage}
         videoClassName="right-8 lg:right-39 aspect-9/7 object-cover w-2/5"

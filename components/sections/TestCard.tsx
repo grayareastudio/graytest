@@ -1,5 +1,6 @@
 import Image, { StaticImageData } from "next/image";
 import { Button } from "../ui/Button";
+import Link from "next/link";
 interface TestCardProps {
   title: string;
   description: string;
@@ -37,13 +38,10 @@ export function TestCard({
           {duration} · {price}
         </p>
 
-        <Button
-          variant="primary"
-          size="sm"
-          className="w-full"
-          onClick={onAssessment}
-        >
-          Start your Assessment
+        <Button variant="primary" size="sm" asChild>
+          <Link href={`/test/${title.toLowerCase()}`} className="block">
+            Start your Assessment
+          </Link>
         </Button>
         <Button
           variant="outline"
