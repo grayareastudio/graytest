@@ -1,13 +1,8 @@
 "use server";
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/supabase/client";
 import { type Question, type ScoringQuestion } from "@/lib/test/questions";
 import { calculateScore } from "@/lib/scoring";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-);
 
 function mapQuestionType(dbType: string): Question["type"] {
   switch (dbType) {
@@ -52,6 +47,7 @@ function mapToScoringQuestion(q: any): ScoringQuestion {
 }
 
 export async function getTestQuestions(testType: string): Promise<Question[]> {
+  const supabase = createClient();
   const { data: data, error } = await supabase
     .from("questions")
     .select(
@@ -83,6 +79,7 @@ export async function submitTestResults(
   totalQuestions: number,
   durationSeconds?: number,
 ) {
+  const supabase = createClient();
   const { data: questions, error: fetchError } = await supabase
     .from("questions")
     .select(

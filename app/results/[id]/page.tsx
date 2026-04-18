@@ -1,7 +1,11 @@
 // app/results/[id]/page.tsx
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { getResultById } from "@/lib/actions/result-actions"; // ✅ Import Server Action
 
+// ============================================================================
+// 📚 CONTENT CONFIG (Editorial content - tetap statis)
+// ============================================================================
 const TEST_CONTENT: Record<
   string,
   {
@@ -165,37 +169,58 @@ export default async function ResultPage({
 }) {
   const { id } = await params;
 
-  const fakeResult = {
-    id,
-    testType: "IQ Assessment",
-    score: 128,
-    percentile: "91st",
-    tag: "High Average",
-    correct: 8,
-    wrong: 2,
-    accuracy: 80,
-    traits: [
-      { name: "Logical Reasoning", value: 92 },
-      { name: "Pattern Recognition", value: 85 },
-      { name: "Verbal Ability", value: 78 },
-      { name: "Processing Speed", value: 88 },
-    ],
-  };
+  const result = await getResultById(id);
 
-  const testKey = getTestKey(fakeResult.testType);
+  if (!result) {
+    return (
+      <main className="min-h-full flex flex-col items-center justify-center bg-linear-to-tr from-black to-[#171717] text-white px-6">
+        <h1 className="font-serif text-3xl text-white mb-4">
+          Result Not Found
+        </h1>
+        <p className="text-[#A1A1A1] mb-8">
+          The test result you're looking for doesn't exist.
+        </p>
+        <a href="/" className="text-white underline">
+          Back to Home
+        </a>
+      </main>
+    );
+  }
+
+  const testKey = getTestKey(result.test_type);
   const content = TEST_CONTENT[testKey];
+
+  const traits = result.dimension_scores
+    ? Object.entries(result.dimension_scores).map(([name, value]) => ({
+        name,
+        value: value as number,
+      }))
+    : content.dimensions.map((d) => ({ name: d.name, value: 0 }));
+
+  const isIQ = result.test_type.toLowerCase().includes("iq");
+  const stats = isIQ
+    ? {
+        correct: Math.round(((result.score || 85) - 85) / 5.5),
+        wrong: Math.max(
+          0,
+          (result.total_questions || 10) -
+            Math.round(((result.score || 85) - 85) / 5.5),
+        ),
+        accuracy: Math.round((((result.score || 85) - 85) / 55) * 100),
+      }
+    : { correct: "—", wrong: "—", accuracy: "—" };
 
   return (
     <main className="min-h-full flex flex-col bg-linear-to-tr from-black to-[#171717] text-white">
       <Header />
 
-      {/* Hero / Score Section */}
+      {/* Hero Section */}
       <section className="pt-28 md:pt-36 lg:pt-40 pb-12 md:pb-16 lg:pb-20 px-6 md:px-12 lg:px-39">
         <div className="mx-auto max-w-7xl">
           {/* Artistic Title & Description */}
           <div className="mb-10 md:mb-12 lg:mb-16">
             <span className="text-[10px] tracking-[0.28em] uppercase text-[#c6bcaa] opacity-75 block mb-3">
-              {fakeResult.testType}
+              {result.test_type}
             </span>
             <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-white mb-3 md:mb-4 leading-tight">
               {content.artisticTitle}
@@ -205,13 +230,13 @@ export default async function ResultPage({
             </p>
           </div>
 
-          {/* Score Stats - Responsive Grid */}
+          {/* Score Stats */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-10 md:mb-12 lg:mb-16">
             {[
-              { label: "Total Score", value: fakeResult.score },
-              { label: "Correct", value: fakeResult.correct },
-              { label: "Wrong", value: fakeResult.wrong },
-              { label: "Accuracy", value: `${fakeResult.accuracy}%` },
+              { label: "Total Score", value: result.score ?? "—" },
+              { label: "Correct", value: stats.correct },
+              { label: "Wrong", value: stats.wrong },
+              { label: "Accuracy", value: isIQ ? `${stats.accuracy}%` : "N/A" },
             ].map((stat) => (
               <div
                 key={stat.label}
@@ -234,11 +259,11 @@ export default async function ResultPage({
                 Percentile ranking
               </div>
               <div className="font-serif text-2xl md:text-3xl text-white">
-                {fakeResult.percentile}
+                {result.percentile || "—"}
               </div>
             </div>
             <span className="text-sm font-semibold text-white bg-[#0A0A0A]/20 border border-white px-4 py-1.5 rounded-full backdrop-blur-[10px] self-start md:self-auto">
-              {fakeResult.tag}
+              {result.tag || "—"}
             </span>
           </div>
 
@@ -248,7 +273,7 @@ export default async function ResultPage({
               Dimension breakdown
             </h3>
             <div className="space-y-4 md:space-y-5">
-              {fakeResult.traits.map((trait) => (
+              {traits.map((trait) => (
                 <div
                   key={trait.name}
                   className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4"
@@ -258,7 +283,7 @@ export default async function ResultPage({
                   </div>
                   <div className="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-[#D4D4D4] transition-all duration-700"
+                      className="h-full bg-[#D9D9D9] transition-all duration-700"
                       style={{ width: `${trait.value}%` }}
                     />
                   </div>
@@ -286,7 +311,8 @@ export default async function ResultPage({
                 className="bg-[#0A0A0A]/20 backdrop-blur-md border border-white/10 rounded-2xl p-6 md:p-8 hover:-translate-y-1 transition-transform"
               >
                 <div className="font-serif text-3xl md:text-4xl text-white leading-none mb-3 md:mb-4">
-                  {item.score}
+                  {traits.find((t) => t.name.includes(item.category))?.value ||
+                    "—"}
                 </div>
                 <div className="text-[9px] md:text-[10px] tracking-[0.25em] uppercase text-[#A1A1A1] mb-3 md:mb-4">
                   {item.category}
@@ -332,7 +358,7 @@ export default async function ResultPage({
         </div>
       </section>
 
-      {/* Clinical Disclaimer (Spectrum only) */}
+      {/* Clinical Disclaimer */}
       {content.showDisclaimer && (
         <section className="px-6 md:px-12 lg:px-39 pb-12 md:pb-16">
           <div className="mx-auto max-w-7xl bg-[#0A0A0A]/20 backdrop-blur-md border border-[#c6bcaa]/20 rounded-2xl p-5 md:p-6">
