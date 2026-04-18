@@ -2,16 +2,35 @@
 
 import { Button } from "@/components/ui/Button";
 import { useState } from "react";
+import Link from "next/link";
 
-// 📊 Mock Data (Phase 1)
-const STATS = [
-  { label: "Total Tests", value: "12" },
-  { label: "Average Score", value: "118" },
-  { label: "Best Score", value: "134" },
-  { label: "Time Invested", value: "2h 14m" },
-];
+type TestType = "IQ Assessment" | "EQ Assessment" | "Personality" | "Spectrum";
+type FilterType = "all" | "iq" | "eq" | "personality" | "spectrum";
 
-const HISTORY = [
+interface TestHistoryItem {
+  id: number;
+  type: TestType;
+  date: string;
+  score: number | null;
+  percentile: string;
+  duration: string;
+}
+
+interface DashboardStats {
+  totalTests: string;
+  averageScore: string;
+  bestScore: string;
+  timeInvested: string;
+}
+
+const MOCK_STATS: DashboardStats = {
+  totalTests: "12",
+  averageScore: "118",
+  bestScore: "134",
+  timeInvested: "2h 14m",
+};
+
+const MOCK_HISTORY: TestHistoryItem[] = [
   {
     id: 1,
     type: "IQ Assessment",
@@ -25,7 +44,7 @@ const HISTORY = [
     type: "EQ Assessment",
     date: "Apr 10, 2026",
     score: 112,
-    percentile: "78th",
+    percentile: "70th",
     duration: "11m 05s",
   },
   {
@@ -41,7 +60,7 @@ const HISTORY = [
     type: "Spectrum",
     date: "Mar 28, 2026",
     score: 24,
-    percentile: "Moderate AQ",
+    percentile: "Typical Range",
     duration: "12m 10s",
   },
   {
@@ -52,21 +71,84 @@ const HISTORY = [
     percentile: "84th",
     duration: "15m 00s",
   },
+  {
+    id: 6,
+    type: "EQ Assessment",
+    date: "Mar 10, 2026",
+    score: 105,
+    percentile: "52nd",
+    duration: "10m 30s",
+  },
 ];
 
-type FilterType = "all" | "iq" | "eq" | "personality" | "spectrum";
+const FILTER_TYPE_MAP: Record<FilterType, TestType[]> = {
+  all: [],
+  iq: ["IQ Assessment"],
+  eq: ["EQ Assessment"],
+  personality: ["Personality"],
+  spectrum: ["Spectrum"],
+};
+
+function formatPercentile(testType: TestType, value: string): string {
+  if (testType === "Personality") return "OCEAN Profile";
+  if (testType === "Spectrum") {
+    const num = parseInt(value);
+    if (num >= 32) return "Elevated AQ";
+    if (num >= 26) return "Moderate AQ";
+    return "Typical Range";
+  }
+  return value; // IQ & EQ: "91st", "70th", dll
+}
+
+function getScoreDisplay(item: TestHistoryItem): {
+  primary: string;
+  secondary: string;
+  isNumeric: boolean;
+} {
+  if (item.type === "Personality") {
+    return { primary: "—", secondary: "OCEAN Profile", isNumeric: false };
+  }
+  if (item.type === "Spectrum") {
+    return {
+      primary: item.score?.toString() || "—",
+      secondary: formatPercentile("Spectrum", item.percentile),
+      isNumeric: true,
+    };
+  }
+  return {
+    primary: item.score?.toString() || "—",
+    secondary: item.percentile,
+    isNumeric: true,
+  };
+}
 
 export default function DashboardPage() {
   const [filter, setFilter] = useState<FilterType>("all");
 
   const filteredHistory =
     filter === "all"
-      ? HISTORY
-      : HISTORY.filter((h) => h.type.toLowerCase().includes(filter));
+      ? MOCK_HISTORY
+      : MOCK_HISTORY.filter((h) => FILTER_TYPE_MAP[filter].includes(h.type));
 
   return (
     <main className="min-h-full flex flex-col bg-linear-to-tr from-black to-[#171717] text-white">
-      {/* Header Section */}
+      <nav className="fixed top-10 left-4 right-4 z-40 flex items-center justify-between px-5 h-14 transition-all duration-400 backdrop-blur-[20px] border border-white/10 bg-[#0A0A0A]/20 md:top-14 md:left-39 md:right-39 md:h-16 md:px-10 rounded-full">
+        <Link
+          href="/"
+          className="font-serif text-lg uppercase text-[#D4D4D4] md:text-xl"
+        >
+          Graytest
+        </Link>
+        <div className="hidden md:flex gap-4">
+          <button className="rounded-full font-semibold transition-all duration-200 hover:cursor-pointer bg-[#E5E5E5]/20 border border-white/10 text-white px-6 py-2 text-sm">
+            Email
+          </button>
+          <button className="rounded-full font-semibold transition-all duration-200 hover:cursor-pointer bg-[#E5E5E5]/20 border border-white/10 text-white px-6 py-2 text-sm">
+            Share
+          </button>
+        </div>
+      </nav>
+
       <section className="pt-24 md:pt-28 lg:pt-32 pb-8 md:pb-10 lg:pb-8 px-6 md:px-12 lg:px-39">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10 md:mb-12">
           <div>
@@ -83,18 +165,17 @@ export default function DashboardPage() {
           </Button>
         </div>
 
-        {/* Stats Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-          {STATS.map((stat) => (
+          {Object.entries(MOCK_STATS).map(([key, value]) => (
             <div
-              key={stat.label}
+              key={key}
               className="bg-[#0A0A0A]/20 backdrop-blur-md border border-white/10 rounded-2xl p-5 md:p-6 text-center hover:-translate-y-1 transition-transform duration-300"
             >
               <div className="font-serif text-2xl md:text-3xl lg:text-4xl text-white mb-1 md:mb-2">
-                {stat.value}
+                {value}
               </div>
               <div className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-[#A1A1A1]">
-                {stat.label}
+                {key.replace(/([A-Z])/g, " $1").trim()}
               </div>
             </div>
           ))}
@@ -134,48 +215,63 @@ export default function DashboardPage() {
           {/* List */}
           <div className="divide-y divide-white/5">
             {filteredHistory.length > 0 ? (
-              filteredHistory.map((test) => (
-                <div
-                  key={test.id}
-                  className="flex flex-col md:flex-row md:items-center justify-between p-4 md:p-5 hover:bg-white/5 transition-colors gap-4"
-                >
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-serif text-base md:text-lg text-[#D4D4D4] truncate">
-                      {test.type}
-                    </h3>
-                    <p className="text-[10px] md:text-xs text-[#A1A1A1] mt-1 flex flex-wrap gap-x-2 gap-y-0.5">
-                      <span>{test.date}</span>
-                      <span>•</span>
-                      <span>{test.duration}</span>
-                    </p>
-                  </div>
-
-                  <div className="flex items-center justify-between md:justify-end gap-4 md:gap-6 lg:gap-10">
-                    <div className="text-right min-w-[80px] md:min-w-[100px]">
-                      <div className="font-serif text-lg md:text-xl text-white">
-                        {test.score ?? "—"}
+              filteredHistory.map((test) => {
+                const { primary, secondary, isNumeric } = getScoreDisplay(test);
+                return (
+                  <Link
+                    key={test.id}
+                    href={`/results/${test.id}`}
+                    className="block"
+                  >
+                    <div className="flex flex-col md:flex-row md:items-center justify-between p-4 md:p-5 hover:bg-white/5 transition-colors gap-4 cursor-pointer">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-serif text-base md:text-lg text-[#D4D4D4] truncate">
+                          {test.type}
+                        </h3>
+                        <p className="text-[10px] md:text-xs text-[#A1A1A1] mt-1 flex flex-wrap gap-x-2 gap-y-0.5">
+                          <span>{test.date}</span>
+                          <span>•</span>
+                          <span>{test.duration}</span>
+                        </p>
                       </div>
-                      <div className="text-[9px] md:text-[10px] uppercase tracking-wider text-[#A1A1A1]">
-                        {test.percentile}
+
+                      <div className="flex items-center justify-between md:justify-end gap-4 md:gap-6 lg:gap-10">
+                        <div className="text-right min-w-[80px] md:min-w-[100px]">
+                          {isNumeric ? (
+                            <>
+                              <div className="font-serif text-lg md:text-xl text-white">
+                                {primary}
+                              </div>
+                              <div className="text-[9px] md:text-[10px] uppercase tracking-wider text-[#A1A1A1]">
+                                {secondary}
+                              </div>
+                            </>
+                          ) : (
+                            <div className="text-[10px] md:text-xs text-[#A1A1A1] italic">
+                              {secondary}
+                            </div>
+                          )}
+                        </div>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="px-3 md:px-4 py-1.5 md:py-2 text-[10px] md:text-xs shrink-0"
+                          onClick={(e) => e.preventDefault()} // Prevent double navigation
+                        >
+                          View Results
+                        </Button>
                       </div>
                     </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="px-3 md:px-4 py-1.5 md:py-2 text-[10px] md:text-xs shrink-0"
-                    >
-                      View Results
-                    </Button>
-                  </div>
-                </div>
-              ))
+                  </Link>
+                );
+              })
             ) : (
               <div className="p-8 md:p-12 text-center text-[#A1A1A1]">
-                <p className="text-sm md:text-base">
+                <p className="text-sm md:text-base mb-4">
                   No tests found for this filter.
                 </p>
-                <Button variant="outline" size="sm" className="mt-4">
-                  Take a Test
+                <Button variant="outline" size="sm" asChild>
+                  <Link href="/iq">Take a Test</Link>
                 </Button>
               </div>
             )}
