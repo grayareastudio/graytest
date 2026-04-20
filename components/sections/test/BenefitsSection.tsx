@@ -59,7 +59,7 @@ export function BenefitsSection({
                 text-white font-medium text-sm
                 hover:bg-white/20 hover:border-white/30 
                 transition-all duration-300
-                backdrop-blur-sm mx-auto lg:mx-0
+                backdrop-blur-xs mx-auto lg:mx-0
               "
             >
               Start your assessment

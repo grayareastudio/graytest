@@ -1,11 +1,12 @@
 "use client";
 import brain from "@/assets/icons/brain.svg";
 import shift from "@/assets/icons/shift.svg";
-import openAi from "@/assets/icons/open-ai.png";
+import openAi from "@/assets/icons/light-chat-gpt-icon.svg";
 import lamp from "@/assets/icons/lamp.svg";
 import { Button } from "@/components/ui/Button";
 import Image from "next/image";
 import Link from "next/link";
+import whyGridVector from "@/assets/why-graytest-bg.svg";
 
 const features = [
   {
@@ -34,7 +35,15 @@ const features = [
 
 export function WhySection() {
   return (
-    <section className="py-16 md:py-20 lg:py-25 px-6 md:px-12 lg:px-39">
+    <section className="relative overflow-hidden py-16 md:py-20 lg:py-25 px-6 md:px-12 lg:px-39">
+        <div className="absolute inset-0 z-[-1]">
+          <Image
+            src={whyGridVector}
+            alt="Grid"
+            fill
+            className="object-cover"
+          />
+        </div>
       <div className="mx-auto">
         <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-center font-light text-white mb-10 md:mb-16 lg:mb-21">
           Why Graytest?
@@ -43,7 +52,7 @@ export function WhySection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           {features.map((feature) => (
             <div key={feature.title} className="text-center">
-              <div className="w-14 h-14 md:w-16 md:h-16 mx-auto mb-4 border border-white/10 rounded-full flex items-center justify-center">
+              <div className="border border-white/20 rounded-full w-14 h-14 md:w-16 md:h-16 mx-auto mb-4 backdrop-blur-sm flex items-center justify-center">
                 <Image
                   src={feature.icon}
                   alt={feature.title}
