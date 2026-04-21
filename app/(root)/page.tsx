@@ -29,7 +29,7 @@ export default function HomePage() {
           />
         </div>
         <TestCards />
-        <WhySection />
+        <WhySection isHomePage={true} />
       </div>
     </main>
   );

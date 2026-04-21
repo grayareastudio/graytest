@@ -33,9 +33,14 @@ const features = [
   },
 ];
 
-export function WhySection() {
+type HomeBoolean = {
+  isHomePage?: boolean;
+};
+
+export function WhySection({ isHomePage = false }: HomeBoolean) {
   return (
     <section className="relative overflow-hidden py-16 md:py-20 lg:py-25 px-6 md:px-12 lg:px-39">
+      {!isHomePage && (
         <div className="absolute inset-0 z-[-1]">
           <Image
             src={whyGridVector}
@@ -44,6 +49,7 @@ export function WhySection() {
             className="object-cover"
           />
         </div>
+      )}
       <div className="mx-auto">
         <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-center font-light text-white mb-10 md:mb-16 lg:mb-21">
           Why Graytest?
