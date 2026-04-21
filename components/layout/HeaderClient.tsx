@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { signOut } from "@/lib/actions/auth-actions";
 import { User } from "@supabase/supabase-js";
 
@@ -31,6 +32,9 @@ export function HeaderClient({ user }: HeaderClientProps) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+
+  // ✅ Dapatkan pathname saat ini
+  const pathname = usePathname();
 
   const userMenuRef = useRef<HTMLLIElement>(null);
 
@@ -62,6 +66,11 @@ export function HeaderClient({ user }: HeaderClientProps) {
         { name: "Login", href: "/login" },
         { name: "Sign Up", href: "/register" },
       ];
+
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname.startsWith(href);
+  };
 
   const getDisplayName = () => {
     if (!user) return null;
@@ -101,7 +110,14 @@ export function HeaderClient({ user }: HeaderClientProps) {
             <li key={link.name}>
               <a
                 href={link.href}
-                className="font-light text-[#D4D4D4] no-underline transition-colors hover:text-white"
+                className={`
+                  font-light no-underline transition-colors
+                  ${
+                    isActive(link.href)
+                      ? "text-white font-medium"
+                      : "text-[#D4D4D4] hover:text-white"
+                  }
+                `}
               >
                 {link.name}
               </a>
@@ -208,7 +224,14 @@ export function HeaderClient({ user }: HeaderClientProps) {
                 <a
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block font-light text-lg text-[#D4D4D4] no-underline transition-colors hover:text-white py-2.5 border-b border-white/5 last:border-0"
+                  className={`
+                    block font-light text-lg no-underline transition-colors py-2.5 border-b border-white/5 last:border-0
+                    ${
+                      isActive(link.href)
+                        ? "text-white font-medium"
+                        : "text-[#D4D4D4] hover:text-white"
+                    }
+                  `}
                 >
                   {link.name}
                 </a>
