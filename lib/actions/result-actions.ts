@@ -1,7 +1,7 @@
 // lib/actions/result-actions.ts
 "use server";
 
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/server";
 
 export interface TestResult {
   id: string;
@@ -22,7 +22,7 @@ export interface TestResult {
 }
 
 export async function getResultById(id: string): Promise<TestResult | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("test_results")
@@ -30,8 +30,12 @@ export async function getResultById(id: string): Promise<TestResult | null> {
     .eq("id", id)
     .single();
 
-  if (error || !data) {
-    console.error("Failed to fetch result:", error);
+  if (error) {
+    return null;
+  }
+
+  if (!data) {
+    console.warn(`No result found for ID: ${id}`);
     return null;
   }
 
@@ -41,7 +45,7 @@ export async function getResultById(id: string): Promise<TestResult | null> {
 export async function getUserTestHistory(
   userId?: string,
 ): Promise<TestResult[]> {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   let query = supabase
     .from("test_results")

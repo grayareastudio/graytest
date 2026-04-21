@@ -94,8 +94,6 @@ function LayoutContent({
 
   return (
     <>
-      <Header />
-
       {testType === "iq" && (
         <div className="fixed top-20 md:top-24 lg:top-41 left-4 md:left-6 lg:left-39 z-40">
           <div className="flex items-center gap-3 md:gap-5 px-4 py-2 md:px-5 md:py-2.5 backdrop-blur-[20px] border border-white/10 rounded-full">

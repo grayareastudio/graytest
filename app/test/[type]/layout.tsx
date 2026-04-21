@@ -1,9 +1,10 @@
 // app/test/[type]/layout.tsx
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/server";
 import { TestLayoutClient } from "./TestLayoutClient";
+import { Header } from "@/components/layout/Header";
 
 async function getTestMetadata(testType: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { count, error } = await supabase
     .from("questions")
@@ -31,16 +32,19 @@ export default async function TestLayout({
   params: Promise<{ type: string }>;
 }) {
   const { type } = await params;
-
   const { duration, totalQuestions } = await getTestMetadata(type);
 
   return (
-    <TestLayoutClient
-      durationSeconds={duration}
-      totalQuestions={totalQuestions}
-      testType={type}
-    >
-      {children}
-    </TestLayoutClient>
+    <>
+      <Header />
+
+      <TestLayoutClient
+        durationSeconds={duration}
+        totalQuestions={totalQuestions}
+        testType={type}
+      >
+        {children}
+      </TestLayoutClient>
+    </>
   );
 }

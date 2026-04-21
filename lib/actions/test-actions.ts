@@ -1,9 +1,12 @@
+// lib/actions/test-actions.ts
 "use server";
 
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/server";
 import { type Question, type ScoringQuestion } from "@/lib/test/questions";
 import { calculateScore } from "@/lib/scoring";
 import { generateGrayPrintAI, type AIInsightPayload } from "./ai-actions";
+import { getCurrentUser } from "./auth-actions";
+
 function mapQuestionType(dbType: string): Question["type"] {
   switch (dbType) {
     case "pattern":
@@ -47,7 +50,7 @@ function mapToScoringQuestion(q: any): ScoringQuestion {
 }
 
 export async function getTestQuestions(testType: string): Promise<Question[]> {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: data, error } = await supabase
     .from("questions")
     .select("id, question_type, text, options, rows, main_image, sort_order")
@@ -65,7 +68,9 @@ export async function submitTestResults(
   totalQuestions: number,
   durationSeconds?: number,
 ) {
-  const supabase = createClient();
+  const supabase = await createClient();
+  const user = await getCurrentUser();
+
   const { data: questions, error: fetchError } = await supabase
     .from("questions")
     .select(
@@ -89,7 +94,7 @@ export async function submitTestResults(
       scoringResult.dimension_scores || {},
     );
   } catch (err) {
-    console.warn("AI generation skipped (static fallback will be used):", err);
+    console.warn("AI generation skipped:", err);
   }
 
   const { data: result, error: insertError } = await supabase
@@ -104,6 +109,7 @@ export async function submitTestResults(
       dimension_scores: scoringResult.dimension_scores,
       duration_seconds: durationSeconds,
       completed_at: new Date().toISOString(),
+      user_id: user?.id || null,
       ai_artistic_title: aiContent?.artisticTitle,
       ai_artistic_description: aiContent?.artisticDescription,
       ai_insights: aiContent?.insights,

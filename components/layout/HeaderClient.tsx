@@ -11,10 +11,10 @@ interface HeaderClientProps {
 
 const guestLinks = [
   { name: "Home", href: "/" },
-  { name: "IQ", href: "/test/iq" },
-  { name: "EQ", href: "/test/eq" },
-  { name: "Personality", href: "/test/personality" },
-  { name: "Spectrum", href: "/test/spectrum" },
+  { name: "IQ", href: "/iq" },
+  { name: "EQ", href: "/eq" },
+  { name: "Personality", href: "/personality" },
+  { name: "Spectrum", href: "/spectrum" },
 ];
 
 export function HeaderClient({ user }: HeaderClientProps) {
@@ -158,14 +158,10 @@ export function HeaderClient({ user }: HeaderClientProps) {
                   </span>
                 </li>
                 <li>
-                  <form
-                    action={async () => {
-                      await signOut();
-                      setMobileMenuOpen(false);
-                    }}
-                  >
+                  <form action={signOut}>
                     <button
                       type="submit"
+                      onClick={() => setMobileMenuOpen(false)}
                       className="block font-light text-lg text-[#D4D4D4] no-underline transition-colors hover:text-white py-2.5 w-full text-left"
                     >
                       Logout
