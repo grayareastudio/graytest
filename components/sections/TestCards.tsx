@@ -39,8 +39,6 @@ const tests = [
 ];
 
 export function TestCards() {
-  const handleAssessment = (testType: string) => {};
-
   return (
     <section
       className="py-16 md:py-20 lg:py-25 px-6 md:px-12 lg:px-39"
@@ -60,7 +58,6 @@ export function TestCards() {
             <TestCard
               key={test.title}
               {...test}
-              onAssessment={() => handleAssessment(test.title)}
               onAbout={() => console.log("About", test.title)}
             />
           ))}
