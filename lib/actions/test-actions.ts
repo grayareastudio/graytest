@@ -137,3 +137,34 @@ export async function submitTestResults(
 
   return result;
 }
+
+export async function getScoringQuestions(
+  testType: string,
+): Promise<ScoringQuestion[]> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("questions")
+    .select(
+      `
+      id,
+      question_type,
+      text,
+      options,
+      rows,
+      main_image,
+      correct_answer,
+      dimension,
+      spectrum_dimension,
+      reverse_scored,
+      sort_order
+    `,
+    )
+    .eq("test_type", testType)
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true });
+
+  if (error) throw new Error(error.message);
+
+  return (data || []).map(mapToScoringQuestion);
+}
