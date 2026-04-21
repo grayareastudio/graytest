@@ -107,13 +107,15 @@ export function BenefitsSection({
 
                     <div
                       className={`
-                        overflow-hidden transition-all duration-500 ease-out
-                        ${isExpanded ? "max-h-60 md:max-h-40 opacity-100" : "max-h-0 opacity-0"}
+                        grid transition-[grid-template-rows] duration-500 ease-out
+                        ${isExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}
                       `}
                     >
-                      <p className="pb-4 md:pb-7.5 text-sm md:text-base text-white leading-relaxed">
-                        {item.description}
-                      </p>
+                      <div className="overflow-hidden">
+                        <p className="pb-4 md:pb-7.5 text-sm md:text-base text-white leading-relaxed">
+                          {item.description}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 );
