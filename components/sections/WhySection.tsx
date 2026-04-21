@@ -58,15 +58,26 @@ export function WhySection({ isHomePage = false }: HomeBoolean) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           {features.map((feature) => (
             <div key={feature.title} className="text-center">
-              <div className="border border-white/20 rounded-full w-14 h-14 md:w-16 md:h-16 mx-auto mb-4 backdrop-blur-sm flex items-center justify-center">
-                <Image
-                  src={feature.icon}
-                  alt={feature.title}
-                  width={24}
-                  height={24}
-                  className="md:w-[30] md:h-[30]"
-                />
-              </div>
+              <div className="rounded-full 
+                shadow-[inset_1px_1px_0px_rgba(255,255,255,0.2)]                
+                bg-gradient-to-br from-black/35 to-gray-200/5
+                from-5% to-95%
+                backdrop-blur-[1.5px]
+                w-14 h-14 md:w-16 md:h-16
+                mx-auto mb-4
+                flex items-center justify-center">
+                  <div className="absolute inset-0 rounded-full
+                    shadow-[inset_-1px_-1px_0px_rgba(255,255,255,0.5)]
+                    pointer-events-none
+                    z-0" />
+                  <Image
+                    src={feature.icon}
+                    alt={feature.title}
+                    width={24}
+                    height={24}
+                    className="relative z-10 md:w-[30px] md:h-[30px]"
+                  />
+                </div>
               <h3 className="font-serif text-lg md:text-xl text-[#D4D4D4] mb-3 md:mb-4.5">
                 {feature.title}
               </h3>
