@@ -43,16 +43,6 @@ export function Hero({
           src={bgImage}
           alt="bg"
           fill
-          className="-z-1 object-cover rotate-180 top-0"
-          priority
-        />
-      )}
-
-      {bgImage && (
-        <Image
-          src={bgImage}
-          alt="bg"
-          fill
           className="-z-1 object-cover"
           priority
         />
