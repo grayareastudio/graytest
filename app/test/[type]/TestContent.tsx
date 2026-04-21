@@ -21,12 +21,6 @@ export function TestContent({ type }: { type: string }) {
     async function fetchQuestions() {
       try {
         const data = await getTestQuestions(type);
-        console.log("First question type:", data[0]?.type);
-
-        console.log(
-          "All types:",
-          data.map((q) => q.type),
-        );
 
         setQuestions(data);
       } catch (error) {

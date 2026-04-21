@@ -2,6 +2,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { TestLayoutClient } from "./TestLayoutClient";
 import { Header } from "@/components/layout/Header";
+import { getCurrentUser } from "@/lib/actions/auth-actions";
 
 async function getTestMetadata(testType: string) {
   const supabase = await createClient();
@@ -33,6 +34,7 @@ export default async function TestLayout({
 }) {
   const { type } = await params;
   const { duration, totalQuestions } = await getTestMetadata(type);
+  const user = await getCurrentUser();
 
   return (
     <>
@@ -42,6 +44,7 @@ export default async function TestLayout({
         durationSeconds={duration}
         totalQuestions={totalQuestions}
         testType={type}
+        userEmail={user?.email}
       >
         {children}
       </TestLayoutClient>

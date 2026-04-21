@@ -15,6 +15,7 @@ interface TestLayoutClientProps {
   durationSeconds: number;
   totalQuestions: number;
   testType: string;
+  userEmail?: string;
 }
 
 export function TestLayoutClient({
@@ -22,6 +23,7 @@ export function TestLayoutClient({
   durationSeconds,
   totalQuestions,
   testType,
+  userEmail,
 }: TestLayoutClientProps) {
   const hasTimer = testType === "iq";
 
@@ -31,7 +33,11 @@ export function TestLayoutClient({
       totalQuestions={totalQuestions}
       hasTimer={hasTimer}
     >
-      <LayoutContent testType={testType} durationSeconds={durationSeconds}>
+      <LayoutContent
+        testType={testType}
+        durationSeconds={durationSeconds}
+        userEmail={userEmail}
+      >
         {children}
       </LayoutContent>
     </TestProvider>
@@ -42,10 +48,12 @@ function LayoutContent({
   children,
   testType,
   durationSeconds,
+  userEmail,
 }: {
   children: ReactNode;
   testType: string;
   durationSeconds: number;
+  userEmail?: string;
 }) {
   const router = useRouter();
   const {
@@ -78,6 +86,7 @@ function LayoutContent({
         answers,
         totalQuestions,
         actualDuration,
+        userEmail,
       );
       router.push(`/results/${result.id}`);
     } catch (error) {

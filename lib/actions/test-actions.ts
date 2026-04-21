@@ -6,6 +6,7 @@ import { type Question, type ScoringQuestion } from "@/lib/test/questions";
 import { calculateScore } from "@/lib/scoring";
 import { generateGrayPrintAI, type AIInsightPayload } from "./ai-actions";
 import { getCurrentUser } from "./auth-actions";
+import { sendTestResultEmail } from "./email-actions";
 
 function mapQuestionType(dbType: string): Question["type"] {
   switch (dbType) {
@@ -67,6 +68,7 @@ export async function submitTestResults(
   answers: Record<number, any>,
   totalQuestions: number,
   durationSeconds?: number,
+  userEmail?: string,
 ) {
   const supabase = await createClient();
   const user = await getCurrentUser();
@@ -119,5 +121,19 @@ export async function submitTestResults(
     .single();
 
   if (insertError) throw new Error(insertError.message);
+
+  if (userEmail && result?.id) {
+    sendTestResultEmail({
+      to: userEmail,
+      testType,
+      score: scoringResult.score,
+      percentile: scoringResult.percentile,
+      tag: scoringResult.tag,
+      resultId: result.id,
+      artisticTitle: aiContent?.artisticTitle,
+      artisticDescription: aiContent?.artisticDescription,
+    }).catch((err) => console.warn("Email delivery failed:", err));
+  }
+
   return result;
 }
