@@ -1,11 +1,8 @@
 // app/results/[id]/page.tsx
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { getResultById } from "@/lib/actions/result-actions"; // ✅ Import Server Action
+import { getResultById } from "@/lib/actions/result-actions";
 
-// ============================================================================
-// 📚 CONTENT CONFIG (Editorial content - tetap statis)
-// ============================================================================
 const TEST_CONTENT: Record<
   string,
   {
@@ -210,6 +207,17 @@ export default async function ResultPage({
       }
     : { correct: "—", wrong: "—", accuracy: "—" };
 
+  const artisticTitle = result.ai_artistic_title || content.artisticTitle;
+  const artisticDescription =
+    result.ai_artistic_description || content.artisticDescription;
+  const aiInsights =
+    Array.isArray(result.ai_insights) && result.ai_insights.length > 0
+      ? result.ai_insights
+      : content.breakdown.map((b) => b.desc);
+  const aiRecommendations = Array.isArray(result.ai_recommendations)
+    ? result.ai_recommendations
+    : [];
+
   return (
     <main className="min-h-full flex flex-col bg-linear-to-tr from-black to-[#171717] text-white">
       <Header />
@@ -223,10 +231,10 @@ export default async function ResultPage({
               {result.test_type}
             </span>
             <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-white mb-3 md:mb-4 leading-tight">
-              {content.artisticTitle}
+              {artisticTitle}
             </h1>
             <p className="text-base md:text-lg lg:text-xl text-[#D4D4D4] font-light leading-relaxed max-w-2xl">
-              {content.artisticDescription}
+              {artisticDescription}
             </p>
           </div>
 
@@ -352,7 +360,7 @@ export default async function ResultPage({
               AI Insight
             </span>
             <p className="text-base md:text-lg text-[#D4D4D4] font-light leading-relaxed">
-              {content.artisticDescription}
+              {artisticDescription}
             </p>
           </div>
         </div>
