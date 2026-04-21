@@ -1,3 +1,4 @@
+// lib/scoring.ts
 import type { ScoringQuestion } from "@/lib/test/questions";
 
 export interface ScoringResult {
@@ -12,6 +13,9 @@ export function calculateScore(
   answers: Record<number, any>,
   questions: ScoringQuestion[],
 ): ScoringResult {
+  if (questions.length === 0)
+    throw new Error("No questions provided for scoring");
+
   switch (testType) {
     case "iq":
       return calculateIQScore(answers, questions);
@@ -102,8 +106,8 @@ function calculatePersonalityScore(
     E: "Extraversion",
     A: "Agreeableness",
     N: "Neuroticism",
-  };
-  const dimData: Record<string, { sum: number; count: number }> = {
+  } as const;
+  const dimData: Record<keyof typeof dims, { sum: number; count: number }> = {
     O: { sum: 0, count: 0 },
     C: { sum: 0, count: 0 },
     E: { sum: 0, count: 0 },
@@ -112,7 +116,7 @@ function calculatePersonalityScore(
   };
 
   questions.forEach((q) => {
-    if (q.dimension && dims[q.dimension as keyof typeof dims]) {
+    if (q.dimension && q.dimension in dims) {
       const val = Number(answers[q.id]);
       if (!isNaN(val)) {
         dimData[q.dimension as keyof typeof dims].sum += val;
@@ -125,10 +129,10 @@ function calculatePersonalityScore(
   let totalSum = 0,
     totalCount = 0;
 
-  Object.keys(dims).forEach((key) => {
+  Object.entries(dims).forEach(([key, name]) => {
     const { sum, count } = dimData[key as keyof typeof dims];
     const avg = count > 0 ? sum / count : 3;
-    dimension_scores[dims[key as keyof typeof dims]] = Math.round(60 + avg * 8);
+    dimension_scores[name] = Math.round(60 + avg * 8);
     totalSum += sum;
     totalCount += count;
   });
@@ -137,21 +141,24 @@ function calculatePersonalityScore(
   const score = Math.round(60 + overallAvg * 8);
 
   let percentile: string, tag: string;
-  if (score >= 140) {
+  if (score >= 96) {
     percentile = "95th";
     tag = "Very High";
-  } else if (score >= 130) {
+  } else if (score >= 90) {
     percentile = "85th";
     tag = "High";
-  } else if (score >= 120) {
+  } else if (score >= 85) {
     percentile = "70th";
     tag = "Above Average";
-  } else if (score >= 110) {
+  } else if (score >= 80) {
     percentile = "55th";
     tag = "Average";
-  } else {
+  } else if (score >= 75) {
     percentile = "40th";
     tag = "Below Average";
+  } else {
+    percentile = "25th";
+    tag = "Low";
   }
 
   return { score, percentile, tag, dimension_scores };
@@ -197,6 +204,7 @@ function getIQDimensions(score: number) {
     "Processing Speed": Math.round(score * 0.9),
   };
 }
+
 function getEQDimensions(score: number) {
   return {
     "Self-Awareness": Math.round(score * 0.9),
@@ -205,6 +213,7 @@ function getEQDimensions(score: number) {
     "Social Skills": Math.round(score * 0.92),
   };
 }
+
 function getSpectrumDimensions(score: number) {
   return {
     "Social Skills": Math.round(score * 0.85),

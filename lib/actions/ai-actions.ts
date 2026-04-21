@@ -1,10 +1,5 @@
+// lib/actions/ai-actions.ts
 "use server";
-
-import OpenAI from "openai";
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 export interface AIInsightPayload {
   artisticTitle: string;
@@ -13,14 +8,14 @@ export interface AIInsightPayload {
   recommendations: string[];
 }
 
-export async function generateGrayPrintAI(
+function buildPrompt(
   testType: string,
   score: number,
   percentile: string,
   tag: string,
   dimensionScores: Record<string, number>,
-): Promise<AIInsightPayload> {
-  const prompt = `You are Graytest AI, a psychological assessment narrator.
+): string {
+  return `You are Graytest AI, a psychological assessment narrator.
 Generate a personalized GrayPrint™ report based on these results:
 - Test: ${testType.toUpperCase()}
 - Overall Score: ${score}
@@ -38,31 +33,87 @@ RULES:
   "insights": ["Specific observation based on highest/lowest dimensions", "Second observation"],
   "recommendations": ["Practical next step for growth", "Second recommendation"]
 }
-4. NEVER mention diagnosis, disorder, medical terms, or clinical labels.
-5. If IQ → focus on logic/patterns. EQ → emotional awareness. Personality → OCEAN balance. Spectrum → detail/social processing.`;
+4. NEVER mention diagnosis, disorder, medical terms, or clinical labels.`;
+}
+
+async function generateWithGemini(prompt: string): Promise<AIInsightPayload> {
+  const { GoogleGenerativeAI } = await import("@google/generative-ai");
+
+  const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+  if (!apiKey) throw new Error("Missing GOOGLE_GENERATIVE_AI_API_KEY");
+
+  const genAI = new GoogleGenerativeAI(apiKey);
+
+  const modelName = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+
+  const model = genAI.getGenerativeModel({
+    model: modelName,
+    generationConfig: {
+      responseMimeType: "application/json",
+      temperature: 0.7,
+      maxOutputTokens: 500,
+    },
+  });
+
+  const result = await model.generateContent(prompt);
+  const text = result.response.text();
+
+  const cleanJson = text.replace(/```json\s*|\s*```/g, "").trim();
+  return JSON.parse(cleanJson) as AIInsightPayload;
+}
+
+async function generateWithOpenAI(prompt: string): Promise<AIInsightPayload> {
+  const OpenAI = await import("openai").then((m) => m.default);
+
+  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+  const res = await openai.chat.completions.create({
+    model: process.env.OPENAI_MODEL || "gpt-4o-mini",
+    messages: [
+      {
+        role: "system",
+        content:
+          "You only output valid JSON. Follow the exact structure requested.",
+      },
+      { role: "user", content: prompt },
+    ],
+    response_format: { type: "json_object" },
+    temperature: 0.7,
+    max_tokens: 350,
+  });
+
+  const content = res.choices[0]?.message?.content;
+  if (!content) throw new Error("Empty OpenAI response");
+
+  return JSON.parse(content) as AIInsightPayload;
+}
+
+export async function generateGrayPrintAI(
+  testType: string,
+  score: number,
+  percentile: string,
+  tag: string,
+  dimensionScores: Record<string, number>,
+): Promise<AIInsightPayload> {
+  if (
+    !process.env.GOOGLE_GENERATIVE_AI_API_KEY &&
+    !process.env.OPENAI_API_KEY
+  ) {
+    return getFallbackContent(testType);
+  }
+
+  const prompt = buildPrompt(testType, score, percentile, tag, dimensionScores);
+  const provider = process.env.AI_PROVIDER || "gemini";
 
   try {
-    const res = await openai.chat.completions.create({
-      model: process.env.OPENAI_MODEL || "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You only output valid JSON. Follow the exact structure requested.",
-        },
-        { role: "user", content: prompt },
-      ],
-      response_format: { type: "json_object" },
-      temperature: 0.7,
-      max_tokens: 350,
-    });
-
-    const content = res.choices[0]?.message?.content;
-    if (!content) throw new Error("Empty AI response");
-
-    return JSON.parse(content) as AIInsightPayload;
+    if (provider === "openai" && process.env.OPENAI_API_KEY) {
+      return await generateWithOpenAI(prompt);
+    }
+    if (process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+      return await generateWithGemini(prompt);
+    }
+    return getFallbackContent(testType);
   } catch (error) {
-    console.warn("AI generation failed, using fallback:", error);
     return getFallbackContent(testType);
   }
 }
