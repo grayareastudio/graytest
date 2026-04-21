@@ -5,10 +5,18 @@ import { WhySection } from "@/components/sections/WhySection";
 import { InfoSection } from "@/components/sections/test/InfoSection";
 import bgImage from "@/assets/personality-bg.svg";
 import benefitsBg from "@/assets/personality-benefit.png";
+import Image from "next/image";
 
 export default function Page() {
   return (
-    <main>
+    <main>    
+        <Image
+          src={bgImage}
+          alt="bg"
+          fill
+          className="-z-1 object-cover rotate-180 top-0"
+          priority
+        />
       <Hero
         title="Personality Test"
         description="This test highlights your natural tendencies on how you act, think, and connect."
