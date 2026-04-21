@@ -32,7 +32,7 @@ export function Button({
 
   const sizes = {
     sm: "px-4 py-2 text-xs",
-    md: "w-53 py-4.5 text-sm",
+    md: "w-53 py-4.5 px-2 text-sm",
     lg: "w-53 py-4.5 text-sm",
   };
 

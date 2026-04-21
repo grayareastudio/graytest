@@ -31,14 +31,14 @@ export function TestCard({
       )}
       <Image src={imageBg} alt={title} className="w-full h-full rounded-xl" />
 
-      <div className="p-10 space-y-4 bg-[#0A0A0A]/20 backdrop-blur-md absolute bottom-0 z-10 rounded-xl border border-white/10">
-        <h3 className="font-serif text-[2.5rem]  text-[#D1D5DC] ">{title}</h3>
-        <p className="text-[#E5E7EB]">{description}</p>
-        <p className="text-sm text-[#E5E7EB]">
+      <div className="px-6 pt-4 pb-8 space-y-8 md:space-y-3 max-h-3/5 min-h-3/12 w-full bg-[#0A0A0A]/20 backdrop-blur-md absolute bottom-0 z-10 rounded-xl border border-white/10">
+        <h3 className="font-serif text-[clamp(30px,2.5vw,29px)] text-[#D1D5DC] ">{title}</h3>
+        <p className="text-[#E5E7EB] text-[clamp(12px,1.5vw,11px)]">{description}</p>
+        <p className="text-[clamp(12px,1.2vw,10px)] text-[#E5E7EB]">
           {duration} · {price}
         </p>
 
-        <Button variant="primary" size="sm" asChild>
+        <Button variant="primary" size="sm" asChild className="text-[clamp(12px,1.2vw,10px)]">
           <Link href={`/test/${title.toLowerCase()}`} className="block">
             Start your Assessment
           </Link>
@@ -46,7 +46,7 @@ export function TestCard({
         <Button
           variant="outline"
           size="sm"
-          className="w-full"
+          className="w-full text-[clamp(12px,1.2vw,10px)]"
           onClick={onAbout}
         >
           About the test
