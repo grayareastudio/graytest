@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 @theme inline {
@@ -12,12 +12,15 @@
   --font-serif: var(--font-serif);
 }
 
-@media (prefers-color-scheme: dark) {
+/*
+  force to use dark mode, since the design is only for dark mode.
+*/
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   background: var(--background);
