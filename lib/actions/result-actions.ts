@@ -15,6 +15,10 @@ export interface TestResult {
   duration_seconds: number | null;
   completed_at: string;
   user_id: string | null;
+  ai_artistic_title: string | null;
+  ai_artistic_description: string | null;
+  ai_insights: string[] | null;
+  ai_recommendations: string[] | null;
 }
 
 export async function getResultById(id: string): Promise<TestResult | null> {

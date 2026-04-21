@@ -21,7 +21,6 @@ export function TypingText({
   const [isTyping, setIsTyping] = useState(false);
 
   useEffect(() => {
-    // ✅ Pastikan text adalah string
     const safeText = String(text || "");
 
     if (!safeText) {
@@ -37,10 +36,8 @@ export function TypingText({
 
     const startTimeout = setTimeout(() => {
       const typeInterval = setInterval(() => {
-        // ✅ Cek bounds sebelum akses karakter
         if (index < safeText.length) {
           const char = safeText[index];
-          // ✅ Hanya concat jika char valid
           if (char !== undefined) {
             setDisplayed((prev) => prev + char);
           }
