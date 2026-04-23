@@ -72,6 +72,13 @@ function LayoutContent({
   const timeDisplay = `${String(minutes).padStart(3, "0")}:${String(seconds).padStart(2, "0")}`;
   const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
   const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
+  const getCurrentAnswer = () => {
+    const idx = currentQuestionIndex;
+    return answers[idx + 1];
+  };
+
+  const currentAnswer = getCurrentAnswer();
+  const isAnswered = currentAnswer !== undefined;
 
   const handleSubmit = async () => {
     if (isSubmitting) return;
@@ -171,8 +178,8 @@ function LayoutContent({
             ) : (
               <button
                 onClick={nextQuestion}
-                disabled={isSubmitting}
-                className="hover:opacity-80 transition-opacity p-1 md:p-2 disabled:opacity-30 hover:cursor-pointer"
+                disabled={!isAnswered || isSubmitting}
+                className="hover:opacity-80 transition-opacity p-1 md:p-2 disabled:opacity-30 hover:cursor-pointer disabled:cursor-not-allowed"
               >
                 <Image
                   src={arrowRightIcon}
