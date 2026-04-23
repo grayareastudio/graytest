@@ -52,7 +52,7 @@ export function TestContent({ type }: { type: string }) {
     return <p className="text-white">No questions available.</p>;
 
   const currentQuestion = questions[currentQuestionIndex];
-  const currentAnswer = answers[currentQuestion?.id ?? -1]; // ✅ null-safe
+  const currentAnswer = answers[currentQuestion?.id ?? -1];
 
   if (!currentQuestion) return null;
 

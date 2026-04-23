@@ -33,7 +33,6 @@ export function HeaderClient({ user }: HeaderClientProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
-  // ✅ Dapatkan pathname saat ini
   const pathname = usePathname();
 
   const userMenuRef = useRef<HTMLLIElement>(null);
