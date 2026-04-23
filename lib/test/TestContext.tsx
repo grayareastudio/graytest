@@ -12,8 +12,8 @@ import {
 interface TestContextType {
   currentTime: number;
   currentQuestionIndex: number;
-  currentQuestionId: number | null; // ✅ tambah
-  setCurrentQuestionId: (id: number | null) => void; // ✅ tambah
+  currentQuestionId: number | null;
+  setCurrentQuestionId: (id: number | null) => void;
   totalQuestions: number;
   answers: Record<number, any>;
   setAnswer: (questionId: number, answer: any) => void;
@@ -83,8 +83,8 @@ export function TestProvider({
       value={{
         currentTime,
         currentQuestionIndex,
-        currentQuestionId, // ✅
-        setCurrentQuestionId, // ✅
+        currentQuestionId,
+        setCurrentQuestionId,
         totalQuestions,
         answers,
         setAnswer,

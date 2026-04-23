@@ -70,7 +70,7 @@ function LayoutContent({
 
   const minutes = Math.floor(currentTime / 60);
   const seconds = currentTime % 60;
-  const timeDisplay = `${String(minutes).padStart(3, "0")}:${String(seconds).padStart(2, "0")}`;
+  const timeDisplay = `${minutes}:${String(seconds).padStart(2, "0")}`;
   const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
   const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
   const getCurrentAnswer = () => {
