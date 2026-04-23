@@ -177,10 +177,10 @@ function calculateSpectrumScore(
   const score = Math.round(sum * 1.2 + 8);
 
   let percentile: string, tag: string;
-  if (score >= 32) {
+  if (score >= 42) {
     percentile = "90th";
     tag = "Elevated AQ";
-  } else if (score >= 26) {
+  } else if (score >= 34) {
     percentile = "70th";
     tag = "Moderate AQ";
   } else {
