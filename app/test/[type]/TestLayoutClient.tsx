@@ -59,6 +59,7 @@ function LayoutContent({
   const {
     currentTime,
     currentQuestionIndex,
+    currentQuestionId,
     totalQuestions,
     answers,
     nextQuestion,
@@ -73,10 +74,8 @@ function LayoutContent({
   const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
   const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
   const getCurrentAnswer = () => {
-    const idx = currentQuestionIndex;
-    return answers[idx + 1];
+    return answers[currentQuestionId ?? -1];
   };
-
   const currentAnswer = getCurrentAnswer();
   const isAnswered = currentAnswer !== undefined;
 
@@ -166,11 +165,12 @@ function LayoutContent({
             {isLastQuestion ? (
               <button
                 onClick={handleSubmit}
-                disabled={isSubmitting}
+                disabled={!isAnswered || isSubmitting}
                 className={`
                   bg-[#D9D9D9] text-black px-4 py-1.5 md:px-6 md:py-2 rounded-full 
-                  text-sm md:text-base font-medium transition-colors
-                  ${isSubmitting ? "opacity-50 cursor-wait" : "hover:bg-white hover:cursor-pointer"}
+                  text-sm md:text-base font-medium transition-colors hover:cursor-pointer
+                  ${!isAnswered ? "opacity-50 cursor-not-allowed" : isSubmitting ? "opacity-50 cursor-wait" : "hover:bg-white hover:cursor-pointer"}}
+                 
                 `}
               >
                 {isSubmitting ? "Submitting..." : "Submit"}

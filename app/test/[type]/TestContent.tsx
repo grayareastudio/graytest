@@ -12,7 +12,13 @@ import { OpenEndedQuestion } from "@/components/sections/test/OpenEndedQuestion"
 import { VisualQuestion } from "@/components/sections/test/VisualQuestion";
 
 export function TestContent({ type }: { type: string }) {
-  const { currentQuestionIndex, answers, setAnswer } = useTest();
+  const {
+    currentQuestionIndex,
+    currentQuestionId,
+    answers,
+    setAnswer,
+    setCurrentQuestionId,
+  } = useTest();
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
@@ -21,8 +27,10 @@ export function TestContent({ type }: { type: string }) {
     async function fetchQuestions() {
       try {
         const data = await getTestQuestions(type);
-
         setQuestions(data);
+        if (data.length > 0) {
+          setCurrentQuestionId(data[0].id);
+        }
       } catch (error) {
         console.error("Failed:", error);
       } finally {
@@ -30,14 +38,21 @@ export function TestContent({ type }: { type: string }) {
       }
     }
     fetchQuestions();
-  }, [type]);
+  }, [type, setCurrentQuestionId]);
+
+  useEffect(() => {
+    if (questions.length > 0) {
+      const q = questions[currentQuestionIndex];
+      if (q) setCurrentQuestionId(q.id);
+    }
+  }, [currentQuestionIndex, questions, setCurrentQuestionId]);
 
   if (loading) return <p className="text-white">Loading...</p>;
   if (!questions.length)
     return <p className="text-white">No questions available.</p>;
 
   const currentQuestion = questions[currentQuestionIndex];
-  const currentAnswer = answers[currentQuestion?.id];
+  const currentAnswer = answers[currentQuestion?.id ?? -1]; // ✅ null-safe
 
   if (!currentQuestion) return null;
 

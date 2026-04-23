@@ -12,6 +12,8 @@ import {
 interface TestContextType {
   currentTime: number;
   currentQuestionIndex: number;
+  currentQuestionId: number | null; // ✅ tambah
+  setCurrentQuestionId: (id: number | null) => void; // ✅ tambah
   totalQuestions: number;
   answers: Record<number, any>;
   setAnswer: (questionId: number, answer: any) => void;
@@ -35,6 +37,9 @@ export function TestProvider({
   const [currentTime, setCurrentTime] = useState(durationSeconds);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, any>>({});
+  const [currentQuestionId, setCurrentQuestionId] = useState<number | null>(
+    null,
+  );
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -57,8 +62,8 @@ export function TestProvider({
     }
   };
 
-  const setAnswer = (questionId: number, answer: any) => {
-    setAnswers((prev) => ({ ...prev, [questionId]: answer }));
+  const setAnswer = (questionIndex: number, answer: any) => {
+    setAnswers((prev) => ({ ...prev, [questionIndex]: answer }));
   };
 
   const nextQuestion = () => {
@@ -78,6 +83,8 @@ export function TestProvider({
       value={{
         currentTime,
         currentQuestionIndex,
+        currentQuestionId, // ✅
+        setCurrentQuestionId, // ✅
         totalQuestions,
         answers,
         setAnswer,
