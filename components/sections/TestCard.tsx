@@ -21,7 +21,7 @@ export function TestCard({
   return (
     <div className="relative text-center rounded-xl w-full aspect-9/16">
       {badge && (
-        <span className="absolute -top-3 right-2.5 text-xs text-white font-semibold bg-[#0A0A0A]/20 border border-white px-2 py-1 rounded-full backdrop-blur-[10px]">
+        <span className="absolute -top-3 right-2.5 text-xs text-white font-semibold bg-[#0A0A0A]/20 border border-white px-2 py-1 rounded-full backdrop-blur-[10px] z-10">
           {badge}
         </span>
       )}
