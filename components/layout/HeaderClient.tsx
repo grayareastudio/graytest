@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { signOut } from "@/lib/actions/auth-actions";
 import { User } from "@supabase/supabase-js";
 
@@ -29,6 +29,7 @@ function getInitials(user: User | null): string {
 }
 
 export function HeaderClient({ user }: HeaderClientProps) {
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -76,6 +77,11 @@ export function HeaderClient({ user }: HeaderClientProps) {
     return (
       user.user_metadata?.display_name || user.email?.split("@")[0] || "User"
     );
+  };
+
+  const handleLogout = async () => {
+    setUserMenuOpen(false);
+    await signOut();
   };
 
   const initials = getInitials(user);
@@ -157,15 +163,13 @@ export function HeaderClient({ user }: HeaderClientProps) {
                     >
                       Dashboard
                     </a>
-                    <form action={signOut}>
-                      <button
-                        type="submit"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="w-full text-left px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-white/5 rounded-lg transition-colors"
-                      >
-                        Logout
-                      </button>
-                    </form>
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      className="w-full text-left px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
+                    >
+                      Logout
+                    </button>
                   </div>
                 </div>
               )}
@@ -252,15 +256,13 @@ export function HeaderClient({ user }: HeaderClientProps) {
                   </div>
                 </li>
                 <li>
-                  <form action={signOut}>
-                    <button
-                      type="submit"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="block font-light text-lg text-red-400 no-underline transition-colors hover:text-red-300 py-2.5 w-full text-left"
-                    >
-                      Logout
-                    </button>
-                  </form>
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="block font-light text-lg text-red-400 no-underline transition-colors hover:text-red-300 py-2.5 w-full text-left cursor-pointer"
+                  >
+                    Logout
+                  </button>
                 </li>
               </>
             )}
