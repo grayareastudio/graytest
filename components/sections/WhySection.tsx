@@ -1,4 +1,3 @@
-"use client";
 import brain from "@/assets/icons/brain.svg";
 import shift from "@/assets/icons/shift.svg";
 import openAi from "@/assets/icons/light-chat-gpt-icon.svg";
@@ -33,19 +32,20 @@ const features = [
   },
 ];
 
-type HomeBoolean = {
+type WhySectionProps = {
   isHomePage?: boolean;
 };
 
-export function WhySection({ isHomePage = false }: HomeBoolean) {
+export function WhySection({ isHomePage = false }: WhySectionProps) {
   return (
     <section className="relative overflow-hidden py-16 md:py-20 lg:py-25 px-6 md:px-12 lg:px-39">
       {!isHomePage && (
         <div className="absolute inset-0 z-[-1]">
           <Image
             src={whyGridVector}
-            alt="Grid"
+            alt=""
             fill
+            sizes="100vw"
             className="object-cover"
           />
         </div>
@@ -58,27 +58,17 @@ export function WhySection({ isHomePage = false }: HomeBoolean) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           {features.map((feature) => (
             <div key={feature.title} className="text-center">
-              <div className="rounded-full 
-                shadow-[inset_1px_1px_0px_rgba(255,255,255,0.2)]                
-                bg-gradient-to-br from-black/35 to-gray-200/5
-                from-5% to-95%
-                backdrop-blur-[1.5px]
-                w-14 h-14 md:w-16 md:h-16
-                mx-auto mb-4
-                flex items-center justify-center">
-                  <div className="absolute inset-0 rounded-full
-                    shadow-[inset_-1px_-1px_0px_rgba(255,255,255,0.5)]
-                    pointer-events-none
-                    z-0" />
-                  <Image
-                    src={feature.icon}
-                    alt={feature.title}
-                    width={24}
-                    height={24}
-                    className="relative z-10 md:w-[30px] md:h-[30px]"
-                  />
-                </div>
-              <h3 className="font-serif text-lg md:text-xl text-[#D4D4D4] mb-3 md:mb-4.5">
+              <div className="relative w-14 h-14 md:w-16 md:h-16 mx-auto mb-4 flex items-center justify-center rounded-full bg-gradient-to-br from-black/35 to-gray-200/5 from-5% to-95% backdrop-blur-[1.5px] shadow-[inset_1px_1px_0px_rgba(255,255,255,0.2)]">
+                <div className="absolute inset-0 rounded-full shadow-[inset_-1px_-1px_0px_rgba(255,255,255,0.5)] pointer-events-none" />
+                <Image
+                  src={feature.icon}
+                  alt=""
+                  width={28}
+                  height={28}
+                  className="relative z-10 md:w-[30px] md:h-[30px]"
+                />
+              </div>
+              <h3 className="font-serif text-lg md:text-xl text-[#D4D4D4] mb-3 md:mb-[1.25">
                 {feature.title}
               </h3>
               <p className="text-sm text-[#A1A1A1]">{feature.description}</p>

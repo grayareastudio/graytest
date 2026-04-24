@@ -1,4 +1,3 @@
-"use client";
 import Image from "next/image";
 import bgVector from "@/assets/bg-vector-1.svg";
 import { TypingText } from "../ui/TypingText";
@@ -35,10 +34,10 @@ export function GrayPrintSection() {
       <div className="absolute inset-0 z-0">
         <Image
           src={bgVector}
-          alt="Background"
+          alt=""
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 80vw, 50vw"
           className="object-cover"
-          priority
         />
       </div>
 
@@ -62,7 +61,7 @@ export function GrayPrintSection() {
                   {step.number}
                 </div>
 
-                <h3 className="font-serif text-lg md:text-xl text-[#D4D4D4] mb-3 md:mb-4.5 group-hover:text-white transition-colors">
+                <h3 className="font-serif text-lg md:text-xl text-[#D4D4D4] mb-4.5 group-hover:text-white transition-colors">
                   {step.title}
                 </h3>
 
@@ -71,15 +70,7 @@ export function GrayPrintSection() {
                 </p>
               </div>
 
-              <div
-                className="
-                pointer-events-none
-                absolute inset-0 z-20
-                backdrop-blur-sm bg-[#171717]/50
-                transition-all duration-500
-                group-hover:opacity-0
-              "
-              />
+              <div className="pointer-events-none absolute inset-0 z-20 backdrop-blur-sm bg-[#171717]/50 transition-all duration-500 group-hover:opacity-0" />
             </div>
           ))}
         </div>

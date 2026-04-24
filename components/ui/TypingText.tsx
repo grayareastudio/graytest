@@ -57,11 +57,15 @@ export function TypingText({
   }, [text, speed, delay]);
 
   return (
-    <span className={className}>
-      {displayed}
-      {showCursor && isTyping && (
-        <span className="inline-block w-[2px] h-[1em] bg-current ml-0.5 animate-pulse" />
-      )}
+    <span className={`relative inline-block ${className}`}>
+      <span className="invisible">{text}</span>
+
+      <span className="absolute left-0 top-0">
+        {displayed}
+        {showCursor && isTyping && (
+          <span className="inline-block w-0.5 h-[1em] bg-current ml-0.5 animate-pulse" />
+        )}
+      </span>
     </span>
   );
 }

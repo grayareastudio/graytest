@@ -1,4 +1,3 @@
-"use client";
 import { Button } from "@/components/ui/Button";
 import { TestCard } from "./TestCard";
 import iqBg from "@/assets/test/iq-bg.png";
@@ -55,16 +54,12 @@ export function TestCards() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-7 w-full max-w-7xl">
           {tests.map((test) => (
-            <TestCard
-              key={test.title}
-              {...test}
-              onAbout={() => console.log("About", test.title)}
-            />
+            <TestCard key={test.title} {...test} />
           ))}
         </div>
 
         <div className="relative inline-block">
-          <div className="absolute -top-4 right-0 bg-black/10 backdrop-blur-md rounded-full px-2 py-1 text-xs font-semibold border border-white">
+          <div className="absolute -top-4 right-0 bg-black/10 backdrop-blur-md rounded-full px-2 py-1 text-xs font-semibold border border-white/20 z-10">
             Save 25%
           </div>
           <Button variant="secondary" size="md">

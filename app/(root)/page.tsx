@@ -21,12 +21,15 @@ export default function HomePage() {
       <GrayPrintSection />
       <div className="relative">
         <div className="absolute inset-0 h-225 top-130 -z-10">
-          <Image
-            src={bgVector2}
-            alt="background"
-            fill
-            className="object-cover"
-          />
+          <div className="relative w-full h-225">
+            <Image
+              src={bgVector2}
+              alt="bg vector"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
         </div>
         <TestCards />
         <WhySection isHomePage={true} />

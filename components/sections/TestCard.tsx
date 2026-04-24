@@ -8,7 +8,6 @@ interface TestCardProps {
   price: string;
   imageBg: StaticImageData;
   badge?: string;
-  onAbout: () => void;
 }
 
 export function TestCard({
@@ -18,7 +17,6 @@ export function TestCard({
   price,
   imageBg,
   badge,
-  onAbout,
 }: TestCardProps) {
   return (
     <div className="relative text-center rounded-xl w-full aspect-9/16">
@@ -27,7 +25,15 @@ export function TestCard({
           {badge}
         </span>
       )}
-      <Image src={imageBg} alt={title} className="w-full h-full rounded-xl" />
+      <Image
+        src={imageBg}
+        alt={title}
+        fill
+        sizes="(max-width: 768px) 100vw,
+                (max-width: 1024px) 50vw,
+                25vw"
+        className="object-cover rounded-xl"
+      />
 
       <div className="px-6 pt-4 pb-8 space-y-8 md:space-y-3 max-h-3/5 min-h-3/12 w-full bg-[#0A0A0A]/20 backdrop-blur-md absolute bottom-0 z-10 rounded-xl border border-white/10">
         <h3 className="font-serif text-[clamp(30px,2.5vw,29px)] text-[#D1D5DC] ">
@@ -54,7 +60,6 @@ export function TestCard({
           variant="outline"
           size="sm"
           className="w-full text-[clamp(12px,1.2vw,10px)]"
-          onClick={onAbout}
         >
           <Link href={`/${title.toLowerCase()}`} className="block">
             About the test

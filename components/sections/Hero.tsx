@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/Button";
 import Image, { StaticImageData } from "next/image";
 import { TypingText } from "../ui/TypingText";
@@ -28,10 +26,12 @@ export function Hero({
     <section className="relative min-h-screen flex items-center px-6 md:px-12 lg:px-39 overflow-hidden">
       <video
         src={videoSrc}
+        poster="/videos/hero-poster.webp"
         autoPlay
         muted
         loop
         playsInline
+        preload="none"
         className={`
           hidden md:block md:absolute 
           ${videoClassName || ""}
@@ -41,8 +41,9 @@ export function Hero({
       {bgImage && (
         <Image
           src={bgImage}
-          alt="bg"
+          alt=""
           fill
+          sizes="(max-width: 2000px) 100vw, (max-width: 1024px) 75vw, 50vw"
           className="-z-1 object-cover"
           priority
         />
