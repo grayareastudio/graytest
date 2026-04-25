@@ -2,7 +2,7 @@
 
 import { Header } from "@/components/layout/Header";
 import { TestProvider, useTest } from "@/lib/test/TestContext";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { submitTestResults } from "@/lib/actions/test-actions";
 import clockIcon from "@/assets/icons/clock.svg";
@@ -67,19 +67,26 @@ function LayoutContent({
   } = useTest();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const autoSubmitRef = useRef(false);
 
   const minutes = Math.floor(currentTime / 60);
   const seconds = currentTime % 60;
   const timeDisplay = `${minutes}:${String(seconds).padStart(2, "0")}`;
   const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
   const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
-  const getCurrentAnswer = () => {
-    return answers[currentQuestionId ?? -1];
-  };
-  const currentAnswer = getCurrentAnswer();
-  const isAnswered = currentAnswer !== undefined;
 
-  const handleSubmit = async () => {
+  const hasValidAnswer = (val: any) => {
+    if (val === undefined || val === null) return false;
+    if (typeof val === "string") return val.trim() !== "";
+    if (Array.isArray(val)) return val.length > 0;
+    if (typeof val === "object") return Object.keys(val).length > 0;
+    return true;
+  };
+
+  const answeredCount = Object.values(answers).filter(hasValidAnswer).length;
+  const allAnswered = answeredCount >= totalQuestions;
+
+  const handleSubmit = useCallback(async () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
@@ -96,16 +103,35 @@ function LayoutContent({
       );
       router.push(`/results/${result.id}`);
     } catch (error) {
+      console.error("Submit failed:", error);
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [
+    isSubmitting,
+    testType,
+    durationSeconds,
+    currentTime,
+    answers,
+    totalQuestions,
+    userEmail,
+    router,
+  ]);
 
   useEffect(() => {
-    if (testType === "iq" && currentTime === 0 && !isSubmitting) {
+    if (
+      testType === "iq" &&
+      currentTime === 0 &&
+      !isSubmitting &&
+      !autoSubmitRef.current
+    ) {
+      autoSubmitRef.current = true;
       handleSubmit();
     }
-  }, [currentTime, isSubmitting, testType]);
+  }, [testType, currentTime, isSubmitting, handleSubmit]);
+
+  const currentAnswer = answers[currentQuestionId ?? -1];
+  const isAnswered = hasValidAnswer(currentAnswer);
 
   return (
     <>
@@ -165,12 +191,11 @@ function LayoutContent({
             {isLastQuestion ? (
               <button
                 onClick={handleSubmit}
-                disabled={!isAnswered || isSubmitting}
+                disabled={!allAnswered || isSubmitting}
                 className={`
                   bg-[#D9D9D9] text-black px-4 py-1.5 md:px-6 md:py-2 rounded-full 
-                  text-sm md:text-base font-medium transition-colors hover:cursor-pointer
-                  ${!isAnswered ? "opacity-50 cursor-not-allowed" : isSubmitting ? "opacity-50 cursor-wait" : "hover:bg-white hover:cursor-pointer"}}
-                 
+                  text-sm md:text-base font-medium transition-colors
+                  ${!allAnswered ? "opacity-50 cursor-not-allowed" : isSubmitting ? "opacity-50 cursor-wait" : "hover:bg-white hover:cursor-pointer"}
                 `}
               >
                 {isSubmitting ? "Submitting..." : "Submit"}
@@ -178,7 +203,7 @@ function LayoutContent({
             ) : (
               <button
                 onClick={nextQuestion}
-                disabled={!isAnswered || isSubmitting}
+                disabled={isSubmitting}
                 className="hover:opacity-80 transition-opacity p-1 md:p-2 disabled:opacity-30 hover:cursor-pointer disabled:cursor-not-allowed"
               >
                 <Image

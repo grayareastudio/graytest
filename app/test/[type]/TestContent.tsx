@@ -105,7 +105,7 @@ export function TestContent({ type }: { type: string }) {
           questionNumber={currentQuestion.id}
           questionText={currentQuestion.text}
           mainImage={currentQuestion.mainImage || ""}
-          options={currentQuestion.visualOptions || []}
+          options={currentQuestion.options || []}
           selectedOption={currentAnswer || null}
           onChange={(val) => setAnswer(currentQuestion.id, val)}
         />

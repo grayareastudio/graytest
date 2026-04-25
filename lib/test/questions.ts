@@ -6,10 +6,9 @@ export interface Question {
   id: number;
   type: QuestionType;
   text: string;
-  options?: { id: string; label: string }[];
+  options?: { id: string; label: string; imageUrl?: string }[]; // ← tambah optional imageUrl
   rows?: { id: string; question: string }[];
   mainImage?: string;
-  visualOptions?: { id: string; imageUrl: string }[];
 }
 
 export interface ScoringQuestion extends Question {

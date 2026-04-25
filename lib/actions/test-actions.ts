@@ -36,7 +36,6 @@ function mapToQuestion(q: any): Question {
     options: q.options || [],
     rows: q.rows || [],
     mainImage: q.main_image,
-    visualOptions: q.options || [],
   };
 }
 

@@ -33,7 +33,7 @@ export function VisualQuestion({
       {/* Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-17.5">
         {/* Main Image */}
-        <div className="aspect-[4/3] bg-[#111] rounded-xl overflow-hidden border border-white/10">
+        <div className="aspect-4/3 bg-[#111] rounded-xl overflow-hidden border border-white/10">
           <img
             src={mainImage}
             alt="Question visual"
@@ -48,7 +48,7 @@ export function VisualQuestion({
               key={option.id}
               onClick={() => onChange(option.id)}
               className={`
-              aspect-[4/3] rounded-lg md:rounded-xl overflow-hidden
+              aspect-4/3 rounded-lg md:rounded-xl overflow-hidden
               transition-all duration-200 border-2
               ${selectedOption === option.id ? "border-white ring-2 ring-white/20" : "border-transparent hover:border-[#D9D9D9]/50"}
             `}
