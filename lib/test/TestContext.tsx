@@ -4,12 +4,14 @@ import {
   createContext,
   useContext,
   useState,
-  ReactNode,
   useEffect,
   useRef,
+  useCallback,
+  useMemo,
+  ReactNode,
 } from "react";
 
-interface TestContextType {
+export interface TestContextType {
   currentTime: number;
   currentQuestionIndex: number;
   currentQuestionId: number | null;
@@ -19,6 +21,7 @@ interface TestContextType {
   setAnswer: (questionId: number, answer: any) => void;
   nextQuestion: () => void;
   prevQuestion: () => void;
+  goToQuestion: (index: number) => void;
 }
 
 const TestContext = createContext<TestContextType | undefined>(undefined);
@@ -55,55 +58,56 @@ export function TestProvider({
     };
   }, [hasTimer, currentTime]);
 
-  const clearTimer = () => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-  };
+  const setAnswer = useCallback((questionId: number, answer: any) => {
+    setAnswers((prev) => ({ ...prev, [questionId]: answer }));
+  }, []);
 
-  const setAnswer = (questionIndex: number, answer: any) => {
-    setAnswers((prev) => ({ ...prev, [questionIndex]: answer }));
-  };
+  const nextQuestion = useCallback(() => {
+    setCurrentQuestionIndex((prev) => Math.min(prev + 1, totalQuestions - 1));
+  }, [totalQuestions]);
 
-  const nextQuestion = () => {
-    if (currentQuestionIndex < totalQuestions - 1) {
-      setCurrentQuestionIndex((prev) => prev + 1);
-    }
-  };
+  const prevQuestion = useCallback(() => {
+    setCurrentQuestionIndex((prev) => Math.max(prev - 1, 0));
+  }, []);
 
-  const prevQuestion = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex((prev) => prev - 1);
-    }
-  };
-
-  return (
-    <TestContext.Provider
-      value={{
-        currentTime,
-        currentQuestionIndex,
-        currentQuestionId,
-        setCurrentQuestionId,
-        totalQuestions,
-        answers,
-        setAnswer,
-        nextQuestion,
-        prevQuestion,
-      }}
-    >
-      {children}
-    </TestContext.Provider>
+  const goToQuestion = useCallback(
+    (index: number) => {
+      setCurrentQuestionIndex(Math.max(0, Math.min(index, totalQuestions - 1)));
+    },
+    [totalQuestions],
   );
+
+  const value = useMemo(
+    () => ({
+      currentTime,
+      currentQuestionIndex,
+      currentQuestionId,
+      setCurrentQuestionId,
+      totalQuestions,
+      answers,
+      setAnswer,
+      nextQuestion,
+      prevQuestion,
+      goToQuestion,
+    }),
+    [
+      currentTime,
+      currentQuestionIndex,
+      currentQuestionId,
+      totalQuestions,
+      answers,
+      setAnswer,
+      nextQuestion,
+      prevQuestion,
+      goToQuestion,
+    ],
+  );
+
+  return <TestContext.Provider value={value}>{children}</TestContext.Provider>;
 }
 
 export function useTest() {
   const context = useContext(TestContext);
   if (!context) throw new Error("useTest must be used within TestProvider");
-  return context;
-}
-
-export function useTestTimer() {
-  const context = useContext(TestContext);
   return context;
 }
