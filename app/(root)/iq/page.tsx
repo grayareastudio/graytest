@@ -53,15 +53,18 @@ export default function Page() {
           },
           {
             title: "Guide career or study choices",
-            description: "To guide your career",
+            description:
+              "Match your talents to fields where they’ll shine, whether that’s analytical work, creative problem-solving, or communication-heavy roles.",
           },
           {
             title: "Support weaker areas",
-            description: "Know and support your weak areas",
+            description:
+              "Spot the skills that need more practice, then use strategies, tools, or habits to give yourself an edge.",
           },
           {
             title: "Build confidence",
-            description: "Build your confidence",
+            description:
+              "Recognize your abilities, challenge self-doubt, and gain motivation to pursue opportunities that fit your cognitive style.",
           },
         ]}
         bgImage={benefitsBg}

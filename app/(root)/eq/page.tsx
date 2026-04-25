@@ -54,17 +54,17 @@ export default function Page() {
           {
             title: "Handle stress and conflict",
             description:
-              "Develop strategies to manage stress and resolve conflicts in a healthy and constructive manner.",
+              "Understand your triggers and use techniques to stay calm, recover quickly, and avoid escalating small issues into big ones.",
           },
           {
             title: "Strengthen relationships",
             description:
-              "Build deeper connections by understanding and responding to the emotions of others, fostering trust and intimacy.",
+              "Empathy helps you connect deeply, resolve misunderstandings, and build stronger trust in both personal and professional circles.",
           },
           {
             title: "Use insights in therapy or coaching",
             description:
-              "Gain valuable insights into your emotional patterns and triggers, which can be used in therapy or coaching to support personal growth and healing.",
+              "Bring your EQ profile to a professional to work on specific goals, like managing anger, increasing resilience, or building leadership skills.",
           },
         ]}
         bgImage={benefitsBg}

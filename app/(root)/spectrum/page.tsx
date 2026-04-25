@@ -53,17 +53,17 @@ export default function Page() {
           {
             title: "Improve self-care",
             description:
-              "Match your talents to fields where they’ll shine, whether that’s analytical work, creative problem-solving, or communication-heavy roles.",
+              "Learn patterns—like sensory sensitivities or social needs—that you can manage with simple daily adjustments.",
           },
           {
             title: "Seek professional support",
             description:
-              "Match your talents to fields where they’ll shine, whether that’s analytical work, creative problem-solving, or communication-heavy roles.",
+              "Share your results with a psychologist to explore diagnosis, therapy, or accommodations.",
           },
           {
             title: "Connect with community",
             description:
-              "Match your talents to fields where they’ll shine, whether that’s analytical work, creative problem-solving, or communication-heavy roles.",
+              "Join a growing neurodiverse movement that values unique ways of thinking and helps you feel understood.",
           },
         ]}
         bgImage={benefitsBg}

@@ -9,14 +9,14 @@ import Image from "next/image";
 
 export default function Page() {
   return (
-    <main>    
-        <Image
-          src={bgImage}
-          alt="bg"
-          fill
-          className="-z-1 object-cover rotate-180 top-0"
-          priority
-        />
+    <main>
+      <Image
+        src={bgImage}
+        alt="bg"
+        fill
+        className="-z-1 object-cover rotate-180 top-0"
+        priority
+      />
       <Hero
         title="Personality Test"
         description="This test highlights your natural tendencies on how you act, think, and connect."
@@ -61,17 +61,17 @@ export default function Page() {
           {
             title: "Improve acceptance",
             description:
-              "Match your talents to fields where they’ll shine, whether that’s analytical work, creative problem-solving, or communication-heavy roles.",
+              "Realize that your style—whether organized, spontaneous, social, or reserved—is part of your natural wiring.",
           },
           {
             title: "Enhance teamwork and relationships",
             description:
-              "Match your talents to fields where they’ll shine, whether that’s analytical work, creative problem-solving, or communication-heavy roles.",
+              "Knowing your traits helps you collaborate better and empathize with people whose styles differ from yours.",
           },
           {
             title: "Align career and life choices",
             description:
-              "Match your talents to fields where they’ll shine, whether that’s analytical work, creative problem-solving, or communication-heavy roles.",
+              "Choose pathways that feel natural for your personality instead of forcing yourself into ill-fitting roles.",
           },
         ]}
         bgImage={benefitsBg}
