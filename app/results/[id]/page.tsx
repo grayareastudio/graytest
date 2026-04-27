@@ -3,6 +3,21 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { getResultById } from "@/lib/actions/result-actions";
 import { getScoringQuestions } from "@/lib/actions/test-actions";
+import { Button } from "@/components/ui/Button";
+import { BenefitsSection } from "@/components/sections/test/BenefitsSection";
+import Image from "next/image";
+import geometricMind from "@/assets/result/geometric-mind.jpg";
+import warningIcon from "@/assets/icons/warning.svg";
+import bgImage from "@/assets/grid-vector-2.svg";
+import benefitsBg from "@/assets/iq-benefit.png";
+import trisullaIcon from "@/assets/icons/trisulla.svg";
+import noteIcon from "@/assets/icons/note.svg";
+import messageIcon from "@/assets/icons/message.svg";
+import dollarIcon from "@/assets/icons/dollar.svg";
+import ctaBg from "@/assets/result/cta-background.png";
+import icebergBg from "@/assets/result/iceberg.png";
+import { ResultsAnalysis } from "@/components/results/ResultsAnalysis";
+import { PricingTiers } from "@/components/results/PricingTiers";
 
 const TEST_CONTENT: Record<
   string,
@@ -21,7 +36,7 @@ const TEST_CONTENT: Record<
   iq: {
     artisticTitle: "The Geometric Mind",
     artisticDescription:
-      "Your results reveal a mind built for pattern and precision — one that finds structure where others see noise.",
+      "Your results reveal a mind built for pattern and precision.",
     dimensions: [
       { name: "Logical Reasoning" },
       { name: "Pattern Recognition" },
@@ -32,17 +47,17 @@ const TEST_CONTENT: Record<
       {
         category: "Logical Reasoning",
         title: "Deductive Reasoning",
-        desc: "You excel at drawing valid conclusions from premises — a foundation for analytical and creative problem solving.",
+        desc: "Language is not just how you communicate — it's how you think. Your ability to extract meaning, detect nuance, and reason through complex verbal information is exceptionally high. This reflects both comprehension depth and the kind of sharp analytical reading that turns words into leverage. You likely process arguments faster than most people can form them.",
       },
       {
         category: "Pattern Recognition",
         title: "Pattern Recognition",
-        desc: "Your ability to identify recurring structures in visual sequences is exceptional.",
+        desc: "You operate comfortably beyond the literal. When faced with unfamiliar structures or novel frameworks, you adapt — finding rules that aren't written anywhere. This score signals a powerful capacity for non-verbal logic: the ability to see relationships between ideas that exist outside of language or prior experience. It's the foundation of systems thinking.",
       },
       {
         category: "Verbal Ability",
         title: "Linguistic Intelligence",
-        desc: "Strong vocabulary underpins your ability to communicate complex ideas.",
+        desc: "You don't just reach conclusions — you construct them. Your ability to move from principles to outcomes with precision places you in the top tier of logical thinkers. Where others guess, you build a case. This score reflects a mind that finds structure in complexity and arrives at truth through disciplined inference.",
       },
     ],
     showDisclaimer: false,
@@ -167,7 +182,7 @@ export default async function ResultPage({
 
   if (!result) {
     return (
-      <main className="min-h-full flex flex-col items-center justify-center bg-linear-to-tr from-black to-[#171717] text-white px-6">
+      <main className="min-h-screen flex flex-col items-center justify-center text-white px-6">
         <h1 className="font-serif text-3xl text-white mb-4">
           Result Not Found
         </h1>
@@ -189,6 +204,9 @@ export default async function ResultPage({
     result.dimension_scores,
     {},
   );
+  const dimensionMetadata = safeJsonParse<
+    Record<string, { badge: string; category: string }>
+  >(result.dimension_metadata, {});
   const aiInsights = safeJsonParse<string[]>(result.ai_insights, []);
   const aiRecommendations = safeJsonParse<string[]>(
     result.ai_recommendations,
@@ -220,190 +238,330 @@ export default async function ResultPage({
   const artisticTitle = result.ai_artistic_title || content.artisticTitle;
   const artisticDescription =
     result.ai_artistic_description || content.artisticDescription;
-  const breakdownInsights =
-    aiInsights.length > 0 ? aiInsights : content.breakdown.map((b) => b.desc);
 
   return (
-    <main className="min-h-full flex flex-col bg-linear-to-tr from-black to-[#171717] text-white">
+    <main className="min-h-screen flex flex-col text-white">
       <Header />
+      <section className="pt-32 md:pt-40 pb-16 md:pb-24 px-6 md:px-12 lg:px-39">
+        <Image
+          src={bgImage}
+          alt=""
+          fill
+          sizes="(max-width: 2000px) 100vw, (max-width: 1024px) 75vw, 50vw"
+          className="-z-1 object-cover"
+          priority
+        />
+        <div className="mx-auto">
+          <div className="flex justify-between gap-52">
+            <div className="max-w-114">
+              <span className="text-2xl text-white/50 block mb-6">
+                IQ-style Assessment
+              </span>
+              <h1 className="font-serif text-[4rem] text-white mb-4">
+                Your IQ Score
+              </h1>
+              <p className="text-2xl text-white mb-16">
+                Based on your answers, our AI has generated your GrayPrint.
+              </p>
 
-      {/* Hero Section */}
-      <section className="pt-28 md:pt-36 lg:pt-40 pb-12 md:pb-16 lg:pb-20 px-6 md:px-12 lg:px-39">
-        <div className="mb-10 md:mb-12 lg:mb-16">
-          <span className="text-[10px] tracking-[0.28em] uppercase text-[#c6bcaa] opacity-75 block mb-3">
-            {result.test_type}
-          </span>
-          <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-white mb-3 md:mb-4 leading-tight">
-            {artisticTitle}
-          </h1>
-          <p className="text-base md:text-lg lg:text-xl text-[#D4D4D4] font-light leading-relaxed max-w-2xl">
-            {artisticDescription}
-          </p>
-        </div>
-        {isIQ && (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-10 md:mb-12 lg:mb-16">
-            {[
-              { label: "Total Score", value: result.score ?? "—" },
-              { label: "Correct", value: stats.correct },
-              { label: "Wrong", value: stats.wrong },
-              { label: "Accuracy", value: stats.accuracy },
-            ].map((stat) => (
-              <div
-                key={stat.label}
-                className="bg-[#0A0A0A]/20 backdrop-blur-md border border-white/10 rounded-2xl p-5 md:p-6 text-center"
-              >
-                <div className="font-serif text-3xl md:text-4xl text-white mb-1 md:mb-2">
-                  {stat.value}
+              {/* Share & Download Buttons */}
+              <div className="flex gap-8 mb-16">
+                <Button size="md">Share Results</Button>
+                <Button size="md" variant="outline">
+                  Download Results PDF
+                </Button>
+              </div>
+
+              {/* Score Display */}
+              <div className="flex gap-4 mb-12">
+                <div className="font-serif text-9xl text-white">
+                  {result.score}
                 </div>
-                <div className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-[#A1A1A1]">
-                  {stat.label}
+                <div>
+                  <div className="text-2xl text-white mb-5">
+                    Percentile Ranking
+                  </div>
+                  <div className="font-serif text-[4rem] text-white">
+                    {result.percentile}
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-
-        {/* Percentile & Tag - untuk semua */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10 md:mb-12 lg:mb-16">
-          <div>
-            <div className="text-xs uppercase tracking-wider text-[#A1A1A1] mb-1 md:mb-2">
-              Percentile ranking
             </div>
-            <div className="font-serif text-2xl md:text-3xl text-white">
-              {result.percentile || "—"}
-            </div>
-          </div>
-          <span className="text-sm font-semibold text-white bg-[#0A0A0A]/20 border border-white px-4 py-1.5 rounded-full backdrop-blur-[10px]">
-            {result.tag || "—"}
-          </span>
-        </div>
-
-        {/* Traits Bars - untuk semua */}
-        <div className="bg-[#0A0A0A]/20 backdrop-blur-md border border-white/10 rounded-2xl p-6 md:p-8 space-y-5 md:space-y-6">
-          <h3 className="font-serif text-xl md:text-2xl text-white mb-4 md:mb-6">
-            Dimension breakdown
-          </h3>
-          <div className="space-y-4 md:space-y-5">
-            {traits.map((trait) => (
-              <div
-                key={trait.name}
-                className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4"
-              >
-                <div className="text-sm md:text-base text-[#D4D4D4] md:w-44 shrink-0">
-                  {trait.name}
-                </div>
-                <div className="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-[#D9D9D9] transition-all duration-700"
-                    style={{
-                      width: `${Math.min(100, Math.max(0, trait.value))}%`,
-                    }}
-                  />
-                </div>
-                <div className="font-serif text-base md:text-lg text-white md:w-10 text-right">
-                  {trait.value}
-                </div>
+            <div className="relative w-full">
+              <Image
+                src={geometricMind}
+                alt="hero"
+                fill
+                className="object-cover"
+              />
+              <div className="w-4/5 absolute -bottom-37 left-1/2 -translate-x-1/2 bg-black/58 backdrop-blur-sm border border-white/10 rounded-md px-10 py-5">
+                <span className="font-serif text-2xl text-[#A1A1A1] mb-4">
+                  Your Graytest profile
+                </span>
+                <h2 className="font-serif text-[4rem] text-white mb-2">
+                  {artisticTitle}
+                </h2>
+                <p className="text-white mb-4">{artisticDescription}</p>
+                <Button size="md">Learn More</Button>
               </div>
-            ))}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-28 mt-30">
+            <div className="flex-1 bg-black/58 border border-white/10 rounded-2xl p-10">
+              <h3 className="text-2xl font-light uppercase tracking-wider text-[#A1A1A1] mb-6">
+                Dimension Breakdown
+              </h3>
+              <div className="space-y-6">
+                {traits.map((trait) => {
+                  const meta = dimensionMetadata[trait.name];
+                  return (
+                    <div key={trait.name} className="flex items-center gap-10">
+                      <div className="w-32 text-white font-light shrink-0">
+                        {trait.name}
+                      </div>
+                      <div className="flex-1 h-2 border border-white/10 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-[#D9D9D9] rounded-full border border-white"
+                          style={{
+                            width: `${Math.min(100, Math.max(0, trait.value))}%`,
+                          }}
+                        />
+                      </div>
+                      <div className="w-12 text-right text-sm text-[#D4D4D4]">
+                        {trait.value}/100
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="flex-1  bg-[#0A0A0A]/40 border border-white/10 rounded-2xl p-6">
+              <div className="flex items-center gap-5 mb-6">
+                <Image src={warningIcon} alt="warning" width={64} height={64} />
+                <h3 className="text-2xl text-white">
+                  An <span className="font-bold">assessment fee</span> is
+                  required for our deep report
+                </h3>
+              </div>
+              <p className="font-light text-white">
+                Finding out deeper information regarding your strengths and
+                weaknesses requires an extra processing power which is supported
+                by this fee.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Detailed Breakdown */}
-      <section className="py-16 md:py-20 lg:py-25 px-6 md:px-12 lg:px-39 bg-black">
-        <div className="mx-auto max-w-7xl">
-          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-center font-light text-white mb-10 md:mb-12 lg:mb-16">
-            Detailed analysis
+      <ResultsAnalysis
+        traits={traits}
+        dimensionMetadata={dimensionMetadata}
+        breakdowns={content.breakdown}
+      />
+
+      {/* Iceberg Premium Section */}
+      <section className="py-24 md:py-32 relative overflow-hidden">
+        <div className="mx-auto">
+          <div className="px-6 md:px-12 lg:px-39">
+            <h2 className="font-serif text-[4rem] text-white mb-6">
+              Just the tip of the Iceberg
+            </h2>
+            <p className="text-white text-2xl mb-16 max-w-xl">
+              What you saw is just the surface of how you think. Go deeper to
+              uncover{" "}
+              <span className="text-white font-bold">
+                how to make it work for you.
+              </span>
+            </p>
+          </div>
+
+          <div className="relative w-full aspect-4/3 mx-auto">
+            {/* Iceberg Image */}
+            <Image
+              src={icebergBg}
+              alt="Iceberg visualization"
+              fill
+              className="object-contain"
+              priority
+            />
+
+            {/* IQ Score */}
+            <div className="absolute top-[15%] left-[35%] md:top-[12%] md:left-[38%] lg:top-[10%] lg:left-[40%]">
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-10 py-5 text-2xl text-white whitespace-nowrap shadow-lg">
+                IQ Score
+              </div>
+            </div>
+
+            {/* Result Analysis */}
+            <div className="absolute top-[15%] right-[20%] md:top-[12%] md:right-[22%] lg:top-[10%] lg:right-[25%]">
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-10 py-5 text-2xl text-white whitespace-nowrap shadow-lg">
+                Result Analysis
+              </div>
+            </div>
+
+            {/* Dimension Breakdown */}
+            <div className="absolute top-[20%] left-[10%] md:top-[18%] md:left-[12%] lg:top-[15%] lg:left-[15%]">
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-10 py-5 text-2xl text-white whitespace-nowrap shadow-lg">
+                Dimension Breakdown
+              </div>
+            </div>
+
+            {/* Below Water Labels (Deeper Insights) */}
+
+            {/* Environment Design */}
+            <div className="absolute top-[45%] left-[50%] -translate-x-1/2 md:top-[42%] lg:top-[40%]">
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-10 py-5 text-2xl text-white whitespace-nowrap shadow-lg">
+                Environment Design (noise, structure, autonomy)
+              </div>
+            </div>
+
+            {/* Relationship Compatibility */}
+            <div className="absolute top-[55%] left-[15%] md:top-[52%] md:left-[18%] lg:top-[50%] lg:left-[20%]">
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-10 py-5 text-2xl text-white whitespace-nowrap shadow-lg">
+                Relationship Compatibility
+              </div>
+            </div>
+
+            {/* Career Matching */}
+            <div className="absolute top-[65%] left-[40%] md:top-[62%] md:left-[42%] lg:top-[60%] lg:left-[43%]">
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-10 py-5 text-2xl text-white whitespace-nowrap shadow-lg">
+                Career Matching
+              </div>
+            </div>
+
+            {/* Learning Style Optimization */}
+            <div className="absolute top-[58%] right-[22%] md:top-[55%] md:right-[24%] lg:top-[52%] lg:right-[26%]">
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-10 py-5 text-2xl text-white whitespace-nowrap shadow-lg">
+                Learning style optimization
+              </div>
+            </div>
+
+            {/* Daily Operating System */}
+            <div className="absolute bottom-[20%] left-[18%] md:bottom-[22%] md:left-[20%] lg:bottom-[24%] lg:left-[22%]">
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-10 py-5 text-2xl text-white whitespace-nowrap shadow-lg">
+                Daily operating system
+              </div>
+            </div>
+
+            {/* Detailed GrayTest Profile */}
+            <div className="absolute bottom-[25%] right-[12%] md:bottom-[27%] md:right-[14%] lg:bottom-[28%] lg:right-[16%]">
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-10 py-5 text-2xl text-white whitespace-nowrap shadow-lg">
+                Detailed GrayTest Profile
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <PricingTiers testType={testKey} className="mb-16" />
+
+      {/* Benefits Section */}
+      <BenefitsSection
+        items={[
+          {
+            title: "Discover your strongest skills",
+            description:
+              "Find out if logic, math, language, or memory are your standout strengths—and put them to work in study, career, or problem-solving.",
+          },
+          {
+            title: "Handle stress and conflict",
+            description:
+              "Understand your triggers and use techniques to stay calm, recover quickly, and avoid escalating small issues into big ones.",
+          },
+          {
+            title: "Strengthen relationships",
+            description:
+              "Empathy helps you connect deeply, resolve misunderstandings, and build stronger trust in both personal and professional circles.",
+          },
+          {
+            title: "Use insights in therapy or coaching",
+            description:
+              "Bring your EQ profile to a professional to work on specific goals, like managing anger, increasing resilience, or building leadership skills.",
+          },
+        ]}
+        bgImage={benefitsBg}
+      />
+
+      {/* Professional Consultation Section */}
+      <section className="relative py-24 px-6 md:px-12 lg:px-39">
+        <Image
+          src={ctaBg}
+          fill
+          alt="background"
+          className="object-cover -z-10 opacity-20"
+        />
+
+        <div className="mx-auto">
+          <h2 className="font-serif text-5xl leading-normal text-white mb-10 max-w-xl">
+            Want to go deeper with a licensed professional?
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {content.breakdown.map((item) => {
-              const traitValue = traits.find(
-                (t) => t.name === item.category,
-              )?.value;
-              return (
-                <div
-                  key={item.category}
-                  className="bg-[#0A0A0A]/20 backdrop-blur-md border border-white/10 rounded-2xl p-6 md:p-8 hover:-translate-y-1 transition-transform"
-                >
-                  <div className="font-serif text-3xl md:text-4xl text-white leading-none mb-3 md:mb-4">
-                    {traitValue ?? "—"}
-                  </div>
-                  <div className="text-[9px] md:text-[10px] tracking-[0.25em] uppercase text-[#A1A1A1] mb-3 md:mb-4">
-                    {item.category}
-                  </div>
-                  <h3 className="font-serif text-lg md:text-xl text-[#D4D4D4] mb-2 md:mb-3">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-[#A1A1A1] leading-relaxed">
-                    {item.desc}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* AI Insight */}
-      <section className="py-16 md:py-20 lg:py-25 px-6 md:px-12 lg:px-39">
-        <div className="mx-auto max-w-7xl bg-[#0A0A0A]/20 backdrop-blur-md border border-white/10 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row md:items-start gap-4 md:gap-6">
-          <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 flex items-center justify-center shrink-0">
-            <svg
-              className="w-5 h-5 md:w-6 md:h-6 text-[#D4D4D4]"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-              />
-            </svg>
-          </div>
-          <div>
-            <span className="text-xs tracking-[0.22em] uppercase text-[#D4D4D4] opacity-70 block mb-3">
-              AI Insight
-            </span>
-            <p className="text-base md:text-lg text-[#D4D4D4] font-light leading-relaxed mb-4">
-              {artisticDescription}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <p className="col-span-2 text-[#D1D5DC] max-w-3xl">
+              Graytest gives you AI-powered insights. But having a human
+              perspective makes all the difference. If your results spark
+              curiosity, raise concerns, or open new questions—you don't have to
+              explore them alone.
             </p>
-            <div className="space-y-3">
-              {breakdownInsights.map((insight, i) => (
-                <div
-                  key={i}
-                  className="flex items-start gap-2 text-sm text-[#A1A1A1]"
-                >
-                  <span className="text-white mt-0.5">•</span> {insight}
+
+            <ul className="space-y-6 text-sm font-semibold max-w-xl">
+              <li className="flex items-center gap-7">
+                <div className="w-12 h-12 rounded-full bg-[#525252] flex items-center justify-center shrink-0">
+                  <Image src={trisullaIcon} alt="icon" width={48} height={48} />
                 </div>
-              ))}
+                <p className="text-[#D4D4D4]">
+                  Meet with a licensed psychologist
+                </p>
+              </li>
+              <li className="flex items-center gap-7">
+                <div className="w-12 h-12 rounded-full bg-[#525252] flex items-center justify-center shrink-0">
+                  <Image src={noteIcon} alt="icon" width={48} height={48} />
+                </div>
+                <p className="text-[#D4D4D4]">
+                  Get a personalized assessment roadmap
+                </p>
+              </li>
+              <li className="flex items-center gap-7">
+                <div className="w-12 h-12 rounded-full bg-[#525252] flex items-center justify-center shrink-0">
+                  <Image src={messageIcon} alt="icon" width={48} height={48} />
+                </div>
+                <p className="text-[#D4D4D4]">
+                  Explore ADHD, Autism, or executive function concerns with
+                  guidance
+                </p>
+              </li>
+              <li className="flex items-center gap-7">
+                <div className="w-12 h-12 rounded-full bg-[#525252] flex items-center justify-center shrink-0">
+                  <Image src={dollarIcon} alt="icon" width={48} height={48} />
+                </div>
+                <p className="text-[#D4D4D4]">
+                  Professional evaluations often cost $3–5K — we help start that
+                  journey at a fraction of the price
+                </p>
+              </li>
+            </ul>
+
+            <div className="relative backdrop-blur-sm bg-[#171717]/50 shadow-[inset_5px_5px_5px_0px_rgba(0,0,0,0.2),inset_-5px_-5px_5px_0px_rgba(255,255,255,0.04)] border border-white/15 rounded-2xl p-6 w-53 h-max">
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs text-white font-semibold bg-[#0A0A0A]/20 border border-white px-2 py-1 rounded-full backdrop-blur-[10px] z-10">
+                Coming Soon
+              </span>
+              <h3 className="text-white mb-4">Psych consultation</h3>
+              <div className="font-serif text-[2rem] text-white mb-8">$150</div>
+              <ul className="space-y-4 text-[#A1A1A1]">
+                <li>• Professional review</li>
+                <li>• Diagnostic report</li>
+              </ul>
             </div>
-            {aiRecommendations.length > 0 && (
-              <div className="mt-4 pt-4 border-t border-white/10">
-                <span className="text-xs uppercase tracking-wider text-[#c6bcaa] mb-2 block">
-                  Recommended Next Steps
-                </span>
-                {aiRecommendations.map((rec, i) => (
-                  <div
-                    key={i}
-                    className="flex items-start gap-2 text-sm text-[#A1A1A1] mb-1"
-                  >
-                    <span className="text-[#D4D4D4] mt-0.5">→</span> {rec}
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         </div>
       </section>
 
-      {/* Clinical Disclaimer */}
       {content.showDisclaimer && (
-        <section className="px-6 md:px-12 lg:px-39 pb-12 md:pb-16">
-          <div className="mx-auto max-w-7xl bg-[#0A0A0A]/20 backdrop-blur-md border border-[#c6bcaa]/20 rounded-2xl p-5 md:p-6">
-            <p className="text-xs md:text-sm text-[#A1A1A1] leading-relaxed">
+        <section className="px-6 md:px-12 lg:px-39 pb-16">
+          <div className="mx-auto bg-[#0A0A0A]/40 border border-[#c6bcaa]/20 rounded-2xl p-6">
+            <p className="text-sm text-[#A1A1A1] leading-relaxed">
               <strong className="text-[#c6bcaa]">Disclaimer:</strong> The
               Spectrum Assessment is an educational self-awareness tool based on
               the validated AQ-50. It is not a clinical diagnosis and does not

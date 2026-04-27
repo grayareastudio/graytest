@@ -62,6 +62,47 @@ export async function getTestQuestions(testType: string): Promise<Question[]> {
   return (data || []).map(mapToQuestion);
 }
 
+function generateDimensionMetadata(
+  testType: string,
+  dimensionScores: Record<string, number>,
+): Record<string, { badge: string; category: string }> {
+  const badgeMapping: Record<string, string> = {
+    "Logical Reasoning": "Local",
+    "Pattern Recognition": "Visual",
+    "Verbal Ability": "Dimensional",
+    "Processing Speed": "Local",
+    "Self-Awareness": "Emotional",
+    "Self-Regulation": "Emotional",
+    Empathy: "Social",
+    "Social Skills": "Social",
+    Openness: "Dimensional",
+    Conscientiousness: "Local",
+    Extraversion: "Social",
+    Agreeableness: "Social",
+    Neuroticism: "Emotional",
+    "Attention Switching": "Cognitive",
+    "Attention to Detail": "Cognitive",
+    Imagination: "Dimensional",
+  };
+
+  const metadata: Record<string, { badge: string; category: string }> = {};
+
+  Object.entries(dimensionScores).forEach(([name, score]) => {
+    let badge: string;
+    if (score >= 90) badge = "Gold Standard";
+    else if (score >= 75) badge = "Hidden Potential";
+    else if (score >= 50) badge = "Developing";
+    else badge = "Needs Attention";
+
+    metadata[name] = {
+      badge,
+      category: badgeMapping[name] || "Local",
+    };
+  });
+
+  return metadata;
+}
+
 export async function submitTestResults(
   testType: string,
   answers: Record<number, any>,
@@ -108,6 +149,10 @@ export async function submitTestResults(
       percentile: scoringResult.percentile,
       tag: scoringResult.tag,
       dimension_scores: scoringResult.dimension_scores,
+      dimension_metadata: generateDimensionMetadata(
+        testType,
+        scoringResult.dimension_scores || {},
+      ),
       duration_seconds: durationSeconds,
       completed_at: new Date().toISOString(),
       user_id: user?.id || null,

@@ -19,6 +19,7 @@ export interface TestResult {
   ai_artistic_description: string | null;
   ai_insights: string[] | null;
   ai_recommendations: string[] | null;
+  dimension_metadata?: Record<string, { badge: string; category: string }>;
 }
 
 export async function getResultById(id: string): Promise<TestResult | null> {
