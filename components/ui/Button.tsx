@@ -33,8 +33,8 @@ export function Button({
 
   const sizes = {
     sm: "px-4 py-2 text-xs",
-    md: "py-4.5 px-2 text-sm min-w-[120px]",
-    lg: "py-5 px-2.5 text-base min-w-[140px]",
+    md: "py-4.5 px-2 text-sm min-w-53",
+    lg: "py-5 px-2.5 text-base min-w-53",
   };
 
   return (
