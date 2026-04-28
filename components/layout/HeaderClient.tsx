@@ -5,6 +5,8 @@ import { useState, useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut } from "@/lib/actions/auth-actions";
 import { User } from "@supabase/supabase-js";
+import userIcon from "@/assets/icons/user.svg";
+import Image from "next/image";
 
 interface HeaderClientProps {
   user: User | null;
@@ -60,7 +62,7 @@ export function HeaderClient({ user }: HeaderClientProps) {
   }, [userMenuOpen]);
 
   const navLinks = user
-    ? [...guestLinks, { name: "Dashboard", href: "/dashboard" }]
+    ? [...guestLinks]
     : [
         ...guestLinks,
         { name: "Login", href: "/login" },
@@ -137,9 +139,10 @@ export function HeaderClient({ user }: HeaderClientProps) {
                 className="flex items-center gap-2 hover:opacity-80 transition-opacity hover:cursor-pointer"
                 aria-label="User menu"
               >
-                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#D9D9D9]/20 border border-white/20 flex items-center justify-center text-white font-medium text-sm md:text-base">
-                  {initials}
-                </div>
+                <Image src={userIcon} width={40} height={40} alt="user" />
+                <p className="font-light text-[#D4D4D4] truncate">
+                  {displayName}
+                </p>
               </button>
 
               {userMenuOpen && (
@@ -244,11 +247,25 @@ export function HeaderClient({ user }: HeaderClientProps) {
             {/* Auth Section - Mobile */}
             {user && (
               <>
+                <li key="dashbord">
+                  <a
+                    href="/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`
+                    block font-light text-lg no-underline transition-colors py-2.5 border-b border-white/5 last:border-0
+                    ${
+                      isActive("/dashboard")
+                        ? "text-white font-medium"
+                        : "text-[#D4D4D4] hover:text-white"
+                    }
+                  `}
+                  >
+                    Dashboard
+                  </a>
+                </li>
                 <li className="py-2.5 border-b border-white/5">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#D9D9D9]/20 border border-white/20 flex items-center justify-center text-white font-medium">
-                      {initials}
-                    </div>
+                    <Image src={userIcon} width={40} height={40} alt="user" />
                     <div>
                       <p className="text-sm text-white">{displayName}</p>
                       <p className="text-xs text-[#A1A1A1]">{userEmail}</p>
