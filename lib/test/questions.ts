@@ -6,7 +6,7 @@ export interface Question {
   id: number;
   type: QuestionType;
   text: string;
-  options?: { id: string; label: string; imageUrl?: string }[]; // ← tambah optional imageUrl
+  options?: { id: string; label: string; imageUrl?: string }[];
   rows?: { id: string; question: string }[];
   mainImage?: string;
 }

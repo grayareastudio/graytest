@@ -63,7 +63,7 @@ export function DashboardClient({
             </p>
           </div>
           <Button variant="primary" size="md">
-            <Link href={`/test/${filter === "all" ? "iq" : filter}`}>
+            <Link href={`/test/${filter === "all" ? "iq" : filter}/questions`}>
               Take New Test
             </Link>
           </Button>
@@ -190,7 +190,9 @@ export function DashboardClient({
                   No tests found for this filter.
                 </p>
                 <Button variant="outline" size="sm" asChild>
-                  <Link href={`/test/${filter === "all" ? "iq" : filter}`}>
+                  <Link
+                    href={`/test/${filter === "all" ? "iq" : filter}/questions`}
+                  >
                     Take a Test
                   </Link>
                 </Button>

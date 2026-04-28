@@ -21,7 +21,7 @@ export default function Page() {
         title="Personality Test"
         description="This test highlights your natural tendencies on how you act, think, and connect."
         buttonText="Start your assessment"
-        href="/test/personality"
+        href="/test/personality/questions"
         videoSrc="/videos/personality.mp4"
         bgImage={bgImage}
         videoClassName="right-8 lg:right-39 rounded-[50px] aspect-9.5/7 object-cover w-1/2"

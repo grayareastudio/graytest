@@ -20,6 +20,12 @@ export interface TestResult {
   ai_insights: string[] | null;
   ai_recommendations: string[] | null;
   dimension_metadata?: Record<string, { badge: string; category: string }>;
+  dimension_breakdown?: DimensionBreakdown[] | null;
+}
+export interface DimensionBreakdown {
+  category: string;
+  title: string;
+  desc: string;
 }
 
 export async function getResultById(id: string): Promise<TestResult | null> {

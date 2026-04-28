@@ -78,7 +78,7 @@ export function WhySection({ isHomePage = false }: WhySectionProps) {
 
         <div className="text-center mt-12 md:mt-24 lg:mt-35">
           <Button asChild>
-            <Link href="/test/iq" className="block mx-auto">
+            <Link href="/test/iq/intro" className="block mx-auto">
               Take A Test
             </Link>
           </Button>

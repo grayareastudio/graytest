@@ -13,7 +13,7 @@ export default function Page() {
         title="Emotional Quotient (EQ)"
         description="Emotional intelligence gives you tools to navigate daily life with more balance and clarity."
         buttonText="Start your assessment"
-        href="/test/eq"
+        href="/test/eq/questions"
         videoSrc="/videos/eq.mp4"
         bgImage={bgImage}
         videoClassName="right-8 lg:right-39 rounded-[344px] border border-white/10 w-2/5 aspect-9/7 object-cover"

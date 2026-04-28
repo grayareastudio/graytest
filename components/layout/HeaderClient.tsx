@@ -140,9 +140,7 @@ export function HeaderClient({ user }: HeaderClientProps) {
                 aria-label="User menu"
               >
                 <Image src={userIcon} width={40} height={40} alt="user" />
-                <p className="font-light text-[#D4D4D4] truncate">
-                  {displayName}
-                </p>
+                <p className="font-light text-white truncate">{displayName}</p>
               </button>
 
               {userMenuOpen && (

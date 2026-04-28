@@ -13,7 +13,7 @@ export default function Page() {
         title="Spectrum Test"
         description="This assessment explores how your brain processes the world—socially, behaviorally, and sensorially."
         buttonText="Start your assessment"
-        href="/test/spectrum"
+        href="/test/spectrum/questions"
         videoSrc="/videos/spectrum.mp4"
         bgImage={bgImage}
         videoClassName="right-8 lg:right-39 aspect-square rounded-full w-1/3 object-cover"

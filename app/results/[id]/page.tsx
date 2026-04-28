@@ -1,7 +1,10 @@
 // app/results/[id]/page.tsx
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { getResultById } from "@/lib/actions/result-actions";
+import {
+  DimensionBreakdown,
+  getResultById,
+} from "@/lib/actions/result-actions";
 import { getScoringQuestions } from "@/lib/actions/test-actions";
 import { Button } from "@/components/ui/Button";
 import { BenefitsSection } from "@/components/sections/test/BenefitsSection";
@@ -207,6 +210,11 @@ export default async function ResultPage({
   const dimensionMetadata = safeJsonParse<
     Record<string, { badge: string; category: string }>
   >(result.dimension_metadata, {});
+  const dimensionBreakdown =
+    safeJsonParse<DimensionBreakdown[]>(
+      result.dimension_breakdown,
+      content.breakdown,
+    ) || content.breakdown;
   const aiInsights = safeJsonParse<string[]>(result.ai_insights, []);
   const aiRecommendations = safeJsonParse<string[]>(
     result.ai_recommendations,
@@ -358,7 +366,7 @@ export default async function ResultPage({
       <ResultsAnalysis
         traits={traits}
         dimensionMetadata={dimensionMetadata}
-        breakdowns={content.breakdown}
+        breakdowns={dimensionBreakdown}
       />
 
       {/* Iceberg Premium Section */}

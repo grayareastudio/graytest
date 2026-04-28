@@ -7,6 +7,7 @@ import { calculateScore } from "@/lib/scoring";
 import { generateGrayPrintAI, type AIInsightPayload } from "./ai-actions";
 import { getCurrentUser } from "./auth-actions";
 import { sendTestResultEmail } from "./email-actions";
+import { DimensionBreakdown } from "./result-actions";
 
 function mapQuestionType(dbType: string): Question["type"] {
   switch (dbType) {
@@ -103,6 +104,84 @@ function generateDimensionMetadata(
   return metadata;
 }
 
+function generateDimensionBreakdown(
+  testType: string,
+  scores: Record<string, number>,
+): DimensionBreakdown[] {
+  // Contoh logic sederhana: Pilih judul/deskripsi berdasarkan skor tinggi/rendah
+  const templates: Record<
+    string,
+    {
+      high: { title: string; desc: string };
+      low: { title: string; desc: string };
+    }
+  > = {
+    "Logical Reasoning": {
+      high: {
+        title: "Deductive Reasoning",
+        desc: "You excel at drawing valid conclusions from premises — a foundation for analytical thinking.",
+      },
+      low: {
+        title: "Developing Logic",
+        desc: "You are building your deductive skills. Practice with structured arguments to strengthen this area.",
+      },
+    },
+    "Pattern Recognition": {
+      high: {
+        title: "Pattern Mastery",
+        desc: "Your ability to identify recurring structures in visual sequences is exceptional.",
+      },
+      low: {
+        title: "Pattern Awareness",
+        desc: "You are developing your eye for patterns. Try exercises with sequences to improve.",
+      },
+    },
+    "Verbal Ability": {
+      high: {
+        title: "Linguistic Intelligence",
+        desc: "Strong vocabulary underpins your ability to communicate complex ideas.",
+      },
+      low: {
+        title: "Language Skills",
+        desc: "Focus on expanding vocabulary and reading comprehension to boost this score.",
+      },
+    },
+    "Processing Speed": {
+      high: {
+        title: "Rapid Processing",
+        desc: "You process simple visual information with high accuracy under time pressure.",
+      },
+      low: {
+        title: "Steady Processing",
+        desc: "Accuracy is key. Try to balance speed and precision in future exercises.",
+      },
+    },
+    // Default fallback
+    default: {
+      high: {
+        title: "Strong Performance",
+        desc: "You demonstrated strong capabilities in this area.",
+      },
+      low: {
+        title: "Potential to Grow",
+        desc: "With focused practice, you can significantly improve in this area.",
+      },
+    },
+  };
+
+  return Object.entries(scores).map(([name, score]) => {
+    const template = templates[name] || templates.default;
+    const isHigh = score >= 70; // Threshold score tinggi
+    const content = isHigh ? template.high : template.low;
+
+    return {
+      category: name,
+      title: content.title,
+      desc: content.desc,
+    };
+  });
+}
+
 export async function submitTestResults(
   testType: string,
   answers: Record<number, any>,
@@ -150,6 +229,10 @@ export async function submitTestResults(
       tag: scoringResult.tag,
       dimension_scores: scoringResult.dimension_scores,
       dimension_metadata: generateDimensionMetadata(
+        testType,
+        scoringResult.dimension_scores || {},
+      ),
+      dimension_breakdown: generateDimensionBreakdown(
         testType,
         scoringResult.dimension_scores || {},
       ),

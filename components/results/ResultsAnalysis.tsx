@@ -36,11 +36,11 @@ export function ResultsAnalysis({
                   </div>
                   {meta?.badge && (
                     <span
-                      className={`px-3 py-1 rounded-full text-[9px] uppercase tracking-wider border ${
+                      className={`px-10 py-2.5 rounded-2xl font-medium uppercase tracking-wider border ${
                         meta.badge === "Gold Standard"
-                          ? "border-[#c6bcaa] text-[#c6bcaa]"
+                          ? "border-[#FBBC05] text-[#FBBC05]"
                           : meta.badge === "Hidden Potential"
-                            ? "border-blue-400/50 text-blue-400"
+                            ? "border-blue-[#4285F4] text-[#4285F4]"
                             : "border-white/20 text-[#A1A1A1]"
                       }`}
                     >

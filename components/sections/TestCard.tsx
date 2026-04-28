@@ -52,7 +52,10 @@ export function TestCard({
           asChild
           className="text-[clamp(12px,1.2vw,10px)]"
         >
-          <Link href={`/test/${title.toLowerCase()}`} className="block">
+          <Link
+            href={`/test/${title.toLowerCase()}/questions`}
+            className="block"
+          >
             Start your Assessment
           </Link>
         </Button>
