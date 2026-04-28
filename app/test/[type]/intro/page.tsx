@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { INTRO_SLIDES_DATA } from "@/lib/data/intro-slides";
 import { SlideRenderer } from "@/components/intro/SlideRenderer";
 import { Button } from "@/components/ui/Button";
+import GradientText from "@/components/ui/GradientText";
 
 export default function TestIntroPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -37,8 +38,8 @@ export default function TestIntroPage() {
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-6 md:px-12 lg:px-39 py-10 md:py-20 w-full">
-      <h1 className="font-serif text-4xl md:text-5xl text-[#A1A1A1] mb-8 text-center max-w-4xl">
-        {current.title}
+      <h1 className="font-serif text-4xl md:text-5xl mb-8 text-center max-w-4xl">
+        <GradientText>{current.title}</GradientText>
       </h1>
 
       <div className="flex gap-2 mb-8">

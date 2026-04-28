@@ -8,6 +8,7 @@ interface TypingTextProps {
   delay?: number;
   showCursor?: boolean;
   className?: string;
+  gradient?: boolean;
 }
 
 export function TypingText({
@@ -16,6 +17,7 @@ export function TypingText({
   delay = 0,
   showCursor = true,
   className = "",
+  gradient,
 }: TypingTextProps) {
   const [displayed, setDisplayed] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -60,7 +62,19 @@ export function TypingText({
     <span className={`relative inline-block ${className}`}>
       <span className="invisible">{text}</span>
 
-      <span className="absolute left-0 top-0">
+      <span
+        className={`absolute left-0 top-0 ${
+          gradient ? "bg-clip-text text-transparent" : ""
+        }`}
+        style={
+          gradient
+            ? {
+                backgroundImage:
+                  "linear-gradient(160deg, rgba(212,212,212,1) 0%, rgba(212,212,212,0.5) 80%, rgba(115,115,115,1) 100%)",
+              }
+            : {}
+        }
+      >
         {displayed}
         {showCursor && isTyping && (
           <span className="inline-block w-0.5 h-[1em] bg-current ml-0.5 animate-pulse" />

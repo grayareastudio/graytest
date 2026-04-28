@@ -4,6 +4,7 @@ import iqBg from "@/assets/test/iq-bg.png";
 import eqBg from "@/assets/test/eq-bg.png";
 import personalityBg from "@/assets/test/personality-bg.png";
 import spectrumBg from "@/assets/test/spectrum-bg.png";
+import GradientText from "../ui/GradientText";
 
 const tests = [
   {
@@ -45,7 +46,7 @@ export function TestCards() {
     >
       <div className="mx-auto space-y-6 md:space-y-8 lg:space-y-11 flex flex-col items-center">
         <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-white text-center">
-          Choose Your Test
+          <GradientText>Choose Your Test</GradientText>
         </h2>
         <p className="text-base md:text-lg lg:text-xl text-[#D1D5DC] text-center max-w-2xl">
           Explore in minutes. Each test reveals a new layer of how your mind
