@@ -23,7 +23,7 @@ export function Button({
   const Comp = asChild ? Slot : "button";
 
   const baseStyles =
-    "rounded-full font-semibold transition-all duration-200 hover:cursor-pointer disabled:opacity-50 disabled:cursor-wait";
+    "rounded-full font-semibold transition-all duration-200 hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed";
 
   const variants = {
     primary: "bg-[#E5E5E5]/20 border border-white/10 text-white",
@@ -33,8 +33,8 @@ export function Button({
 
   const sizes = {
     sm: "px-4 py-2 text-xs",
-    md: "w-53 py-4.5 px-2 text-sm",
-    lg: "w-53 py-4.5 text-sm",
+    md: "py-4.5 px-2 text-sm min-w-[120px]",
+    lg: "py-5 px-2.5 text-base min-w-[140px]",
   };
 
   return (
