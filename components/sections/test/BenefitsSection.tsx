@@ -1,7 +1,9 @@
 "use client";
 
+import { Button } from "@/components/ui/Button";
 import GradientText from "@/components/ui/GradientText";
 import Image, { StaticImageData } from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 interface Benefit {
@@ -12,13 +14,13 @@ interface Benefit {
 interface BenefitsSectionProps {
   items: Benefit[];
   bgImage?: StaticImageData;
-  onCtaClick?: () => void;
+  href: string;
 }
 
 export function BenefitsSection({
   items,
   bgImage,
-  onCtaClick,
+  href,
 }: BenefitsSectionProps) {
   const [expandedIndex, setExpandedIndex] = useState<number>(0);
 
@@ -52,19 +54,9 @@ export function BenefitsSection({
               </p>
             </div>
 
-            <button
-              onClick={onCtaClick}
-              className="
-                px-6 py-3 md:px-8 md:py-4 rounded-full 
-                bg-white/10 border border-white/20 
-                text-white font-medium text-sm
-                hover:bg-white/20 hover:border-white/30 
-                transition-all duration-300
-                backdrop-blur-xs mx-auto lg:mx-0
-              "
-            >
-              Start your assessment
-            </button>
+            <Button>
+              <Link href={href}>Start your assessment</Link>
+            </Button>
           </div>
 
           {/* Right Accordion Panel */}

@@ -49,7 +49,6 @@ export function TestCard({
         <Button
           variant="primary"
           size="sm"
-          asChild
           className="text-[clamp(12px,1.2vw,10px)]"
         >
           <Link

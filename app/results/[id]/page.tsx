@@ -490,6 +490,7 @@ export default async function ResultPage({
           },
         ]}
         bgImage={benefitsBg}
+        href="dashboard"
       />
 
       {/* Professional Consultation Section */}

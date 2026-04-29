@@ -75,6 +75,7 @@ export default function Page() {
           },
         ]}
         bgImage={benefitsBg}
+        href="/test/personality/questions"
       />
 
       <WhySection />

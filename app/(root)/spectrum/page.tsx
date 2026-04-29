@@ -67,6 +67,7 @@ export default function Page() {
           },
         ]}
         bgImage={benefitsBg}
+        href="/test/spectrum/questions"
       />
 
       <WhySection />
