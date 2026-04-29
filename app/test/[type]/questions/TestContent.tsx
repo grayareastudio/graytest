@@ -1,10 +1,10 @@
-// app/test/[type]/TestContent.tsx
+// app/test/[type]/questions/TestContent.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import { useTest } from "@/lib/test/TestContext";
-import { getTestQuestions } from "@/lib/actions/test-actions";
-import { type Question, type QuestionType } from "@/lib/test/questions";
+import { DimensionInfoScreen } from "@/components/sections/test/DimensionInfoScreen";
+
 import { RadioQuestion } from "@/components/sections/test/RadioQuestion";
 import { CheckboxQuestion } from "@/components/sections/test/CheckboxQuestion";
 import { MatrixQuestion } from "@/components/sections/test/MatrixQuestion";
@@ -13,48 +13,46 @@ import { VisualQuestion } from "@/components/sections/test/VisualQuestion";
 
 export function TestContent({ type }: { type: string }) {
   const {
-    currentQuestionIndex,
-    currentQuestionId,
+    dimensions,
+    currentDimensionIndex,
+    currentQuestion,
     answers,
     setAnswer,
-    setCurrentQuestionId,
+    showDimensionInfo,
+    prevDimension,
+    setShowDimensionInfo,
   } = useTest();
 
-  const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchQuestions() {
-      try {
-        const data = await getTestQuestions(type);
-        setQuestions(data);
-        if (data.length > 0) {
-          setCurrentQuestionId(data[0].id);
-        }
-      } catch (error) {
-        console.error("Failed:", error);
-      } finally {
-        setLoading(false);
-      }
+    if (dimensions.length > 0) {
+      setLoading(false);
     }
-    fetchQuestions();
-  }, [type, setCurrentQuestionId]);
+  }, [dimensions]);
 
-  useEffect(() => {
-    if (questions.length > 0) {
-      const q = questions[currentQuestionIndex];
-      if (q) setCurrentQuestionId(q.id);
-    }
-  }, [currentQuestionIndex, questions, setCurrentQuestionId]);
+  if (loading) {
+    return <div className="text-white text-center py-20">Loading test...</div>;
+  }
 
-  if (loading) return <p className="text-white">Loading...</p>;
-  if (!questions.length)
-    return <p className="text-white">No questions available.</p>;
+  const currentDimension = dimensions[currentDimensionIndex];
 
-  const currentQuestion = questions[currentQuestionIndex];
-  const currentAnswer = answers[currentQuestion?.id ?? -1];
+  if (showDimensionInfo) {
+    return (
+      <DimensionInfoScreen
+        dimension={currentDimension}
+        onStart={() => setShowDimensionInfo(false)}
+        onPrevious={prevDimension}
+        canGoPrevious={currentDimensionIndex > 0}
+      />
+    );
+  }
 
-  if (!currentQuestion) return null;
+  if (!currentQuestion) {
+    return <div className="text-white">No questions available.</div>;
+  }
+
+  const currentAnswer = answers[currentQuestion.id] ?? null;
 
   switch (currentQuestion.type) {
     case "radio":
@@ -63,7 +61,7 @@ export function TestContent({ type }: { type: string }) {
           questionNumber={currentQuestion.id}
           questionText={currentQuestion.text}
           options={currentQuestion.options || []}
-          selectedOption={currentAnswer || null}
+          selectedOption={currentAnswer}
           onChange={(val) => setAnswer(currentQuestion.id, val)}
         />
       );
@@ -106,11 +104,11 @@ export function TestContent({ type }: { type: string }) {
           questionText={currentQuestion.text}
           mainImage={currentQuestion.mainImage || ""}
           options={currentQuestion.options || []}
-          selectedOption={currentAnswer || null}
+          selectedOption={currentAnswer}
           onChange={(val) => setAnswer(currentQuestion.id, val)}
         />
       );
     default:
-      return null;
+      return <p className="text-red-400">Error.</p>;
   }
 }

@@ -1,4 +1,3 @@
-// lib/actions/test-actions.ts
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
@@ -8,6 +7,16 @@ import { generateGrayPrintAI, type AIInsightPayload } from "./ai-actions";
 import { getCurrentUser } from "./auth-actions";
 import { sendTestResultEmail } from "./email-actions";
 import { DimensionBreakdown } from "./result-actions";
+
+export interface DimensionWithQuestions {
+  id: string;
+  code: string;
+  name: string;
+  description?: string;
+  info_content?: string;
+  sort_order: number;
+  questions: Question[];
+}
 
 function mapQuestionType(dbType: string): Question["type"] {
   switch (dbType) {
@@ -42,25 +51,174 @@ function mapToQuestion(q: any): Question {
 
 function mapToScoringQuestion(q: any): ScoringQuestion {
   return {
-    ...mapToQuestion(q),
+    id: q.id,
+    type: mapQuestionType(q.question_type),
+    text: q.text,
+    options: q.options || [],
+    rows: q.rows || [],
+    mainImage: q.main_image,
     correct_answer: q.correct_answer,
-    dimension: q.dimension,
-    spectrum_dimension: q.spectrum_dimension,
-    reverse_scored: q.reverse_scored,
+    reverse_scored: q.reverse_scored || false,
   };
 }
 
-export async function getTestQuestions(testType: string): Promise<Question[]> {
+export async function getTestWithDimensions(
+  testType: string,
+): Promise<DimensionWithQuestions[]> {
   const supabase = await createClient();
-  const { data: data, error } = await supabase
-    .from("questions")
-    .select("id, question_type, text, options, rows, main_image, sort_order")
+
+  const { data, error } = await supabase
+    .from("dimensions")
+    .select(
+      `
+      id,
+      code,
+      name,
+      description,
+      info_content,
+      sort_order,
+      questions (
+        id,
+        question_type,
+        text,
+        options,
+        rows,
+        main_image,
+        reverse_scored,
+        difficulty,
+        sort_order,
+        is_active
+      )
+    `,
+    )
     .eq("test_type", testType)
     .eq("is_active", true)
     .order("sort_order", { ascending: true });
 
-  if (error) throw new Error(error.message);
-  return (data || []).map(mapToQuestion);
+  if (error) {
+    console.error("Error fetching dimensions:", error);
+    throw new Error(error.message);
+  }
+
+  if (!data) return [];
+
+  const filteredDimensions = data
+    .map((dim: any) => ({
+      id: dim.id,
+      code: dim.code,
+      name: dim.name,
+      description: dim.description,
+      info_content: dim.info_content,
+      sort_order: dim.sort_order,
+      questions: (dim.questions || [])
+        .filter((q: any) => q.is_active === true)
+        .sort((a: any, b: any) => (a.sort_order || 0) - (b.sort_order || 0))
+        .map(mapToQuestion),
+    }))
+    .filter((dim) => dim.questions.length > 0); // ← Baris ini yang penting
+
+  return filteredDimensions;
+}
+
+export async function submitTestResults(
+  testType: string,
+  answers: Record<number, any>,
+  totalQuestions: number,
+  durationSeconds?: number,
+  userEmail?: string,
+) {
+  const supabase = await createClient();
+  const user = await getCurrentUser();
+
+  if (!user?.id) {
+    throw new Error("User must be logged in to submit test results");
+  }
+
+  const { data: questions, error: fetchError } = await supabase
+    .from("questions")
+    .select(
+      `
+      id, 
+      question_type, 
+      text, 
+      options, 
+      rows, 
+      main_image, 
+      correct_answer, 
+      reverse_scored
+    `,
+    )
+    .eq("is_active", true);
+
+  if (fetchError) throw new Error(fetchError.message);
+  if (!questions || questions.length === 0) {
+    throw new Error("No active questions found");
+  }
+
+  const scoringQuestions = questions.map(mapToScoringQuestion);
+  const scoringResult = calculateScore(testType, answers, scoringQuestions);
+
+  let aiContent: AIInsightPayload | null = null;
+  try {
+    aiContent = await generateGrayPrintAI(
+      testType,
+      scoringResult.score,
+      scoringResult.percentile,
+      scoringResult.tag,
+      scoringResult.dimension_scores || {},
+    );
+  } catch (err) {
+    console.warn("AI generation skipped:", err);
+  }
+
+  const { data: result, error: insertError } = await supabase
+    .from("test_results")
+    .insert({
+      user_id: user.id,
+      test_type: testType,
+      total_questions: totalQuestions,
+      answers: answers,
+      score: scoringResult.score,
+      percentile: scoringResult.percentile,
+      tag: scoringResult.tag,
+      dimension_scores: scoringResult.dimension_scores || {},
+      dimension_metadata: generateDimensionMetadata(
+        testType,
+        scoringResult.dimension_scores || {},
+      ),
+      dimension_breakdown: generateDimensionBreakdown(
+        testType,
+        scoringResult.dimension_scores || {},
+      ),
+      duration_seconds: durationSeconds,
+      completed_at: new Date().toISOString(),
+      ai_artistic_title: aiContent?.artisticTitle,
+      ai_artistic_description: aiContent?.artisticDescription,
+      ai_insights: aiContent?.insights,
+      ai_recommendations: aiContent?.recommendations,
+    })
+    .select("id")
+    .single();
+
+  if (insertError) {
+    console.error("Insert Error:", insertError);
+    throw new Error(`Failed to save test result: ${insertError.message}`);
+  }
+
+  if (userEmail && result?.id) {
+    sendTestResultEmail({
+      to: userEmail,
+      testType,
+      score: scoringResult.score,
+      percentile: scoringResult.percentile,
+      tag: scoringResult.tag,
+      resultId: result.id,
+      artisticTitle: aiContent?.artisticTitle,
+      artisticDescription: aiContent?.artisticDescription,
+    }).catch((err) => console.warn("Email failed:", err));
+  }
+
+  return result;
 }
 
 function generateDimensionMetadata(
@@ -108,7 +266,6 @@ function generateDimensionBreakdown(
   testType: string,
   scores: Record<string, number>,
 ): DimensionBreakdown[] {
-  // Contoh logic sederhana: Pilih judul/deskripsi berdasarkan skor tinggi/rendah
   const templates: Record<
     string,
     {
@@ -171,7 +328,7 @@ function generateDimensionBreakdown(
 
   return Object.entries(scores).map(([name, score]) => {
     const template = templates[name] || templates.default;
-    const isHigh = score >= 70; // Threshold score tinggi
+    const isHigh = score >= 70;
     const content = isHigh ? template.high : template.low;
 
     return {
@@ -180,89 +337,6 @@ function generateDimensionBreakdown(
       desc: content.desc,
     };
   });
-}
-
-export async function submitTestResults(
-  testType: string,
-  answers: Record<number, any>,
-  totalQuestions: number,
-  durationSeconds?: number,
-  userEmail?: string,
-) {
-  const supabase = await createClient();
-  const user = await getCurrentUser();
-
-  const { data: questions, error: fetchError } = await supabase
-    .from("questions")
-    .select(
-      "id, question_type, text, options, rows, main_image, correct_answer, dimension, spectrum_dimension, reverse_scored",
-    )
-    .eq("test_type", testType)
-    .eq("is_active", true);
-
-  if (fetchError) throw new Error(fetchError.message);
-
-  const scoringQuestions = (questions || []).map(mapToScoringQuestion);
-  const scoringResult = calculateScore(testType, answers, scoringQuestions);
-
-  let aiContent: AIInsightPayload | null = null;
-  try {
-    aiContent = await generateGrayPrintAI(
-      testType,
-      scoringResult.score,
-      scoringResult.percentile,
-      scoringResult.tag,
-      scoringResult.dimension_scores || {},
-    );
-  } catch (err) {
-    console.warn("AI generation skipped:", err);
-  }
-
-  const { data: result, error: insertError } = await supabase
-    .from("test_results")
-    .insert({
-      test_type: testType,
-      total_questions: scoringQuestions.length,
-      answers: answers,
-      score: scoringResult.score,
-      percentile: scoringResult.percentile,
-      tag: scoringResult.tag,
-      dimension_scores: scoringResult.dimension_scores,
-      dimension_metadata: generateDimensionMetadata(
-        testType,
-        scoringResult.dimension_scores || {},
-      ),
-      dimension_breakdown: generateDimensionBreakdown(
-        testType,
-        scoringResult.dimension_scores || {},
-      ),
-      duration_seconds: durationSeconds,
-      completed_at: new Date().toISOString(),
-      user_id: user?.id || null,
-      ai_artistic_title: aiContent?.artisticTitle,
-      ai_artistic_description: aiContent?.artisticDescription,
-      ai_insights: aiContent?.insights,
-      ai_recommendations: aiContent?.recommendations,
-    })
-    .select()
-    .single();
-
-  if (insertError) throw new Error(insertError.message);
-
-  if (userEmail && result?.id) {
-    sendTestResultEmail({
-      to: userEmail,
-      testType,
-      score: scoringResult.score,
-      percentile: scoringResult.percentile,
-      tag: scoringResult.tag,
-      resultId: result.id,
-      artisticTitle: aiContent?.artisticTitle,
-      artisticDescription: aiContent?.artisticDescription,
-    }).catch((err) => console.warn("Email delivery failed:", err));
-  }
-
-  return result;
 }
 
 export async function getScoringQuestions(
@@ -281,17 +355,16 @@ export async function getScoringQuestions(
       rows,
       main_image,
       correct_answer,
-      dimension,
-      spectrum_dimension,
       reverse_scored,
       sort_order
     `,
     )
-    .eq("test_type", testType)
     .eq("is_active", true)
     .order("sort_order", { ascending: true });
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    throw new Error(error.message);
+  }
 
   return (data || []).map(mapToScoringQuestion);
 }
