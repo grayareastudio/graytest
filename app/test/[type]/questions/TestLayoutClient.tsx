@@ -246,7 +246,7 @@ function LayoutContent({
           onClick={() => setShowQuestionList(false)}
         >
           <div
-            className="bg-zinc-900 border border-white/10 rounded-2xl p-8 max-w-4xl w-full mx-4 max-h-[85vh] overflow-y-auto"
+            className="bg-zinc-900 border border-white/10 rounded-2xl p-8 max-w-4xl w-full mx-4 h-2/3 overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-8">
