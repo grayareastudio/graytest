@@ -250,110 +250,134 @@ export default async function ResultPage({
   return (
     <main className="min-h-screen flex flex-col text-white">
       <Header />
-      <section className="pt-32 md:pt-40 pb-16 md:pb-24 px-6 md:px-12 lg:px-39">
+
+      <section className="pt-24 md:pt-32 lg:pt-40 pb-12 md:pb-16 lg:pb-24 px-4 md:px-8 lg:px-39">
         <Image
           src={bgImage}
           alt=""
           fill
-          sizes="(max-width: 2000px) 100vw, (max-width: 1024px) 75vw, 50vw"
-          className="-z-1 object-cover"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 50vw"
+          className="-z-10 object-cover"
           priority
         />
         <div className="mx-auto">
-          <div className="flex justify-between gap-52">
-            <div className="max-w-114">
-              <span className="text-2xl text-white/50 block mb-6">
+          {/* Top Section: Text + Image */}
+          <div className="flex flex-col xl:flex-row justify-between gap-8 lg:gap-16 xl:gap-52">
+            {/* Left Column */}
+            <div className="max-w-full xl:max-w-114">
+              <span className="text-lg md:text-xl lg:text-2xl text-white/50 block mb-4 md:mb-6">
                 IQ-style Assessment
               </span>
-              <h1 className="font-serif text-[4rem] text-white mb-4">
+              <h1 className="font-serif text-3xl md:text-4xl lg:text-[4rem] text-white mb-3 md:mb-4 leading-tight">
                 Your IQ Score
               </h1>
-              <p className="text-2xl text-white mb-16">
+              <p className="text-base md:text-lg lg:text-2xl text-white mb-8 lg:mb-16">
                 Based on your answers, our AI has generated your GrayPrint.
               </p>
 
               {/* Share & Download Buttons */}
-              <div className="flex gap-8 mb-16">
-                <Button size="md">Share Results</Button>
-                <Button size="md" variant="outline">
+              <div className="flex flex-col sm:flex-row gap-4 mb-8 lg:mb-16">
+                <Button size="md" className="w-full sm:w-auto">
+                  Share Results
+                </Button>
+                <Button
+                  size="md"
+                  variant="outline"
+                  className="w-full sm:w-auto"
+                >
                   Download Results PDF
                 </Button>
               </div>
 
               {/* Score Display */}
-              <div className="flex gap-4 mb-12">
-                <div className="font-serif text-9xl text-white">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-8 lg:mb-12">
+                <div className="font-serif text-5xl md:text-7xl lg:text-9xl text-white leading-none">
                   {result.score}
                 </div>
-                <div>
-                  <div className="text-2xl text-white mb-5">
+                <div className="border-t sm:border-t-0 sm:border-l border-white/20 pt-3 sm:pt-0 sm:pl-4 md:pl-6">
+                  <div className="text-base md:text-xl text-white/80 mb-1 md:mb-2">
                     Percentile Ranking
                   </div>
-                  <div className="font-serif text-[4rem] text-white">
+                  <div className="font-serif text-2xl md:text-3xl lg:text-[4rem] text-white leading-none">
                     {result.percentile}
                   </div>
                 </div>
               </div>
             </div>
-            <div className="relative w-full">
+
+            {/* Right Column: Image + Overlay Card */}
+            <div className="relative w-full aspect-4/3 xl:aspect-auto xl:h-auto min-h-[280px] xl:min-h-0">
               <Image
                 src={geometricMind}
                 alt="hero"
                 fill
                 className="object-cover"
               />
-              <div className="w-4/5 absolute -bottom-37 left-1/2 -translate-x-1/2 bg-black/58 backdrop-blur-sm border border-white/10 rounded-md px-10 py-5">
-                <span className="font-serif text-2xl text-[#A1A1A1] mb-4">
+              <div className="absolute -bottom-30 w-4/5 left-1/2 -translate-x-1/2 bg-black/58 backdrop-blur-sm border border-white/10 rounded-md px-4 py-4 lg:px-10 lg:py-5">
+                <span className="font-serif text-base lg:text-2xl text-[#A1A1A1] mb-2 lg:mb-4 block">
                   Your Graytest profile
                 </span>
-                <h2 className="font-serif text-[4rem] text-white mb-2">
+                <h2 className="font-serif text-xl md:text-2xl lg:text-[4rem] text-white mb-1 lg:mb-2 leading-tight">
                   {artisticTitle}
                 </h2>
-                <p className="text-white mb-4">{artisticDescription}</p>
-                <Button size="md">Learn More</Button>
+                <p className="text-sm md:text-base text-white/90 mb-3 lg:mb-4 line-clamp-2 lg:line-clamp-none">
+                  {artisticDescription}
+                </p>
+                <Button size="sm" className="w-full sm:w-auto lg:size-md">
+                  Learn More
+                </Button>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-28 mt-30">
-            <div className="flex-1 bg-black/58 border border-white/10 rounded-2xl p-10">
-              <h3 className="text-2xl font-light uppercase tracking-wider text-[#A1A1A1] mb-6">
+          {/* Bottom Section: Dimension Breakdown + Fee Card */}
+          <div className="flex flex-col xl:flex-row items-center gap-6 xl:gap-10 mt-40">
+            {/* Breakdown Card */}
+            <div className="flex-1 bg-black/58 border border-white/10 rounded-2xl p-5 md:p-8 lg:p-10">
+              <h3 className="text-base md:text-lg lg:text-2xl font-light uppercase tracking-wider text-[#A1A1A1] mb-4 md:mb-6">
                 Dimension Breakdown
               </h3>
-              <div className="space-y-6">
-                {traits.map((trait) => {
-                  const meta = dimensionMetadata[trait.name];
-                  return (
-                    <div key={trait.name} className="flex items-center gap-10">
-                      <div className="w-32 text-white font-light shrink-0">
-                        {trait.name}
-                      </div>
-                      <div className="flex-1 h-2 border border-white/10 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-[#D9D9D9] rounded-full border border-white"
-                          style={{
-                            width: `${Math.min(100, Math.max(0, trait.value))}%`,
-                          }}
-                        />
-                      </div>
-                      <div className="w-12 text-right text-sm text-[#D4D4D4]">
-                        {trait.value}/100
-                      </div>
+              <div className="space-y-4 md:space-y-5 lg:space-y-6">
+                {traits.map((trait) => (
+                  <div
+                    key={trait.name}
+                    className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 lg:gap-10"
+                  >
+                    <div className="w-full sm:w-32 text-white font-light text-sm md:text-base shrink-0">
+                      {trait.name}
                     </div>
-                  );
-                })}
+                    <div className="flex-1 h-1.5 md:h-2 border border-white/10 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-[#D9D9D9] rounded-full border border-white transition-all duration-500"
+                        style={{
+                          width: `${Math.min(100, Math.max(0, trait.value))}%`,
+                        }}
+                      />
+                    </div>
+                    <div className="w-full sm:w-12 text-right text-xs md:text-sm text-[#D4D4D4]">
+                      {trait.value}/100
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div className="flex-1  bg-[#0A0A0A]/40 border border-white/10 rounded-2xl p-6">
-              <div className="flex items-center gap-5 mb-6">
-                <Image src={warningIcon} alt="warning" width={64} height={64} />
-                <h3 className="text-2xl text-white">
+            {/* Fee Card */}
+            <div className="flex-1 bg-[#0A0A0A]/40 border border-white/10 rounded-2xl p-5 md:p-6 lg:p-6 flex flex-col justify-center">
+              <div className="flex items-start gap-3 md:gap-4 lg:gap-5 mb-3 md:mb-4 lg:mb-6">
+                <Image
+                  src={warningIcon}
+                  alt="warning"
+                  width={64}
+                  height={64}
+                  className="w-10 h-10 md:w-12 md:h-12 lg:w-16 lg:h-16 shrink-0"
+                />
+                <h3 className="text-base md:text-lg lg:text-2xl text-white leading-snug">
                   An <span className="font-bold">assessment fee</span> is
                   required for our deep report
                 </h3>
               </div>
-              <p className="font-light text-white">
+              <p className="font-light text-white text-sm md:text-base leading-relaxed">
                 Finding out deeper information regarding your strengths and
                 weaknesses requires an extra processing power which is supported
                 by this fee.
@@ -370,13 +394,13 @@ export default async function ResultPage({
       />
 
       {/* Iceberg Premium Section */}
-      <section className="py-24 md:py-32 relative overflow-hidden">
+      <section className="py-12 md:py-24 lg:py-32 relative overflow-hidden">
         <div className="mx-auto">
-          <div className="px-6 md:px-12 lg:px-39">
-            <h2 className="font-serif text-[4rem] text-white mb-6">
+          <div className="px-4 md:px-12 lg:px-39 mb-8 md:mb-16">
+            <h2 className="font-serif text-3xl md:text-4xl lg:text-[4rem] text-white mb-3 md:mb-6 leading-tight">
               Just the tip of the Iceberg
             </h2>
-            <p className="text-white text-2xl mb-16 max-w-xl">
+            <p className="text-white text-base md:text-xl lg:text-2xl max-w-xl leading-relaxed">
               What you saw is just the surface of how you think. Go deeper to
               uncover{" "}
               <span className="text-white font-bold">
@@ -385,85 +409,98 @@ export default async function ResultPage({
             </p>
           </div>
 
-          <div className="relative w-full aspect-4/3 mx-auto">
+          <div className="relative w-full aspect-4/5 mx-auto">
             {/* Iceberg Image */}
             <Image
               src={icebergBg}
               alt="Iceberg visualization"
               fill
-              className="object-contain"
+              className="object-cover"
               priority
             />
 
             {/* IQ Score */}
-            <div className="absolute top-[15%] left-[35%] md:top-[12%] md:left-[38%] lg:top-[10%] lg:left-[40%]">
-              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-10 py-5 text-2xl text-white whitespace-nowrap shadow-lg">
+            <div className="absolute top-[10%] left-[20%] md:top-[14%] md:left-[36%] lg:top-[10%] lg:left-[20%] xl:top-[10%] xl:left-[35%]">
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-lg md:rounded-xl lg:rounded-2xl px-3 py-1.5 md:px-6 md:py-3 lg:px-10 lg:py-5 text-[10px] md:text-base lg:text-2xl text-white whitespace-nowrap shadow-lg">
                 IQ Score
               </div>
             </div>
 
             {/* Result Analysis */}
-            <div className="absolute top-[15%] right-[20%] md:top-[12%] md:right-[22%] lg:top-[10%] lg:right-[25%]">
-              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-10 py-5 text-2xl text-white whitespace-nowrap shadow-lg">
+            <div className="absolute top-[10%] right-[15%] md:top-[14%] md:right-[20%] lg:top-[10%] lg:right-[25%]">
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-lg md:rounded-xl lg:rounded-2xl px-3 py-1.5 md:px-6 md:py-3 lg:px-10 lg:py-5 text-[10px] md:text-base lg:text-2xl text-white whitespace-nowrap shadow-lg">
                 Result Analysis
               </div>
             </div>
 
             {/* Dimension Breakdown */}
-            <div className="absolute top-[20%] left-[10%] md:top-[18%] md:left-[12%] lg:top-[15%] lg:left-[15%]">
-              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-10 py-5 text-2xl text-white whitespace-nowrap shadow-lg">
+            <div className="absolute top-[20%] left-[15%] md:top-[18%] md:left-[10%] lg:top-[20%] lg:left-[15%]">
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-lg md:rounded-xl lg:rounded-2xl px-3 py-1.5 md:px-6 md:py-3 lg:px-10 lg:py-5 text-[10px] md:text-base lg:text-2xl text-white whitespace-nowrap shadow-lg">
                 Dimension Breakdown
               </div>
             </div>
 
-            {/* Below Water Labels (Deeper Insights) */}
+            {/* Below Water Labels */}
 
             {/* Environment Design */}
-            <div className="absolute top-[45%] left-[50%] -translate-x-1/2 md:top-[42%] lg:top-[40%]">
-              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-10 py-5 text-2xl text-white whitespace-nowrap shadow-lg">
-                Environment Design (noise, structure, autonomy)
+            <div className="absolute top-[35%] left-[25%] md:top-[42%] md:left-[45%] lg:top-[40%] lg:left-[50%] lg:-translate-x-1/2">
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-lg md:rounded-xl lg:rounded-2xl px-3 py-1.5 md:px-6 md:py-3 lg:px-10 lg:py-5 text-[10px] md:text-base lg:text-2xl text-white whitespace-nowrap shadow-lg text-center">
+                <span className="hidden md:inline">
+                  Environment Design (noise, structure, autonomy)
+                </span>
+                <span className="md:hidden">Environment Design</span>
               </div>
             </div>
 
             {/* Relationship Compatibility */}
-            <div className="absolute top-[55%] left-[15%] md:top-[52%] md:left-[18%] lg:top-[50%] lg:left-[20%]">
-              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-10 py-5 text-2xl text-white whitespace-nowrap shadow-lg">
-                Relationship Compatibility
+            <div className="absolute top-[45%] left-[15%] md:top-[52%] md:left-[18%] lg:top-[50%] lg:left-[10%] xl:top-[50%] xl:left-[20%]">
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-lg md:rounded-xl lg:rounded-2xl px-3 py-1.5 md:px-6 md:py-3 lg:px-10 lg:py-5 text-[10px] md:text-base lg:text-2xl text-white whitespace-nowrap shadow-lg">
+                <span className="hidden md:inline">
+                  Relationship Compatibility
+                </span>
+                <span className="md:hidden">Relationships</span>
               </div>
             </div>
 
             {/* Career Matching */}
-            <div className="absolute top-[65%] left-[40%] md:top-[62%] md:left-[42%] lg:top-[60%] lg:left-[43%]">
-              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-10 py-5 text-2xl text-white whitespace-nowrap shadow-lg">
+            <div className="absolute top-[55%] left-[25%] md:top-[62%] md:left-[42%] lg:top-[60%] lg:left-[43%]">
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-lg md:rounded-xl lg:rounded-2xl px-3 py-1.5 md:px-6 md:py-3 lg:px-10 lg:py-5 text-[10px] md:text-base lg:text-2xl text-white whitespace-nowrap shadow-lg">
                 Career Matching
               </div>
             </div>
 
             {/* Learning Style Optimization */}
-            <div className="absolute top-[58%] right-[22%] md:top-[55%] md:right-[24%] lg:top-[52%] lg:right-[26%]">
-              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-10 py-5 text-2xl text-white whitespace-nowrap shadow-lg">
-                Learning style optimization
+            <div className="absolute top-[48%] right-[15%] md:top-[55%] md:right-[24%] lg:top-[52%] lg:right-[10%] xl:top-[52%] xl:right-[26%]">
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-lg md:rounded-xl lg:rounded-2xl px-3 py-1.5 md:px-6 md:py-3 lg:px-10 lg:py-5 text-[10px] md:text-base lg:text-2xl text-white whitespace-nowrap shadow-lg">
+                <span className="hidden md:inline">
+                  Learning style optimization
+                </span>
+                <span className="md:hidden">Learning Style</span>
               </div>
             </div>
 
             {/* Daily Operating System */}
-            <div className="absolute bottom-[20%] left-[18%] md:bottom-[22%] md:left-[20%] lg:bottom-[24%] lg:left-[22%]">
-              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-10 py-5 text-2xl text-white whitespace-nowrap shadow-lg">
-                Daily operating system
+            <div className="absolute bottom-[20%] left-[20%] md:bottom-[22%] md:left-[20%] lg:bottom-[24%] lg:left-[22%]">
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-lg md:rounded-xl lg:rounded-2xl px-3 py-1.5 md:px-6 md:py-3 lg:px-10 lg:py-5 text-[10px] md:text-base lg:text-2xl text-white whitespace-nowrap shadow-lg">
+                <span className="hidden md:inline">Daily operating system</span>
+                <span className="md:hidden">Daily OS</span>
               </div>
             </div>
 
             {/* Detailed GrayTest Profile */}
-            <div className="absolute bottom-[25%] right-[12%] md:bottom-[27%] md:right-[14%] lg:bottom-[28%] lg:right-[16%]">
-              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-10 py-5 text-2xl text-white whitespace-nowrap shadow-lg">
-                Detailed GrayTest Profile
+            <div className="absolute bottom-[25%] right-[20%] md:bottom-[27%] md:right-[14%] lg:bottom-[28%] lg:right-[10%] xl:bottom-[28%] xl:right-[16%]">
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-lg md:rounded-xl lg:rounded-2xl px-3 py-1.5 md:px-6 md:py-3 lg:px-10 lg:py-5 text-[10px] md:text-base lg:text-2xl text-white whitespace-nowrap shadow-lg">
+                <span className="hidden lg:inline">
+                  Detailed GrayTest Profile
+                </span>
+                <span className="lg:hidden">Detailed Profile</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <PricingTiers testType={testKey} className="mb-16" />
+      <PricingTiers testType={testKey} className="mb-12 md:mb-16" />
 
       {/* Benefits Section */}
       <BenefitsSection
@@ -494,7 +531,7 @@ export default async function ResultPage({
       />
 
       {/* Professional Consultation Section */}
-      <section className="relative py-24 px-6 md:px-12 lg:px-39">
+      <section className="relative py-16 md:py-24 px-4 md:px-8 lg:px-39">
         <Image
           src={ctaBg}
           fill
@@ -503,74 +540,99 @@ export default async function ResultPage({
         />
 
         <div className="mx-auto">
-          <h2 className="font-serif text-5xl leading-normal text-white mb-10 max-w-xl">
+          {/* Title */}
+          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight text-white mb-6 md:mb-8 lg:mb-10 max-w-3xl">
             Want to go deeper with a licensed professional?
           </h2>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <p className="col-span-2 text-[#D1D5DC] max-w-3xl">
-              Graytest gives you AI-powered insights. But having a human
-              perspective makes all the difference. If your results spark
-              curiosity, raise concerns, or open new questions—you don't have to
-              explore them alone.
-            </p>
+          {/* Description - full width on all screens */}
+          <p className="text-[#D1D5DC] text-sm md:text-base max-w-3xl mb-10 md:mb-12 lg:mb-16">
+            Graytest gives you AI-powered insights. But having a human
+            perspective makes all the difference. If your results spark
+            curiosity, raise concerns, or open new questions—you don't have to
+            explore them alone.
+          </p>
 
-            <ul className="space-y-6 text-sm font-semibold max-w-xl">
-              <li className="flex items-center gap-7">
-                <div className="w-12 h-12 rounded-full bg-[#525252] flex items-center justify-center shrink-0">
-                  <Image src={trisullaIcon} alt="icon" width={48} height={48} />
-                </div>
-                <p className="text-[#D4D4D4]">
-                  Meet with a licensed psychologist
-                </p>
-              </li>
-              <li className="flex items-center gap-7">
-                <div className="w-12 h-12 rounded-full bg-[#525252] flex items-center justify-center shrink-0">
-                  <Image src={noteIcon} alt="icon" width={48} height={48} />
-                </div>
-                <p className="text-[#D4D4D4]">
-                  Get a personalized assessment roadmap
-                </p>
-              </li>
-              <li className="flex items-center gap-7">
-                <div className="w-12 h-12 rounded-full bg-[#525252] flex items-center justify-center shrink-0">
-                  <Image src={messageIcon} alt="icon" width={48} height={48} />
-                </div>
-                <p className="text-[#D4D4D4]">
-                  Explore ADHD, Autism, or executive function concerns with
-                  guidance
-                </p>
-              </li>
-              <li className="flex items-center gap-7">
-                <div className="w-12 h-12 rounded-full bg-[#525252] flex items-center justify-center shrink-0">
-                  <Image src={dollarIcon} alt="icon" width={48} height={48} />
-                </div>
-                <p className="text-[#D4D4D4]">
-                  Professional evaluations often cost $3–5K — we help start that
-                  journey at a fraction of the price
-                </p>
-              </li>
-            </ul>
-
-            <div className="relative backdrop-blur-sm bg-[#171717]/50 shadow-[inset_5px_5px_5px_0px_rgba(0,0,0,0.2),inset_-5px_-5px_5px_0px_rgba(255,255,255,0.04)] border border-white/15 rounded-2xl p-6 w-53 h-max">
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs text-white font-semibold bg-[#0A0A0A]/20 border border-white px-2 py-1 rounded-full backdrop-blur-[10px] z-10">
-                Coming Soon
-              </span>
-              <h3 className="text-white mb-4">Psych consultation</h3>
-              <div className="font-serif text-[2rem] text-white mb-8">$150</div>
-              <ul className="space-y-4 text-[#A1A1A1]">
-                <li>• Professional review</li>
-                <li>• Diagnostic report</li>
+          {/* Content Grid: Mobile = stacked, Desktop = 2-column */}
+          <div className="flex flex-col lg:flex-row lg:items-start gap-8 lg:gap-12">
+            {/* Left Column: Feature List */}
+            <div className="flex-1 w-full lg:max-w-xl">
+              <ul className="space-y-5 md:space-y-6">
+                {[
+                  {
+                    icon: trisullaIcon,
+                    text: "Meet with a licensed psychologist",
+                  },
+                  {
+                    icon: noteIcon,
+                    text: "Get a personalized assessment roadmap",
+                  },
+                  {
+                    icon: messageIcon,
+                    text: "Explore ADHD, Autism, or executive function concerns with guidance",
+                  },
+                  {
+                    icon: dollarIcon,
+                    text: "Professional evaluations often cost $3–5K — we help start that journey at a fraction of the price",
+                  },
+                ].map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-4">
+                    <div className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-[#525252] flex items-center justify-center shrink-0 mt-0.5">
+                      <Image
+                        src={item.icon}
+                        alt=""
+                        width={48}
+                        height={48}
+                        className="w-6 h-6 md:w-7 md:h-7"
+                      />
+                    </div>
+                    <p className="text-[#D4D4D4] text-sm md:text-base leading-relaxed pt-0.5">
+                      {item.text}
+                    </p>
+                  </li>
+                ))}
               </ul>
+            </div>
+
+            {/* Right Column: Pricing Card */}
+            <div className="w-full lg:w-auto lg:min-w-[280px]">
+              <div className="relative backdrop-blur-sm bg-[#171717]/50 shadow-[inset_5px_5px_5px_0px_rgba(0,0,0,0.2),inset_-5px_-5px_5px_0px_rgba(255,255,255,0.04)] border border-white/15 rounded-2xl p-6 mx-auto lg:mx-0 max-w-sm lg:max-w-none">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] md:text-xs text-white font-semibold bg-[#0A0A0A]/20 border border-white px-2.5 py-1 rounded-full backdrop-blur-[10px] z-10 whitespace-nowrap">
+                  Coming Soon
+                </span>
+
+                <h3 className="text-white mb-4 text-lg md:text-xl font-medium">
+                  Psych consultation
+                </h3>
+
+                <div className="font-serif text-3xl md:text-[2.5rem] text-white mb-6">
+                  $150
+                </div>
+
+                <ul className="space-y-3 text-[#A1A1A1] text-sm">
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#D9D9D9]"></span>
+                    Professional review
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#D9D9D9]"></span>
+                    Diagnostic report
+                  </li>
+                </ul>
+
+                <Button className="w-full mt-6" size="md" variant="outline">
+                  Notify When Available
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {content.showDisclaimer && (
-        <section className="px-6 md:px-12 lg:px-39 pb-16">
-          <div className="mx-auto bg-[#0A0A0A]/40 border border-[#c6bcaa]/20 rounded-2xl p-6">
-            <p className="text-sm text-[#A1A1A1] leading-relaxed">
+        <section className="px-4 md:px-8 lg:px-39 pb-12 md:pb-16">
+          <div className="mx-auto bg-[#0A0A0A]/40 border border-[#c6bcaa]/20 rounded-2xl p-4 md:p-6">
+            <p className="text-xs md:text-sm text-[#A1A1A1] leading-relaxed">
               <strong className="text-[#c6bcaa]">Disclaimer:</strong> The
               Spectrum Assessment is an educational self-awareness tool based on
               the validated AQ-50. It is not a clinical diagnosis and does not
