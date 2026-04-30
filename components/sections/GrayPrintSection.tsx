@@ -69,8 +69,6 @@ export function GrayPrintSection() {
                   {step.description}
                 </p>
               </div>
-
-              <div className="pointer-events-none absolute inset-0 z-20 backdrop-blur-sm bg-[#171717]/50 transition-all duration-500 group-hover:opacity-0" />
             </div>
           ))}
         </div>
