@@ -21,28 +21,26 @@ export function RadioQuestion({
   onChange,
 }: RadioQuestionProps) {
   return (
-    <div className="space-y-6 md:space-y-8 lg:space-y-12 text-white">
-      <p className="text-xl md:text-2xl lg:text-3xl font-bold leading-snug">
+    <div className="space-y-8 md:space-y-12 text-white flex flex-col items-center">
+      <p className="text-xl md:text-2xl font-medium text-center max-w-2xl leading-relaxed">
         {questionText}
       </p>
 
-      <div className="space-y-4 md:space-y-6 lg:space-y-8">
+      <div className="grid grid-cols-2 gap-4 w-full max-w-lg">
         {options.map((option) => (
           <label
             key={option.id}
-            className="flex items-center gap-4 md:gap-6 lg:gap-8 cursor-pointer transition-colors group"
+            className={`
+              flex items-center justify-center px-6 py-4 
+              rounded-full cursor-pointer transition-all duration-200 border
+              font-semibold
+              ${
+                selectedOption === option.id
+                  ? "bg-[#D9D9D9] border-[#D9D9D9] text-black"
+                  : "bg-white/10 border-white/10 text-white hover:bg-[#1a1a1a]"
+              }
+            `}
           >
-            <div
-              className={`
-                w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 rounded-full border-2 flex-shrink-0
-                transition-all duration-200
-                ${
-                  selectedOption === option.id
-                    ? "bg-[#D9D9D9] border-[#D9D9D9]"
-                    : "border-[#D9D9D9] bg-transparent hover:bg-[#D9D9D9]/20"
-                }
-              `}
-            />
             <input
               type="radio"
               name={`question-${questionNumber}`}
@@ -50,9 +48,7 @@ export function RadioQuestion({
               onChange={() => onChange(option.id)}
               className="sr-only"
             />
-            <span className="text-base md:text-lg lg:text-xl leading-snug">
-              {option.label}
-            </span>
+            <span className="truncate">{option.label}</span>
           </label>
         ))}
       </div>
