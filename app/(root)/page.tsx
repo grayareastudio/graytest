@@ -12,7 +12,7 @@ export default function HomePage() {
         <Hero
           title="Find out how your brain actually works"
           description="Achieve clarity though the world's first AI-powered cognitive testing platform."
-          buttonText="Take a Test"
+          buttonText="Unlock Your GrayPrint"
           href="/test/iq/intro"
           videoSrc="/videos/hero.mp4"
           videoClassName="right-8 lg:right-39 h-9/10"
