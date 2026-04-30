@@ -79,6 +79,7 @@ export default function Page() {
           questions: "50 questions",
           result: "Instant",
         }}
+        href="/test/eq/questions"
       />
     </main>
   );

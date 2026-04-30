@@ -78,6 +78,7 @@ export default function Page() {
           questions: "5 (open ended)",
           result: "Instant",
         }}
+        href="/test/spectrum/questions"
       />
     </main>
   );

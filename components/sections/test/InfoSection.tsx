@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/Button";
 import Image from "next/image";
 import bgVector2 from "@/assets/bg-vector-2.svg";
+import Link from "next/link";
 
 interface Info {
   duration: string;
@@ -12,10 +13,10 @@ interface Info {
 
 interface InfoSectionProps {
   info: Info;
-  onStart?: () => void;
+  href: string;
 }
 
-export function InfoSection({ info, onStart }: InfoSectionProps) {
+export function InfoSection({ info, href }: InfoSectionProps) {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-12 md:py-16 lg:py-0 px-6 md:px-12 lg:px-39">
       <Image
@@ -54,7 +55,9 @@ export function InfoSection({ info, onStart }: InfoSectionProps) {
           </div>
         </div>
 
-        <Button onClick={onStart}>Start your assessment</Button>
+        <Button>
+          <Link href={href}>Start your assessment</Link>
+        </Button>
       </div>
     </section>
   );
