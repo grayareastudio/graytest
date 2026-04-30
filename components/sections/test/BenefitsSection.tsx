@@ -45,10 +45,10 @@ export function BenefitsSection({
           {/* Left Content */}
           <div className="space-y-6 md:space-y-8 text-center lg:text-left">
             <div>
-              <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl mb-4 md:mb-6 font-light tracking-tight">
-                <GradientText>How it benefits you</GradientText>
+              <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl mb-4 md:mb-6 font-light tracking-tight text-black/90 lg:text-white">
+                How it benefits you
               </h2>
-              <p className="text-base md:text-lg text-[#D1D5DC] max-w-xl mx-auto lg:mx-0 leading-relaxed">
+              <p className="text-base md:text-lg text-black/80 lg:text-[#D1D5DC] max-w-xl mx-auto lg:mx-0 leading-relaxed">
                 Your cognitive profile is like a mental toolkit. Knowing what's
                 inside helps you use it wisely.
               </p>
