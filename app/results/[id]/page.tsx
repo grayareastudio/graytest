@@ -340,7 +340,7 @@ export default async function ResultPage({
           {/* Bottom Section: Dimension Breakdown + Fee Card */}
           <div className="flex flex-col xl:flex-row items-center gap-6 xl:gap-10 mt-40">
             {/* Breakdown Card */}
-            <div className="flex-1 bg-black/58 border border-white/10 rounded-2xl p-5 md:p-8 lg:p-10">
+            <div className="flex-1 bg-black/58 border border-white/10 rounded-2xl p-5 md:p-8 lg:p-10 w-full">
               <h3 className="text-base md:text-lg lg:text-2xl font-light uppercase tracking-wider text-[#A1A1A1] mb-4 md:mb-6">
                 Dimension Breakdown
               </h3>
