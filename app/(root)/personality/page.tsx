@@ -13,8 +13,7 @@ export default function Page() {
       <Image
         src={bgImage}
         alt="bg"
-        fill
-        className="-z-1 object-cover rotate-180 absolute top-0"
+        className="-z-1 object-contain rotate-180 absolute top-0"
         priority
       />
       <Hero

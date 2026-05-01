@@ -251,7 +251,7 @@ export default async function ResultPage({
     <main className="min-h-screen flex flex-col text-white">
       <Header />
 
-      <section className="pt-24 md:pt-32 lg:pt-40 pb-12 md:pb-16 lg:pb-24 px-4 md:px-8 lg:px-39">
+      <section className="relative pt-24 md:pt-32 lg:pt-40 pb-12 md:pb-16 lg:pb-24 px-4 md:px-8 lg:px-39">
         <Image
           src={bgImage}
           alt=""
@@ -311,6 +311,8 @@ export default async function ResultPage({
                 src={geometricMind}
                 alt="hero"
                 fill
+                priority
+                sizes="(max-width: 1280px) 100vw, 50vw"
                 className="object-cover"
               />
               <div className="absolute -bottom-30 w-4/5 left-1/2 -translate-x-1/2 bg-black/58 backdrop-blur-sm border border-white/10 rounded-md px-4 py-4 lg:px-10 lg:py-5">
