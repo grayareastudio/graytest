@@ -21,6 +21,7 @@ import ctaBg from "@/assets/result/cta-background.png";
 import icebergBg from "@/assets/result/iceberg.png";
 import { ResultsAnalysis } from "@/components/results/ResultsAnalysis";
 import { PricingTiers } from "@/components/results/PricingTiers";
+import { ShareButton } from "@/components/results/ShareButton";
 
 const TEST_CONTENT: Record<
   string,
@@ -277,9 +278,13 @@ export default async function ResultPage({
 
               {/* Share & Download Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 mb-8 lg:mb-16">
-                <Button size="md" className="w-full sm:w-auto">
-                  Share Results
-                </Button>
+                <ShareButton
+                  title="My GrayTest Result"
+                  text="Check out my personality assessment results"
+                  url={
+                    typeof window !== "undefined" ? window.location.href : ""
+                  }
+                />
                 <Button
                   size="md"
                   variant="outline"
