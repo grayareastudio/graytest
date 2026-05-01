@@ -317,7 +317,7 @@ export default async function ResultPage({
                 <span className="font-serif text-base lg:text-2xl text-[#A1A1A1] mb-2 lg:mb-4 block">
                   Your Graytest profile
                 </span>
-                <h2 className="font-serif text-xl md:text-2xl lg:text-[4rem] text-white mb-1 lg:mb-2 leading-tight">
+                <h2 className="font-serif text-xl md:text-2xl lg:text-[3rem] text-white mb-1 lg:mb-2 leading-tight">
                   {artisticTitle}
                 </h2>
                 <p className="text-sm md:text-base text-white/90 mb-3 lg:mb-4 line-clamp-2 lg:line-clamp-none">
