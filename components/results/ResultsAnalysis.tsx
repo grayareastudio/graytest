@@ -22,7 +22,7 @@ export function ResultsAnalysis({
           Results Analysis
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 lg:gap-12">
           {traits.map((trait) => {
             const meta = dimensionMetadata[trait.name];
             const breakdown = breakdowns.find((b) => b.category === trait.name);
@@ -52,7 +52,7 @@ export function ResultsAnalysis({
                 </div>
 
                 {meta?.category && (
-                  <div className="text-[10px] md:text-[9px] uppercase tracking-wider text-[#A1A1A1] mb-1.5 md:mb-2">
+                  <div className="font-light text-xs md:text-sm lg:text-base uppercase tracking-wider text-[#A1A1A1] mb-1.5 md:mb-2">
                     {meta.category}
                   </div>
                 )}
@@ -60,7 +60,7 @@ export function ResultsAnalysis({
                 <h3 className="font-serif text-lg md:text-xl lg:text-2xl text-white mb-3 md:mb-6 lg:mb-8">
                   {breakdown?.title || trait.name}
                 </h3>
-                <p className="text-sm md:text-base text-white font-light leading-relaxed">
+                <p className="text-sm md:text-base text-white font-light">
                   {breakdown?.desc || "Analysis based on your responses."}
                 </p>
               </div>

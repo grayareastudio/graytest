@@ -399,7 +399,7 @@ export default async function ResultPage({
       <section className="py-12 md:py-24 lg:py-32 relative overflow-hidden">
         <div className="mx-auto">
           <div className="px-4 md:px-12 lg:px-39 mb-8 md:mb-16">
-            <h2 className="font-serif text-3xl md:text-4xl lg:text-[4rem] text-white mb-3 md:mb-6 leading-tight">
+            <h2 className="font-serif text-3xl md:text-4xl lg:text-[4rem] text-white mb-3 md:mb-6">
               Just the tip of the Iceberg
             </h2>
             <p className="text-white text-base md:text-xl lg:text-2xl max-w-xl leading-relaxed">
