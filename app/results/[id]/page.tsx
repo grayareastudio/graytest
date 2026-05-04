@@ -22,6 +22,7 @@ import icebergBg from "@/assets/result/iceberg.png";
 import { ResultsAnalysis } from "@/components/results/ResultsAnalysis";
 import { PricingTiers } from "@/components/results/PricingTiers";
 import { ShareButton } from "@/components/results/ShareButton";
+import { DownloadPDFButton } from "@/components/results/DownloadPDFButton";
 
 const TEST_CONTENT: Record<
   string,
@@ -285,13 +286,7 @@ export default async function ResultPage({
                     typeof window !== "undefined" ? window.location.href : ""
                   }
                 />
-                <Button
-                  size="md"
-                  variant="outline"
-                  className="w-full sm:w-auto"
-                >
-                  Download Results PDF
-                </Button>
+                <DownloadPDFButton />
               </div>
 
               {/* Score Display */}
