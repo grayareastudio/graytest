@@ -102,10 +102,71 @@ function LayoutContent({
     isLastQuestionInDimension,
     isLastDimension,
     showDimensionInfo,
+    setAnswer,
   } = useTest();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAutoSubmitting, setIsAutoSubmitting] = useState(() => {
+    if (typeof window === "undefined") return false;
+    const saved = localStorage.getItem("pendingTestAnswers");
+    if (!saved) return false;
+    try {
+      const { savedTestType } = JSON.parse(saved);
+      return savedTestType === testType;
+    } catch {
+      return false;
+    }
+  });
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const autoSubmitRef = useRef(false);
+
+  useEffect(() => {
+    if (!userEmail) return;
+
+    const saved = localStorage.getItem("pendingTestAnswers");
+    if (!saved) return;
+
+    let parsedAnswers: Record<number, any> | null = null;
+    try {
+      const { savedTestType, savedAnswers } = JSON.parse(saved);
+      if (savedTestType !== testType) {
+        localStorage.removeItem("pendingTestAnswers");
+        setIsAutoSubmitting(false);
+        return;
+      }
+      parsedAnswers = savedAnswers;
+    } catch {
+      localStorage.removeItem("pendingTestAnswers");
+      setIsAutoSubmitting(false);
+      return;
+    }
+
+    localStorage.removeItem("pendingTestAnswers");
+    
+    Object.entries(parsedAnswers!).forEach(([id, answer]) => {
+      setAnswer(Number(id), answer);
+    });
+    
+    setIsSubmitting(true);
+    const actualDuration =
+      testType === "iq" ? durationSeconds - currentTime : undefined;
+
+    submitTestResults(
+      testType,
+      parsedAnswers!,
+      totalQuestions,
+      actualDuration,
+      userEmail,
+    )
+      .then((result) => {
+        router.push(`/results/${result.id}`);
+      })
+      .catch((err) => {
+        console.error("Auto-submit failed:", err);
+        setIsSubmitting(false);
+        setIsAutoSubmitting(false);
+      });  
+  }, [userEmail]);
   const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
   const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
   const [showQuestionList, setShowQuestionList] = useState(false);
@@ -171,6 +232,12 @@ function LayoutContent({
 
   const handleSubmit = useCallback(async () => {
     if (isSubmitting) return;
+
+    if (!userEmail) {
+      setShowLoginModal(true);
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -215,6 +282,22 @@ function LayoutContent({
 
   return (
     <>
+      {/* loading auto-submit */}
+      {isAutoSubmitting && (
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/90 backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-6">
+            <div className="w-12 h-12 rounded-full border-2 border-white/20 border-t-white animate-spin" />
+            <div className="text-center">
+              <p className="font-serif text-2xl text-white mb-2">
+                Submitting your results...
+              </p>
+              <p className="text-sm text-white/50">
+                Please wait a moment
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Timer */}
       {testType === "iq" && (
         <div className="fixed top-20 md:top-24 lg:top-41 left-4 md:left-6 lg:left-39 z-40">
@@ -343,6 +426,64 @@ function LayoutContent({
                   }}
                 />
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Login Required Modal */}
+      {showLoginModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+          onClick={() => setShowLoginModal(false)}
+        >
+          <div
+            className="bg-zinc-900 border border-white/10 rounded-2xl p-8 max-w-md w-full mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="font-serif text-2xl text-white font-medium">
+                Login Required
+              </h2>
+              <button
+                onClick={() => setShowLoginModal(false)}
+                className="text-white/70 hover:text-white transition-colors hover:cursor-pointer"
+              >
+                <Image src={deleteIcon} alt="close" width={36} height={36} />
+              </button>
+            </div>
+
+            <p className="text-white/70 text-sm leading-relaxed mb-8">
+              You need to be logged in to submit your test results. Create an
+              account or log in to save your progress and see your full
+              analysis.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={() => {
+                  localStorage.setItem(
+                    "pendingTestAnswers",
+                    JSON.stringify({ savedTestType: testType, savedAnswers: answers }),
+                  );
+                  router.push(`/login?redirect=/test/${testType}/questions`);
+                }}
+                className="flex-1 bg-[#E5E5E5] text-black px-6 py-3 rounded-full text-sm font-medium hover:bg-white transition-colors hover:cursor-pointer"
+              >
+                Log In
+              </button>
+              <button
+                onClick={() => {
+                  localStorage.setItem(
+                    "pendingTestAnswers",
+                    JSON.stringify({ savedTestType: testType, savedAnswers: answers }),
+                  );
+                  router.push(`/register?redirect=/test/${testType}/questions`);
+                }}
+                className="flex-1 bg-[#E5E5E5]/20 border border-white/10 text-white px-6 py-3 rounded-full text-sm font-medium hover:bg-white/10 transition-colors hover:cursor-pointer"
+              >
+                Create Account
+              </button>
             </div>
           </div>
         </div>

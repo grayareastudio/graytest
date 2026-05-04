@@ -11,6 +11,7 @@ export async function signUp(_: any, formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const displayName = formData.get("displayName") as string;
+  const redirectTo = (formData.get("redirectTo") as string) || "/";
 
   if (!email || !password) {
     return { error: "Email and password are required" };
@@ -40,7 +41,7 @@ export async function signUp(_: any, formData: FormData) {
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect(redirectTo);
 }
 
 export async function signIn(_: any, formData: FormData) {
@@ -48,6 +49,7 @@ export async function signIn(_: any, formData: FormData) {
 
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+  const redirectTo = (formData.get("redirectTo") as string) || "/";
 
   if (!email || !password) {
     return { error: "Email and password are required" };
@@ -63,7 +65,7 @@ export async function signIn(_: any, formData: FormData) {
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect(redirectTo);
 }
 
 export async function signOut() {
