@@ -106,6 +106,7 @@ function LayoutContent({
   } = useTest();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [skippedMode, setSkippedMode] = useState(false);
   const [isAutoSubmitting, setIsAutoSubmitting] = useState(() => {
     if (typeof window === "undefined") return false;
     const saved = localStorage.getItem("pendingTestAnswers");
@@ -238,6 +239,27 @@ function LayoutContent({
       return;
     }
 
+    if (!allAnswered) {
+      for (let dimIdx = 0; dimIdx < dimensions.length; dimIdx++) {
+        const dim = dimensions[dimIdx];
+        for (let qIdx = 0; qIdx < dim.questions.length; qIdx++) {
+          const q = dim.questions[qIdx];
+          const ans = answers[q.id];
+          const isEmpty =
+            ans === undefined ||
+            ans === null ||
+            (typeof ans === "string" && ans.trim() === "") ||
+            (Array.isArray(ans) && ans.length === 0) ||
+            (typeof ans === "object" && !Array.isArray(ans) && Object.keys(ans).length === 0);
+          if (isEmpty) {
+            goToQuestionInDimension(dimIdx, qIdx);
+            setSkippedMode(true);
+            return;
+          }
+        }
+      }
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -259,14 +281,44 @@ function LayoutContent({
     }
   }, [
     isSubmitting,
+    allAnswered,
+    userEmail,
+    dimensions,
+    answers,
+    goToQuestionInDimension,
     testType,
     durationSeconds,
     currentTime,
-    answers,
     totalQuestions,
-    userEmail,
     router,
   ]);
+
+  useEffect(() => {
+    if (skippedMode && allAnswered) {
+      setSkippedMode(false);
+    }
+  }, [skippedMode, allAnswered]);
+
+  const goToNextSkipped = useCallback(() => {
+    for (let dimIdx = 0; dimIdx < dimensions.length; dimIdx++) {
+      const dim = dimensions[dimIdx];
+      for (let qIdx = 0; qIdx < dim.questions.length; qIdx++) {
+        const q = dim.questions[qIdx];
+        if (dimIdx === currentDimensionIndex && qIdx === currentQuestionIndex) continue;
+        const ans = answers[q.id];
+        const isEmpty =
+          ans === undefined ||
+          ans === null ||
+          (typeof ans === "string" && ans.trim() === "") ||
+          (Array.isArray(ans) && ans.length === 0) ||
+          (typeof ans === "object" && !Array.isArray(ans) && Object.keys(ans).length === 0);
+        if (isEmpty) {
+          goToQuestionInDimension(dimIdx, qIdx);
+          return;
+        }
+      }
+    }
+  }, [dimensions, currentDimensionIndex, currentQuestionIndex, answers, goToQuestionInDimension]);
 
   useEffect(() => {
     if (
@@ -294,6 +346,36 @@ function LayoutContent({
               <p className="text-sm text-white/50">
                 Please wait a moment
               </p>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Skipped Questions Banner */}
+      {skippedMode && (
+        <div className="fixed top-0 left-0 right-0 z-50 bg-amber-500/10 border-b border-amber-500/30 backdrop-blur-sm">
+          <div className="max-w-full md:max-w-137 mx-auto px-4 md:px-6 py-3 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-2 h-2 rounded-full bg-amber-400 shrink-0 animate-pulse" />
+              <p className="text-sm text-amber-200 truncate">
+                <span className="font-medium">
+                  {totalQuestions - totalAnswered} question{totalQuestions - totalAnswered !== 1 ? "s" : ""} remaining
+                </span>
+                <span className="text-amber-200/60 ml-1 hidden sm:inline">— answer them to submit</span>
+              </p>
+            </div>
+            <div className="flex items-center gap-3 shrink-0">
+              <button
+                onClick={goToNextSkipped}
+                className="text-xs text-amber-300 hover:text-amber-100 transition-colors hover:cursor-pointer whitespace-nowrap"
+              >
+                Next skipped →
+              </button>
+              <button
+                onClick={() => setSkippedMode(false)}
+                className="text-xs text-white/40 hover:text-white/70 transition-colors hover:cursor-pointer"
+              >
+                Dismiss
+              </button>
             </div>
           </div>
         </div>
@@ -538,18 +620,32 @@ function LayoutContent({
                 {isLastDimension && isLastQuestionInDimension ? (
                   <button
                     onClick={handleSubmit}
-                    disabled={!allAnswered || isSubmitting}
+                    disabled={isSubmitting}
                     className={`
                   bg-[#D9D9D9] text-black px-6 py-2 rounded-full 
                   text-sm md:text-base font-medium transition-colors
-                  ${!allAnswered ? "opacity-50 cursor-not-allowed" : isSubmitting ? "opacity-50 cursor-wait" : "hover:bg-white hover:cursor-pointer"}
+                  ${isSubmitting ? "opacity-50 cursor-wait" : "hover:bg-white hover:cursor-pointer"}
                 `}
                   >
-                    {isSubmitting ? "Submitting..." : "Submit Test"}
+                    {isSubmitting
+                      ? "Submitting..."
+                      : !allAnswered
+                        ? `Submit (${totalAnswered}/${totalQuestions})`
+                        : "Submit Test"}
                   </button>
                 ) : (
                   <button
-                    onClick={nextQuestion}
+                    onClick={() => {
+                      if (skippedMode) {
+                        goToNextSkipped();
+                      } else if (allAnswered && !(isLastDimension && isLastQuestionInDimension)) {
+                        const lastDimIdx = dimensions.length - 1;
+                        const lastQIdx = dimensions[lastDimIdx].questions.length - 1;
+                        goToQuestionInDimension(lastDimIdx, lastQIdx);
+                      } else {
+                        nextQuestion();
+                      }
+                    }}
                     disabled={isSubmitting}
                     className="hover:opacity-80 transition-opacity p-1 md:p-2 disabled:opacity-30 hover:cursor-pointer disabled:cursor-not-allowed"
                   >
