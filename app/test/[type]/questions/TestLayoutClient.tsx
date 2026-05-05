@@ -234,11 +234,6 @@ function LayoutContent({
   const handleSubmit = useCallback(async () => {
     if (isSubmitting) return;
 
-    if (!userEmail) {
-      setShowLoginModal(true);
-      return;
-    }
-
     if (!allAnswered) {
       for (let dimIdx = 0; dimIdx < dimensions.length; dimIdx++) {
         const dim = dimensions[dimIdx];
@@ -260,7 +255,13 @@ function LayoutContent({
       }
     }
 
+    if (!userEmail) {
+      setShowLoginModal(true);
+      return;
+    }
+
     setIsSubmitting(true);
+    setIsAutoSubmitting(true);
 
     try {
       const actualDuration =
@@ -276,8 +277,8 @@ function LayoutContent({
       router.push(`/results/${result.id}`);
     } catch (error) {
       console.error("Submit failed:", error);
-    } finally {
       setIsSubmitting(false);
+      setIsAutoSubmitting(false);
     }
   }, [
     isSubmitting,
