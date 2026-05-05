@@ -8,6 +8,13 @@ import GradientText from "../ui/GradientText";
 
 const tests = [
   {
+    title: "Spectrum",
+    description: "Map how your brain processes the social and sensory world.",
+    duration: "~15 mins",
+    price: "$4.99",
+    imageBg: spectrumBg,
+  },
+  {
     title: "IQ",
     description: "Discover your unique problem-solving strengths.",
     duration: "~15 mins",
@@ -28,13 +35,6 @@ const tests = [
     duration: "~12 mins",
     price: "$4.99",
     imageBg: personalityBg,
-  },
-  {
-    title: "Spectrum",
-    description: "Map how your brain processes the social and sensory world.",
-    duration: "~15 mins",
-    price: "$4.99",
-    imageBg: spectrumBg,
   },
 ];
 

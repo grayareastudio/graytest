@@ -14,10 +14,10 @@ interface HeaderClientProps {
 
 const guestLinks = [
   { name: "Home", href: "/" },
+  { name: "Spectrum", href: "/spectrum" },
   { name: "IQ", href: "/iq" },
   { name: "EQ", href: "/eq" },
   { name: "Personality", href: "/personality" },
-  { name: "Spectrum", href: "/spectrum" },
 ];
 
 function getInitials(user: User | null): string {
