@@ -39,7 +39,7 @@ export default function TestIntroPage() {
   };
 
   const handleClose = () => {
-    router.push(`/test/${testType}/questions`);
+    window.history.back()
   }
 
   return (
