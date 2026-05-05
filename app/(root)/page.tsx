@@ -10,7 +10,7 @@ export default function HomePage() {
     <main>
       <div className="bg-black">
         <Hero
-          title="Find out how your brain actually works"
+          title="Find out how your brain **actually** works"
           description="Achieve clarity though the world's first AI-powered cognitive testing platform."
           buttonText="Unlock Your GrayPrint"
           href="/test/iq/intro"
