@@ -355,12 +355,6 @@ function LayoutContent({
             </div>
             <div className="flex items-center gap-3 shrink-0">
               <button
-                onClick={goToNextSkipped}
-                className="text-xs text-amber-300 hover:text-amber-100 transition-colors hover:cursor-pointer whitespace-nowrap"
-              >
-                Next skipped →
-              </button>
-              <button
                 onClick={() => setSkippedMode(false)}
                 className="text-xs text-white/40 hover:text-white/70 transition-colors hover:cursor-pointer"
               >
