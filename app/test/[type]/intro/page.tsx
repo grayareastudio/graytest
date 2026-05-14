@@ -43,15 +43,15 @@ export default function TestIntroPage() {
   }
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center px-6 md:px-12 lg:px-39 py-10 md:py-20 w-full">
+    <div className="flex-1 flex flex-col items-center justify-center px-6 md:px-12 lg:px-39 pt-20 md:pb-20 pb-10 w-full">
       <button
       onClick={handleClose}
-        className="text-white/70 hover:text-white transition-colors hover:cursor-pointer absolute top-10 right-10"
+        className="text-white/70 hover:text-white transition-colors hover:cursor-pointer absolute top-10 sm:right-10 right-3"
       >
         <Image src={deleteIcon} alt="close" width={36} height={36} />
       </button>
 
-      <h1 className="font-serif text-4xl md:text-5xl mb-8 text-center max-w-4xl">
+      <h1 className="font-serif text-4xl md:text-5xl mb-8 text-center max-w-4xl mt-12">
         <GradientText>{current.title}</GradientText>
       </h1>
 
@@ -74,7 +74,7 @@ export default function TestIntroPage() {
       </div>
 
       {/* Navigation Buttons */}
-      <div className="flex gap-4 mt-12">
+      <div className="flex sm:flex-row flex-col gap-4 mt-12">
         <Button
           variant="primary"
           onClick={handlePrevious}
