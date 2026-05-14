@@ -342,7 +342,7 @@ function LayoutContent({
       )}
       {/* Skipped Questions Banner */}
       {skippedMode && (
-        <div className="fixed top-0 left-0 right-0 z-50 bg-amber-500/10 border-b border-amber-500/30 backdrop-blur-sm">
+        <div className="fixed bottom-0 left-0 right-0 z-50 bg-amber-500/10 border-t border-amber-500/30 backdrop-blur-sm">
           <div className="max-w-full md:max-w-137 mx-auto px-4 md:px-6 py-3 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 min-w-0">
               <div className="w-2 h-2 rounded-full bg-amber-400 shrink-0 animate-pulse" />
@@ -569,7 +569,7 @@ function LayoutContent({
         {children}
       </main>
 
-      <div className="fixed bottom-0 left-0 right-0 pb-4 md:pb-6 lg:pb-25">
+      <div className={`fixed bottom-0 left-0 right-0 pb-4 md:pb-6 lg:pb-25 transition-all duration-200 ${skippedMode ? "pb-14 md:pb-16 lg:pb-25" : ""}`}>
         <div className="max-w-full md:max-w-137 mx-auto px-4 md:px-6">
           <div className="flex gap-2.5 mb-4">
             {dimensionProgress.map((dim, idx) => (
