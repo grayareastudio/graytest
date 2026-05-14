@@ -30,7 +30,7 @@ export function DimensionInfoScreen({
   const currentDimensionNumber = currentDimensionIndex + 1;
 
   return (
-    <div className="max-w-5xl mx-auto flex flex-col justify-center h-full">
+    <div className="max-w-5xl mx-auto flex flex-col justify-center h-full mt-12">
       {/* Dimension Name */}
       <h1 className="text-4xl md:text-5xl font-serif text-white mb-8">
         <GradientText>{dimension.name}</GradientText>

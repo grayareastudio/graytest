@@ -107,17 +107,7 @@ function LayoutContent({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [skippedMode, setSkippedMode] = useState(false);
-  const [isAutoSubmitting, setIsAutoSubmitting] = useState(() => {
-    if (typeof window === "undefined") return false;
-    const saved = localStorage.getItem("pendingTestAnswers");
-    if (!saved) return false;
-    try {
-      const { savedTestType } = JSON.parse(saved);
-      return savedTestType === testType;
-    } catch {
-      return false;
-    }
-  });
+  const [isAutoSubmitting, setIsAutoSubmitting] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const autoSubmitRef = useRef(false);
 
@@ -132,13 +122,11 @@ function LayoutContent({
       const { savedTestType, savedAnswers } = JSON.parse(saved);
       if (savedTestType !== testType) {
         localStorage.removeItem("pendingTestAnswers");
-        setIsAutoSubmitting(false);
         return;
       }
       parsedAnswers = savedAnswers;
     } catch {
       localStorage.removeItem("pendingTestAnswers");
-      setIsAutoSubmitting(false);
       return;
     }
 
@@ -149,6 +137,7 @@ function LayoutContent({
     });
     
     setIsSubmitting(true);
+    setIsAutoSubmitting(true);
     const actualDuration =
       testType === "iq" ? durationSeconds - currentTime : undefined;
 
@@ -383,7 +372,7 @@ function LayoutContent({
       )}
       {/* Timer */}
       {testType === "iq" && (
-        <div className="fixed top-20 md:top-24 lg:top-41 left-4 md:left-6 lg:left-39 z-40">
+        <div className="fixed top-24 md:top-28 lg:top-41 left-4 md:left-6 lg:left-39 z-40">
           <div className="flex items-center gap-3 md:gap-5 px-4 py-2 md:px-5 md:py-2.5 backdrop-blur-[20px] border border-white/10 rounded-full">
             <Image
               src={clockIcon}
@@ -402,7 +391,7 @@ function LayoutContent({
       )}
       <button
         onClick={() => setShowQuestionList(true)}
-        className="fixed top-20 md:top-24 lg:top-41 right-4 md:right-6 lg:right-39 z-40 text-xs md:text-sm text-white/70 hover:text-white transition-colors hover:cursor-pointer"
+        className="fixed top-24 md:top-28 lg:top-41 right-4 md:right-6 lg:right-39 z-40 text-xs md:text-sm text-white/70 hover:text-white transition-colors hover:cursor-pointer"
       >
         Question List ({totalAnswered}/{totalQuestions})
       </button>
