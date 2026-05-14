@@ -35,7 +35,7 @@ export function TestCard({
         className="object-cover rounded-xl"
       />
 
-      <div className="px-6 pt-4 pb-8 space-y-8 md:space-y-3 max-h-3/5 min-h-3/12 w-full bg-[#0A0A0A]/20 backdrop-blur-md absolute bottom-0 z-10 rounded-xl border border-white/10">
+      <div className="px-6 pt-4 pb-8 space-y-6 md:space-y-3 max-h-3/5 min-h-3/12 w-full bg-[#0A0A0A]/20 backdrop-blur-md absolute bottom-0 z-10 rounded-xl border border-white/10">
         <h3 className="font-serif text-[clamp(30px,2.5vw,29px)] text-[#D1D5DC] ">
           {title}
         </h3>
@@ -46,27 +46,29 @@ export function TestCard({
           {duration} · {price}
         </p>
 
-        <Button
-          variant="primary"
-          size="sm"
-          className="text-[clamp(12px,1.2vw,10px)]"
-        >
-          <Link
-            href={`/test/${title.toLowerCase()}/questions`}
-            className="block"
+        <div className="sm:space-y-3 space-y-1 ">
+          <Button
+            variant="primary"
+            size="sm"
+            className="text-[clamp(12px,1.2vw,10px)]"
           >
-            Start your Assessment
-          </Link>
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          className="w-full text-[clamp(12px,1.2vw,10px)]"
-        >
-          <Link href={`/${title.toLowerCase()}`} className="block">
-            About the test
-          </Link>
-        </Button>
+            <Link
+              href={`/test/${title.toLowerCase()}/questions`}
+              className="block"
+            >
+              Start your Assessment
+            </Link>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full text-[clamp(12px,1.2vw,10px)]"
+          >
+            <Link href={`/${title.toLowerCase()}`} className="block">
+              About the test
+            </Link>
+          </Button>
+        </div>
       </div>
     </div>
   );

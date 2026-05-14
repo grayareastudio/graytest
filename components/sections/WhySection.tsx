@@ -80,10 +80,10 @@ export function WhySection({ isHomePage = false }: WhySectionProps) {
         <div className="text-center mt-12 md:mt-24 lg:mt-35">
           <Link
             href="/test/iq/intro"
-            className="block mx-auto group flex items-center gap-3 bg-[#0A0A0A] border-2 border-[#C6BCAA]/30 rounded-full py-4 px-8 w-max shadow-[0_0_30px_rgba(198,188,170,0.3)] hover:shadow-[0_0_40px_rgba(198,188,170,0.5)] hover:bg-[#111] hover:border-[#C6BCAA]/50 transition-all duration-300"
+            className="block mx-auto group flex items-center gap-3 bg-[#0A0A0A] border-2 border-[#C6BCAA]/30 rounded-full sm:py-4 sm:px-8 py-2 px-4 w-max shadow-[0_0_30px_rgba(198,188,170,0.3)] hover:shadow-[0_0_40px_rgba(198,188,170,0.5)] hover:bg-[#111] hover:border-[#C6BCAA]/50 transition-all duration-300"
           >
-            <FingerprintPattern className="w-6 h-6" />
-            <span className="font-serif text-lg text-white font-light tracking-wide">
+            <FingerprintPattern className="sm:w-6 sm:h-6 h-4 w-4" />
+            <span className="font-serif sm:text-lg text-md text-white font-light tracking-wide">
               Unlock your GrayPrint
             </span>
             <svg
