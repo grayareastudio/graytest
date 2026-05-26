@@ -63,7 +63,7 @@ export function DashboardClient({
             </p>
           </div>
           <Button variant="primary" size="md">
-            <Link href={`/test/${filter === "all" ? "iq" : filter}/questions`}>
+            <Link href="/#tests">
               Take New Test
             </Link>
           </Button>
