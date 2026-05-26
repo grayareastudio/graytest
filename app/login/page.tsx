@@ -1,13 +1,13 @@
 // app/login/page.tsx
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, Suspense } from "react";
 import { signIn } from "@/lib/actions/auth-actions";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { useSearchParams } from "next/navigation";
 
-export default function LoginPage() {
+function LoginForm() {
   const [state, action, isPending] = useActionState(signIn, {
     error: null as string | null,
   });
@@ -149,5 +149,13 @@ export default function LoginPage() {
         </p>
       </div>
     </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }

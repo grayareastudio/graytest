@@ -1,13 +1,13 @@
 // app/register/page.tsx
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, Suspense } from "react";
 import { signUp } from "@/lib/actions/auth-actions";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { useSearchParams } from "next/navigation";
 
-export default function RegisterPage() {
+function RegisterForm() {
   const [state, action, isPending] = useActionState(signUp, {
     error: null as string | null,
   });
@@ -110,5 +110,13 @@ export default function RegisterPage() {
         </p>
       </div>
     </main>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense>
+      <RegisterForm />
+    </Suspense>
   );
 }
