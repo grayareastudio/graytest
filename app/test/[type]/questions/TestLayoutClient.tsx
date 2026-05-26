@@ -108,6 +108,7 @@ function LayoutContent({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [skippedMode, setSkippedMode] = useState(false);
   const [isAutoSubmitting, setIsAutoSubmitting] = useState(false);
+  const [isTimeUp, setIsTimeUp] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const autoSubmitRef = useRef(false);
 
@@ -221,7 +222,7 @@ function LayoutContent({
   });
 
   const handleSubmit = useCallback(async () => {
-    if (isSubmitting) return;
+    if (isSubmitting || isTimeUp) return;
 
     if (!allAnswered) {
       for (let dimIdx = 0; dimIdx < dimensions.length; dimIdx++) {
@@ -271,6 +272,7 @@ function LayoutContent({
     }
   }, [
     isSubmitting,
+    isTimeUp,
     allAnswered,
     userEmail,
     dimensions,
@@ -318,9 +320,9 @@ function LayoutContent({
       !autoSubmitRef.current
     ) {
       autoSubmitRef.current = true;
-      handleSubmit();
+      setIsTimeUp(true);
     }
-  }, [testType, currentTime, isSubmitting, handleSubmit]);
+  }, [testType, currentTime, isSubmitting]);
 
   return (
     <>
@@ -555,6 +557,54 @@ function LayoutContent({
         </div>
       )}
 
+      {/* Time's Up Modal */}
+      {isTimeUp && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+          <div className="bg-zinc-900 border border-white/10 rounded-2xl p-8 max-w-md w-full mx-4">
+            <div className="flex flex-col items-center text-center mb-6">
+              {/* Clock icon */}
+              <div className="w-14 h-14 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center mb-4">
+                <svg
+                  className="w-7 h-7 text-red-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z"
+                  />
+                </svg>
+              </div>
+              <h2 className="font-serif text-2xl text-white font-medium mb-2">
+                Time's Up
+              </h2>
+              <p className="text-white/60 text-sm leading-relaxed">
+                Your time has run out. You can go back to the home page or
+                retake the test from the beginning.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={() => router.push("/")}
+                className="flex-1 bg-[#E5E5E5] text-black px-6 py-3 rounded-full text-sm font-medium hover:bg-white transition-colors hover:cursor-pointer"
+              >
+                Back to Home
+              </button>
+              <button
+                onClick={() => router.push(`/test/${testType}/intro`)}
+                className="flex-1 bg-[#E5E5E5]/20 border border-white/10 text-white px-6 py-3 rounded-full text-sm font-medium hover:bg-white/10 transition-colors hover:cursor-pointer"
+              >
+                Retake Test
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <main
         className={`flex flex-col items-center justify-center min-h-screen 
         ${testType === "iq" ? "pt-32 md:pt-40 lg:pt-40" : "pt-24 md:pt-28 lg:pt-32"} 
@@ -604,18 +654,20 @@ function LayoutContent({
                 {isLastDimension && isLastQuestionInDimension ? (
                   <button
                     onClick={handleSubmit}
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isTimeUp}
                     className={`
                   bg-[#D9D9D9] text-black px-6 py-2 rounded-full 
                   text-sm md:text-base font-medium transition-colors
-                  ${isSubmitting ? "opacity-50 cursor-wait" : "hover:bg-white hover:cursor-pointer"}
+                  ${isSubmitting || isTimeUp ? "opacity-50 cursor-wait" : "hover:bg-white hover:cursor-pointer"}
                 `}
                   >
                     {isSubmitting
                       ? "Submitting..."
-                      : !allAnswered
-                        ? `Submit (${totalAnswered}/${totalQuestions})`
-                        : "Submit Test"}
+                      : isTimeUp
+                        ? "Time's up"
+                        : !allAnswered
+                          ? `Submit (${totalAnswered}/${totalQuestions})`
+                          : "Submit Test"}
                   </button>
                 ) : (
                   <button

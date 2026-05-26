@@ -102,7 +102,7 @@ export function TestProvider({
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (!hasTimer || currentTime <= 0) return;
+    if (!hasTimer || currentTime <= 0 || showDimensionInfo) return;
 
     timerRef.current = setInterval(() => {
       setCurrentTime((prev) => {
@@ -116,7 +116,7 @@ export function TestProvider({
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [hasTimer, currentTime]);
+  }, [hasTimer, currentTime, showDimensionInfo]);
 
   useEffect(() => {
     const currentDim = dimensions[currentDimensionIndex];
