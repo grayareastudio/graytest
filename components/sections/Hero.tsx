@@ -10,6 +10,7 @@ type HeroProps = {
   href: string;
   buttonText: string;
   videoSrc: string;
+  videoPoster?: string;
   videoClassName?: string;
   bgImage?: StaticImageData;
 };
@@ -20,19 +21,21 @@ export function Hero({
   href,
   buttonText,
   videoSrc,
+  videoPoster,
   videoClassName,
   bgImage,
 }: HeroProps) {
   return (
     <section className="relative min-h-screen flex items-center px-6 md:px-12 lg:px-39 overflow-hidden">
       <video
+        key={videoSrc}
         src={videoSrc}
-        poster="/videos/hero-poster.webp"
+        poster={videoPoster}
         autoPlay
         muted
         loop
         playsInline
-        preload="none"
+        preload="auto"
         className={`
           hidden md:block md:absolute 
           ${videoClassName || ""}

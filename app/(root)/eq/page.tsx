@@ -76,7 +76,7 @@ export default function Page() {
       <InfoSection
         info={{
           duration: "15 min",
-          questions: "50 questions",
+          questions: "10 questions",
           result: "Instant",
         }}
         href="/test/eq/questions"

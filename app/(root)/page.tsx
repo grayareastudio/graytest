@@ -15,6 +15,7 @@ export default function HomePage() {
           buttonText="Unlock Your GrayPrint"
           href="/#tests"
           videoSrc="/videos/hero.mp4"
+          videoPoster="/videos/hero-poster.webp"
           videoClassName="right-8 lg:right-39 h-9/10"
         />
       </div>

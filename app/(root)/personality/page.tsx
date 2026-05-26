@@ -82,7 +82,7 @@ export default function Page() {
       <InfoSection
         info={{
           duration: "12 min",
-          questions: "5 (open ended)",
+          questions: "10 questions",
           result: "Instant",
         }}
         href="/test/personality/questions"

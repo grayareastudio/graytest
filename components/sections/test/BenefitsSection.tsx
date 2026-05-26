@@ -22,7 +22,7 @@ export function BenefitsSection({
   bgImage,
   href,
 }: BenefitsSectionProps) {
-  const [expandedIndex, setExpandedIndex] = useState<number>(0);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   const toggleAccordion = (index: number) => {
     setExpandedIndex(expandedIndex === index ? -1 : index);
@@ -91,10 +91,12 @@ export function BenefitsSection({
                         className={`
                           w-5 h-5 md:w-6 md:h-6 flex items-center justify-center 
                           text-[#ADADAD] transition-all duration-300
-                          ${isExpanded ? "rotate-45" : "rotate-0"}
-                        `}
+                          text-2xl md:text-3xl
+                          group-hover:text-white group-hover:scale-[110%]
+                          ${isExpanded ? "text-white" : ""}
+                          `}
                       >
-                        +
+                        {isExpanded ? "-" : "+"}
                       </span>
                     </button>
 
