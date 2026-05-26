@@ -26,9 +26,9 @@ export function Button({
     "rounded-full font-semibold transition-all duration-200 hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed";
 
   const variants = {
-    primary: "bg-[#E5E5E5]/20 border border-white/10 text-white",
-    secondary: "bg-[#E5E5E5] border text-black",
-    outline: "bg-transparent border border-white text-white",
+    primary: "bg-[#E5E5E5]/20 border border-white/10 text-white hover:bg-[#E5E5E5] hover:text-black active:bg-[#E5E5E5]/20",
+    secondary: "bg-[#E5E5E5] border text-black hover:bg-[#E5E5E5]/20 hover:text-white active:scale-90",
+    outline: "bg-transparent border border-white text-white hover:bg-[#E5E5E5]/20 active:bg-transparent",
   };
 
   const sizes = {

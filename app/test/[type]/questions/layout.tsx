@@ -30,7 +30,7 @@ async function getTestMetadata(testType: string) {
       return sum + (dim.questions?.length || 0);
     }, 0) || 0;
 
-  const duration = testType.toLowerCase() === "iq" ? 1200 : 0; // 20 menit
+  const duration = testType.toLowerCase() === "iq" ? 900 : 0; // 15 min
 
   return {
     duration,

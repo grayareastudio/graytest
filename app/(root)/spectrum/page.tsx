@@ -74,7 +74,7 @@ export default function Page() {
 
       <InfoSection
         info={{
-          duration: "6–10 min",
+          duration: "15 min",
           questions: "5 (open ended)",
           result: "Instant",
         }}

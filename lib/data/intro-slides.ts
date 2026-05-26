@@ -52,7 +52,7 @@ export const INTRO_SLIDES_DATA: Record<string, IntroSlideData[]> = {
     {
       title: "Intelligence Quotient (IQ)",
       description:
-        "Each test session consists of **32 questions in total** — 8 per dimension. These 32 questions must be completed within a **20-minute global countdown**. There is no per-question timer; the single countdown applies to the entire session, giving users the freedom to manage their time and return to earlier questions.",
+        "Each test session consists of **32 questions in total** — 8 per dimension. These 32 questions must be completed within a **15-minute global countdown**. There is no per-question timer; the single countdown applies to the entire session, giving users the freedom to manage their time and return to earlier questions.",
       type: "info",
       content:
         "Each dimension has different difficulty levels - 3 easy, 3 medium and 2 hard. All questions are single choice with 4 options.",

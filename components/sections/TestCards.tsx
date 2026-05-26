@@ -20,7 +20,7 @@ const tests = [
     duration: "~15 mins",
     price: "$4.99",
     imageBg: iqBg,
-    badge: "Coming Soon",
+    // badge: "Coming Soon",
   },
   {
     title: "EQ",
@@ -63,7 +63,7 @@ export function TestCards() {
           <div className="absolute -top-4 right-0 bg-black/10 backdrop-blur-md rounded-full px-2 py-1 text-xs font-semibold border border-white/20 z-10">
             Save 25%
           </div>
-          <Button variant="secondary" size="md">
+          <Button variant="secondary" size="md" className="border-[#E5E5E5]">
             Bundle all tests
           </Button>
         </div>

@@ -47,27 +47,28 @@ export function TestCard({
         </p>
 
         <div className="sm:space-y-3 space-y-1 ">
-          <Button
-            variant="primary"
-            size="sm"
-            className="text-[clamp(12px,1.2vw,10px)]"
+          <Link
+            href={`/test/${title.toLowerCase()}/questions`}
+            className="block"
           >
-            <Link
-              href={`/test/${title.toLowerCase()}/questions`}
-              className="block"
+            <Button
+              variant="primary"
+              size="sm"
+              className="text-[clamp(12px,1.2vw,10px)]"
             >
-              Start your Assessment
-            </Link>
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="w-full text-[clamp(12px,1.2vw,10px)]"
-          >
-            <Link href={`/${title.toLowerCase()}`} className="block">
-              About the test
-            </Link>
-          </Button>
+                Start your Assessment
+            </Button>
+          </Link>
+
+          <Link href={`/${title.toLowerCase()}`} className="block">
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full text-[clamp(12px,1.2vw,10px)]"
+            >
+                About the test
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
