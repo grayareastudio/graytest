@@ -62,11 +62,11 @@ export function DashboardClient({
               insights.
             </p>
           </div>
-          <Button variant="primary" size="md">
-            <Link href="/#tests">
-              Take New Test
-            </Link>
-          </Button>
+          <Link href="/#tests">
+            <Button variant="primary" size="md">
+                Take New Test
+            </Button>
+          </Link>
         </div>
 
         {/* Stats Cards */}
