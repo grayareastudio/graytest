@@ -4,6 +4,9 @@
 import { Button } from "@/components/ui/Button";
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import deleteIcon from "@/assets/icons/delete.svg";
+import { TestCards } from "@/components/sections/TestCards";
 import type { TestResult } from "@/lib/actions/result-actions";
 
 type FilterType = "all" | "iq" | "eq" | "personality" | "spectrum";
@@ -42,6 +45,7 @@ export function DashboardClient({
   stats,
 }: DashboardClientProps) {
   const [filter, setFilter] = useState<FilterType>("all");
+  const [showTestModal, setShowTestModal] = useState(false);
 
   const filteredResults =
     filter === "all"
@@ -62,12 +66,36 @@ export function DashboardClient({
               insights.
             </p>
           </div>
-          <Link href="/#tests">
-            <Button variant="primary" size="md">
-                Take New Test
-            </Button>
-          </Link>
+          <Button variant="primary" size="md" onClick={() => setShowTestModal(true)}>
+            Take New Test
+          </Button>
         </div>
+
+        {/* Test Selection Modal */}
+        {showTestModal && (
+          <div
+            className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+            onClick={() => setShowTestModal(false)}
+          >
+            <div
+              className="bg-zinc-900 border border-white/10 rounded-2xl w-full max-w-8xl max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between px-6 md:px-8 pt-6 md:pt-8 pb-2">
+                <h2 className="font-serif text-2xl md:text-3xl text-white font-medium">
+                  Choose a Test
+                </h2>
+                <button
+                  onClick={() => setShowTestModal(false)}
+                  className="text-white/70 hover:text-white transition-colors hover:cursor-pointer"
+                >
+                  <Image src={deleteIcon} alt="close" width={36} height={36} />
+                </button>
+              </div>
+              <TestCards />
+            </div>
+          </div>
+        )}
 
         {/* Stats Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
@@ -116,7 +144,7 @@ export function DashboardClient({
             <h2 className="font-serif text-xl md:text-2xl lg:text-3xl text-white">
               Test History
             </h2>
-            <div className="flex gap-2 overflow-x-auto pb-1 md:pb-0">
+            {/* <div className="flex gap-2 overflow-x-auto pb-1 md:pb-0">
               {(
                 ["all", "iq", "eq", "personality", "spectrum"] as FilterType[]
               ).map((f) => (
@@ -132,7 +160,7 @@ export function DashboardClient({
                   {f}
                 </button>
               ))}
-            </div>
+            </div> */}
           </div>
 
           {/* List */}
