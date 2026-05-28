@@ -22,9 +22,11 @@ function mapQuestionType(dbType: string): Question["type"] {
   switch (dbType) {
     case "pattern":
     case "multiple":
-    case "likert_5":
-    case "likert_4":
       return "radio";
+    case "likert_5":
+      return "likert_5";
+    case "likert_4":
+      return "likert_4";
     case "matrix":
       return "matrix";
     case "visual":

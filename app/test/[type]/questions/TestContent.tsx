@@ -110,6 +110,8 @@ export function TestContent({ type }: { type: string }) {
         />
       );
     case "likert":
+    case "likert_5":
+    case "likert_4":
       return (
         <LikertQuestion
           questionNumber={currentQuestion.id}
