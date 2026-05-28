@@ -44,6 +44,7 @@ export default function Page() {
       />
 
       <BenefitsSection
+        description={`If you've ever felt "out of sync", this test can bring clarity and self-understanding.`}
         items={[
           {
             title: "Gain validation",

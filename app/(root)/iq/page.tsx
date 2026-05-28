@@ -45,6 +45,7 @@ export default function Page() {
       />
 
       <BenefitsSection
+        description="Your cognitive profile is like a mental toolkit. Knowing what's inside helps you use it wisely."
         items={[
           {
             title: "Improve communication",

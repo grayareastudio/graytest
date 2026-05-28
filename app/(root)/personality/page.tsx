@@ -51,6 +51,7 @@ export default function Page() {
       />
 
       <BenefitsSection
+        description="Your personality influences how you act, think, and connect. This test highlights your natural tendencies."
         items={[
           {
             title: "Increase self-awareness",

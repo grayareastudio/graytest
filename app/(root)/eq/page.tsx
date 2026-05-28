@@ -45,6 +45,7 @@ export default function Page() {
       />
 
       <BenefitsSection
+        description="Your emotions shape every interaction. This test uncovers how you perceive, manage, and express them."
         items={[
           {
             title: "Improve communication",

@@ -5,6 +5,8 @@ import GradientText from "@/components/ui/GradientText";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { abortOnSynchronousPlatformIOAccess } from "next/dist/server/app-render/dynamic-rendering";
 
 interface Benefit {
   title: string;
@@ -15,13 +17,18 @@ interface BenefitsSectionProps {
   items: Benefit[];
   bgImage?: StaticImageData;
   href: string;
+  description: string;
 }
 
 export function BenefitsSection({
   items,
   bgImage,
   href,
+  description,
 }: BenefitsSectionProps) {
+  const url = usePathname()
+  const eq = url === '/eq'
+
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   const toggleAccordion = (index: number) => {
@@ -48,9 +55,8 @@ export function BenefitsSection({
               <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl mb-4 md:mb-6 font-light tracking-tight text-black/90 lg:text-white">
                 How it benefits you
               </h2>
-              <p className="text-base md:text-lg text-black/80 lg:text-[#D1D5DC] max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                Your cognitive profile is like a mental toolkit. Knowing what's
-                inside helps you use it wisely.
+              <p className={`text-base md:text-lg text-black/80 lg:text-[#D1D5DC] max-w-xl mx-auto lg:mx-0 leading-relaxed ${eq ? 'bg-black' : ''}`}>
+                {description}
               </p>
             </div>
 

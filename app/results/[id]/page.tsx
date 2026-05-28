@@ -506,6 +506,7 @@ export default async function ResultPage({
 
       {/* Benefits Section */}
       <BenefitsSection
+        description="Your cognitive profile is like a mental toolkit. Knowing what's inside helps you use it wisely."
         items={[
           {
             title: "Discover your strongest skills",
