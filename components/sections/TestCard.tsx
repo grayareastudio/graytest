@@ -48,7 +48,7 @@ export function TestCard({
 
         <div className="sm:space-y-3 space-y-1 ">
           <Link
-            href={`/test/${title.toLowerCase()}/questions`}
+            href={`/test/${title.toLowerCase()}/intro`}
             className="block"
           >
             <Button

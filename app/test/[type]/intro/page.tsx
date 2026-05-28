@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { INTRO_SLIDES_DATA } from "@/lib/data/intro-slides";
 import { SlideRenderer } from "@/components/intro/SlideRenderer";
@@ -8,12 +8,23 @@ import { Button } from "@/components/ui/Button";
 import GradientText from "@/components/ui/GradientText";
 import Image from "next/image";
 import deleteIcon from "@/assets/icons/delete.svg";
+import { hasCompletedOnboarding } from "@/lib/actions/profile-actions";
 
 export default function TestIntroPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const router = useRouter();
   const params = useParams();
   const testType = params.type as string;
+
+  useEffect(() => {
+    hasCompletedOnboarding().then((done) => {
+      if (!done) {
+        router.replace(
+          `/onboarding?redirect=/test/${testType}/intro`,
+        );
+      }
+    });
+  }, [testType, router]);
 
   const slides =
     INTRO_SLIDES_DATA[testType as keyof typeof INTRO_SLIDES_DATA] ||

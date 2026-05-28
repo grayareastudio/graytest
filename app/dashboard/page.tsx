@@ -2,6 +2,7 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/actions/auth-actions";
 import { getUserTestHistory } from "@/lib/actions/result-actions";
+import { getUserProfile } from "@/lib/actions/profile-actions";
 import { DashboardClient } from "./DashboardClient";
 
 function calculateStats(
@@ -35,8 +36,11 @@ export default async function DashboardPage() {
     redirect("/login?next=/dashboard");
   }
 
-  const results = await getUserTestHistory(user.id);
+  const [results, profile] = await Promise.all([
+    getUserTestHistory(user.id).catch(() => []),
+    getUserProfile().catch(() => null),
+  ]);
   const stats = calculateStats(results);
 
-  return <DashboardClient initialResults={results} stats={stats} />;
+  return <DashboardClient initialResults={results} stats={stats} profile={profile} />;
 }

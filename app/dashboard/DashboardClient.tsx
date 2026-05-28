@@ -8,11 +8,13 @@ import Image from "next/image";
 import deleteIcon from "@/assets/icons/delete.svg";
 import { TestCards } from "@/components/sections/TestCards";
 import type { TestResult } from "@/lib/actions/result-actions";
+import type { UserProfile } from "@/lib/actions/profile-actions";
 
 type FilterType = "all" | "iq" | "eq" | "personality" | "spectrum";
 
 interface DashboardClientProps {
   initialResults: TestResult[];
+  profile: UserProfile | null;
   stats: {
     totalTests: number;
     averageScore: number | null;
@@ -43,6 +45,7 @@ function getFilterKey(testType: string): FilterType {
 export function DashboardClient({
   initialResults,
   stats,
+  profile,
 }: DashboardClientProps) {
   const [filter, setFilter] = useState<FilterType>("all");
   const [showTestModal, setShowTestModal] = useState(false);
@@ -95,6 +98,59 @@ export function DashboardClient({
               <TestCards />
             </div>
           </div>
+        )}
+
+        {/* Profile Section */}
+        {profile && (
+          <section className="py-0 pb-6 md:pb-8">
+            <div className="bg-[#0A0A0A]/20 backdrop-blur-md border border-white/10 rounded-2xl p-5 md:p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="font-serif text-xl md:text-2xl text-white">
+                  Your Profile
+                </h2>
+                <Link
+                  href={`/onboarding?redirect=/dashboard`}
+                  className="text-xs text-[#A1A1A1] hover:text-white transition-colors"
+                >
+                  Edit
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                  <p className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-[#A1A1A1] mb-1">
+                    Age
+                  </p>
+                  <p className="text-sm text-white">
+                    {profile.age ?? "—"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-[#A1A1A1] mb-1">
+                    Gender
+                  </p>
+                  <p className="text-sm text-white capitalize">
+                    {profile.gender?.replace(/_/g, " ") ?? "—"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-[#A1A1A1] mb-1">
+                    Education
+                  </p>
+                  <p className="text-sm text-white capitalize">
+                    {profile.education?.replace(/_/g, " ") ?? "—"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-[#A1A1A1] mb-1">
+                    Occupation
+                  </p>
+                  <p className="text-sm text-white">
+                    {profile.occupation ?? "—"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
         )}
 
         {/* Stats Cards */}
