@@ -86,7 +86,7 @@ export default function Page() {
           questions: "10 questions",
           result: "Instant",
         }}
-        href="/test/personality/questions"
+        href="/test/personality/intro"
       />
     </main>
   );

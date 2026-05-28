@@ -79,7 +79,7 @@ export default function Page() {
           questions: "10 questions",
           result: "Instant",
         }}
-        href="/test/spectrum/questions"
+        href="/test/spectrum/intro"
       />
     </main>
   );

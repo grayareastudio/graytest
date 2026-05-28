@@ -80,7 +80,7 @@ export default function Page() {
           questions: "10 questions",
           result: "Instant",
         }}
-        href="/test/eq/questions"
+        href="/test/eq/intro"
       />
     </main>
   );
