@@ -10,6 +10,7 @@ import { CheckboxQuestion } from "@/components/sections/test/CheckboxQuestion";
 import { MatrixQuestion } from "@/components/sections/test/MatrixQuestion";
 import { OpenEndedQuestion } from "@/components/sections/test/OpenEndedQuestion";
 import { VisualQuestion } from "@/components/sections/test/VisualQuestion";
+import { LikertQuestion } from "@/components/sections/test/LikertQuestion";
 
 export function TestContent({ type }: { type: string }) {
   const {
@@ -103,6 +104,16 @@ export function TestContent({ type }: { type: string }) {
           questionNumber={currentQuestion.id}
           questionText={currentQuestion.text}
           mainImage={currentQuestion.mainImage || ""}
+          options={currentQuestion.options || []}
+          selectedOption={currentAnswer}
+          onChange={(val) => setAnswer(currentQuestion.id, val)}
+        />
+      );
+    case "likert":
+      return (
+        <LikertQuestion
+          questionNumber={currentQuestion.id}
+          questionText={currentQuestion.text}
           options={currentQuestion.options || []}
           selectedOption={currentAnswer}
           onChange={(val) => setAnswer(currentQuestion.id, val)}

@@ -11,7 +11,9 @@ import clockIcon from "@/assets/icons/clock.svg";
 import deleteIcon from "@/assets/icons/delete.svg";
 import arrowRightIcon from "@/assets/icons/arrow-right.svg";
 import arrowLeftIcon from "@/assets/icons/arrow-left.svg";
+import bgVector from "@/assets/bg-vector-1.svg";
 import Image from "next/image";
+import { Button } from "@/components/ui/Button";
 
 interface TestLayoutClientProps {
   children: ReactNode;
@@ -367,30 +369,32 @@ function LayoutContent({
         </div>
       )}
       {/* Timer */}
-      {testType === "iq" && (
-        <div className="fixed top-24 md:top-28 lg:top-41 left-4 md:left-6 lg:left-39 z-40">
-          <div className="flex items-center gap-3 md:gap-5 px-4 py-2 md:px-5 md:py-2.5 backdrop-blur-[20px] border border-white/10 rounded-full">
-            <Image
-              src={clockIcon}
-              alt="clock"
-              width={32}
-              height={32}
-              className="md:w-10 md:h-10"
-            />
-            <span
-              className={`text-lg md:text-2xl ${currentTime <= 60 ? "text-red-400" : ""}`}
-            >
-              {timeDisplay}
-            </span>
-          </div>
+      <div className="flex items-center gap-3 fixed top-24 md:top-28 lg:top-41 left-4 md:left-6 lg:left-39 z-40">
+        <div className="flex items-center gap-3 md:gap-5 px-4 py-2 md:px-5 md:py-2.5 backdrop-blur-[20px] border border-white/10 rounded-full">
+          <Image
+            src={clockIcon}
+            alt="clock"
+            width={32}
+            height={32}
+            className="md:w-10 md:h-10"
+          />
+          <span
+            className={`text-lg md:text-2xl ${currentTime <= 60 ? "text-red-400" : ""}`}
+          >
+            {timeDisplay}
+          </span>
         </div>
-      )}
-      <button
+        <p className="z-40 text-s md:text-sm text-white">
+          Answered Questions ({totalAnswered}/{totalQuestions})
+        </p>
+      </div>
+
+      <Button 
+        className="fixed top-24 md:top-28 lg:top-41 right-4 md:right-6 lg:right-39 z-40"
         onClick={() => setShowQuestionList(true)}
-        className="fixed top-24 md:top-28 lg:top-41 right-4 md:right-6 lg:right-39 z-40 text-xs md:text-sm text-white/70 hover:text-white transition-colors hover:cursor-pointer"
       >
-        Question List ({totalAnswered}/{totalQuestions})
-      </button>
+        See full Questions List
+      </Button>
       {showQuestionList && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
@@ -606,11 +610,25 @@ function LayoutContent({
       )}
 
       <main
-        className={`flex flex-col items-center justify-center min-h-screen 
+        className={`relative flex flex-col items-center justify-center min-h-screen 
         ${testType === "iq" ? "pt-32 md:pt-40 lg:pt-40" : "pt-24 md:pt-28 lg:pt-32"} 
         pb-32 md:pb-44 lg:pb-58 px-4 md:px-8 lg:px-90`}
       >
-        {children}
+        {!showDimensionInfo && (
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            <Image
+              src={bgVector}
+              alt=""
+              fill
+              sizes="100vw"
+              className="object-cover opacity-60"
+              priority
+            />
+          </div>
+        )}
+        <div className="relative z-10 w-full flex flex-col items-center">
+          {children}
+        </div>
       </main>
 
       <div className={`fixed bottom-0 left-0 right-0 pb-4 md:pb-6 lg:pb-25 transition-all duration-200 ${skippedMode ? "pb-14 md:pb-16 lg:pb-25" : ""}`}>

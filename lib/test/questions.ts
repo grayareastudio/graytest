@@ -1,6 +1,6 @@
 // lib/test/questions.ts
 
-export type QuestionType = "radio" | "checkbox" | "matrix" | "open" | "visual";
+export type QuestionType = "radio" | "checkbox" | "matrix" | "open" | "visual" | "likert";
 
 export interface Question {
   id: number;
