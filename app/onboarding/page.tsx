@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, Suspense } from "react";
+import { useActionState, Suspense, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { saveOnboardingProfile } from "@/lib/actions/profile-actions";
 import { Button } from "@/components/ui/Button";
@@ -29,9 +29,11 @@ function OnboardingForm() {
     error: undefined,
   });
 
-  if (state?.success) {
-    router.push(redirectTo);
-  }
+  useEffect(() => {
+    if (state?.success) {
+      router.push(redirectTo);
+    }
+  }, [state?.success, redirectTo, router]);
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-black px-6 py-12">

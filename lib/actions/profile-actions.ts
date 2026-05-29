@@ -61,14 +61,14 @@ export async function saveOnboardingProfile(
   const supabase = await createClient();
   const { error } = await supabase
     .from("user_profiles")
-    .update({
+    .upsert({
+      id: user.id,
       age,
       gender,
       occupation,
       education,
       onboarded_at: new Date().toISOString(),
-    })
-    .eq("id", user.id);
+    }, { onConflict: "id" });
 
   if (error) return { error: error.message };
   return { success: true };

@@ -12,6 +12,7 @@ import { hasCompletedOnboarding } from "@/lib/actions/profile-actions";
 
 export default function TestIntroPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [checking, setChecking] = useState(true);
   const router = useRouter();
   const params = useParams();
   const testType = params.type as string;
@@ -19,12 +20,20 @@ export default function TestIntroPage() {
   useEffect(() => {
     hasCompletedOnboarding().then((done) => {
       if (!done) {
-        router.replace(
-          `/onboarding?redirect=/test/${testType}/intro`,
-        );
+        router.replace(`/onboarding?redirect=/test/${testType}/intro`);
+      } else {
+        setChecking(false);
       }
     });
   }, [testType, router]);
+
+  if (checking) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-white animate-spin" />
+      </div>
+    );
+  }
 
   const slides =
     INTRO_SLIDES_DATA[testType as keyof typeof INTRO_SLIDES_DATA] ||
