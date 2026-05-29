@@ -30,7 +30,7 @@ export function TestLayoutClient({
   testType,
   userEmail,
 }: TestLayoutClientProps) {
-  const hasTimer = testType === "iq";
+  const hasTimer = true;
 
   const [dimensions, setDimensions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -316,7 +316,6 @@ function LayoutContent({
 
   useEffect(() => {
     if (
-      testType.toLowerCase() === "iq" &&
       currentTime === 0 &&
       !isSubmitting &&
       !autoSubmitRef.current
@@ -324,7 +323,7 @@ function LayoutContent({
       autoSubmitRef.current = true;
       setIsTimeUp(true);
     }
-  }, [testType, currentTime, isSubmitting]);
+  }, [currentTime, isSubmitting]);
 
   return (
     <>
