@@ -123,54 +123,6 @@ export async function sendPasswordResetEmail(
     return { error: resetError.message };
   }
 
-  // Send branded email via Gmail SMTP
-  try {
-    const nodemailer = await import("nodemailer");
-    const transporter = nodemailer.default.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: Number(process.env.EMAIL_PORT) || 465,
-      secure: process.env.EMAIL_SECURE === "true",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-
-    await transporter.sendMail({
-      from: process.env.EMAIL_FROM || "Graytest <noreply@graytest.app>",
-      to: email,
-      subject: "Reset your Graytest password",
-      text: `You requested a password reset. Click the link below to set a new password. The link expires in 1 hour.\n\n${baseUrl}/reset-password\n\nIf you didn't request this, you can safely ignore this email.`,
-      html: `
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"></head>
-<body style="background:#0a0a0a;color:#ffffff;font-family:serif,sans-serif;padding:20px;margin:0;">
-  <div style="max-width:600px;margin:0 auto;">
-    <p style="font-size:24px;font-weight:500;color:#ffffff;margin-bottom:8px;">Reset your password</p>
-    <p style="color:#d4d4d4;margin-bottom:24px;line-height:1.6;">
-      We received a request to reset your Graytest password. Click the button below to choose a new one.
-      This link expires in <strong style="color:#ffffff;">1 hour</strong>.
-    </p>
-    <a href="${baseUrl}/reset-password"
-       style="display:inline-block;background:#d9d9d9;color:#000000;padding:12px 28px;border-radius:9999px;text-decoration:none;font-weight:600;font-size:15px;">
-      Reset Password
-    </a>
-    <p style="color:#888888;font-size:12px;margin-top:32px;line-height:1.4;">
-      If you didn't request a password reset, you can safely ignore this email.<br>
-      Graytest — For informational purposes only.
-    </p>
-  </div>
-</body>
-</html>
-      `.trim(),
-    });
-  } catch (emailErr) {
-    console.warn("Mailtrap send failed (Supabase email still sent):", emailErr);
-  }
-
   return { success: true };
 }
 
