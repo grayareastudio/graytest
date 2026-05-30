@@ -14,6 +14,7 @@ import arrowLeftIcon from "@/assets/icons/arrow-left.svg";
 import bgVector from "@/assets/bg-vector-1.svg";
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
+import { FooterTest } from "@/components/layout/FooterTest";
 
 interface TestLayoutClientProps {
   children: ReactNode;
@@ -629,8 +630,9 @@ function LayoutContent({
           {children}
         </div>
       </main>
+      <FooterTest />
 
-      <div className={`fixed bottom-0 left-0 right-0 pb-4 md:pb-6 lg:pb-25 transition-all duration-200 ${skippedMode ? "pb-14 md:pb-16 lg:pb-25" : ""}`}>
+      <div className={`fixed bottom-0 left-0 right-0 pb-4 md:pb-6 lg:pb-30 transition-all duration-200 ${skippedMode ? "pb-14 md:pb-16 lg:pb-30" : ""}`}>
         <div className="max-w-full md:max-w-137 mx-auto px-4 md:px-6">
           <div className="flex gap-2.5 mb-4">
             {dimensionProgress.map((dim, idx) => (
