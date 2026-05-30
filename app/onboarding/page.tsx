@@ -1,9 +1,13 @@
 "use client";
 
-import { useActionState, Suspense, useEffect } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { saveOnboardingProfile } from "@/lib/actions/profile-actions";
+import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/Button";
+import { STORAGE_KEYS } from "@/lib/utils/constants";
+
+const USER_DRAFT_PROFILE = STORAGE_KEYS.USER_DRAFT_PROFILE;
 
 const genderOptions = [
   { value: "male", label: "Male" },
@@ -25,15 +29,106 @@ function OnboardingForm() {
   const router = useRouter();
   const redirectTo = searchParams.get("redirect") || "/";
 
-  const [state, action, isPending] = useActionState(saveOnboardingProfile, {
-    error: undefined,
-  });
+  const [isPending, setIsPending] = useState(false);
+  const [isAutoSubmitting, setIsAutoSubmitting] = useState(false);
+  const [error, setError] = useState<string | undefined>();
+  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    if (state?.success) {
+    const saved = localStorage.getItem(USER_DRAFT_PROFILE);
+    if (!saved) return;
+
+    const supabase = createClient();
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      if (!user) return;
+
+      try {
+        const pending = JSON.parse(saved);
+        localStorage.removeItem(USER_DRAFT_PROFILE);
+        setIsAutoSubmitting(true);
+
+        const formData = new FormData();
+        formData.set("age", String(pending.age));
+        formData.set("gender", pending.gender);
+        formData.set("education", pending.education);
+        if (pending.occupation) formData.set("occupation", pending.occupation);
+
+        const result = await saveOnboardingProfile({ error: undefined }, formData);
+        if (result?.error) {
+          setError(result.error);
+          setIsAutoSubmitting(false);
+        } else {
+          router.push(pending.redirectTo || redirectTo);
+        }
+      } catch {
+        localStorage.removeItem(USER_DRAFT_PROFILE);
+        setIsAutoSubmitting(false);
+      }
+    });
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(undefined);
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    const age = Number(formData.get("age"));
+    const gender = formData.get("gender") as string;
+    const education = formData.get("education") as string;
+    const occupation = (formData.get("occupation") as string) || "";
+
+    if (!age || age < 10 || age > 120) {
+      setError("Please enter a valid age (10–120)");
+      return;
+    }
+    if (!gender) {
+      setError("Please select a gender");
+      return;
+    }
+    if (!education) {
+      setError("Please select your education level");
+      return;
+    }
+
+    setIsPending(true);
+
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      localStorage.setItem(USER_DRAFT_PROFILE, JSON.stringify({
+        age,
+        gender,
+        education,
+        occupation: occupation || null,
+        redirectTo,
+      }));
+      router.push(`/login?redirect=/onboarding?redirect=${encodeURIComponent(redirectTo)}`);
+      return;
+    }
+
+    const result = await saveOnboardingProfile({ error: undefined }, formData);
+
+    if (result?.error) {
+      setError(result.error);
+      setIsPending(false);
+    } else {
       router.push(redirectTo);
     }
-  }, [state?.success, redirectTo, router]);
+  };
+
+  if (isAutoSubmitting) {
+    return (
+      <main className="min-h-screen flex items-center justify-center bg-black px-6">
+        <div className="flex flex-col items-center gap-6">
+          <div className="w-12 h-12 rounded-full border-2 border-white/20 border-t-white animate-spin" />
+          <p className="font-serif text-2xl text-white">Saving your profile...</p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-black px-6 py-12">
@@ -48,12 +143,10 @@ function OnboardingForm() {
           </p>
         </div>
 
-        <form className="space-y-6" action={action}>
-          <input type="hidden" name="redirectTo" value={redirectTo} />
-
-          {state?.error && (
+        <form ref={formRef} className="space-y-6" onSubmit={handleSubmit}>
+          {error && (
             <p className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-3 py-2">
-              {state.error}
+              {error}
             </p>
           )}
 
